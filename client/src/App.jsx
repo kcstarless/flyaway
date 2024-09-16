@@ -5,12 +5,12 @@ import MainContent from "./components/MainContent"
 
 function App() {
   return (
-    <>
+    <div className="container">
       <Navbar />
       <SearchBar />
       <MainContent />
       {/* <Footer />  */}
-    </>
+    </div>
   )
 }
 

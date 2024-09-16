@@ -84,6 +84,14 @@ a {
 
 p {
   align-self: end;
-  // border: var(--border-dark);
   font-size: var(--font-size-xs);
+  &.p-large {
+    font-size: var(--font-size-m);
+  }
+  &.p-medium {
+    font-size: var(--font-size-s);
+  }
+  &.p-small {
+    font-size: var(--font-size-xxs);
+  }
 }

@@ -1,4 +1,3 @@
-import logo from '../assets/images/logo_all.svg';
 import logo_plane from '../assets/images/logo_plane.svg';
 
 function Navbar() {
