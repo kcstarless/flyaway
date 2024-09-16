@@ -14,11 +14,12 @@
       height: 50px;
     }
   
-    @include media(tabletAndUp) {
-      padding-right: var(--space-m);
-      padding-left: var(--space-m);
-      max-width: 50rem;
-    }
+    // @include media(tabletAndUp) {
+    //   padding-right: var(--space-m);
+    //   padding-left: var(--space-m);
+    //   max-width: 50rem;
+    // }
+    
     @media (max-width: 700px) {
       .brand-text {
         display: none;

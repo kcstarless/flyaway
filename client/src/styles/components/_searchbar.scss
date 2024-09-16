@@ -1,46 +1,98 @@
 .search-flight {
-    position: relative;
-    width: 300px; /* Adjust as needed */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: var(--space-xxs);
+  position: relative;
+  padding: var(--space-s);
+
+  label {
+    padding-left: var(--space-xxxs);
+    font-weight: bold;
+    font-size: var(--font-size-xs);
   }
   
-  .input-group {
+  .search-item {
     position: relative;
-    margin-bottom: 20px; /* Space between input fields */
+    background-color: white;
+    border: 2px solid black;
+    border-radius: var(--border-radius);
   }
-  
+
   input {
     width: 100%;
-    padding: 8px;
+    padding: var(--space-xxxs);
+    font-size: var(--font-size-s);
     box-sizing: border-box;
+    outline: none;
+    border: none;
   }
-  
-  .suggestions-dropdown {
+  input:focus {
+    outline: none;
+  }
+
+  .suggestions-list {
+    list-style: none;
     position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    max-height: 200px; /* Adjust height as needed */
+    margin-top: var(--space-xxxs);
     overflow-y: auto;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Ensure dropdown is on top */
-    margin-top: 2px;
-    padding: 0;
-    list-style-type: none;
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    width: 180%;
+  }
+
+  .input-wrapper {
+    position: relative;
   }
   
+  .loading-indicator {
+    // position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: gray;
+  }
+
   .suggestion-item {
-    padding: 8px;
+    display: flex;
+    gap: var(--space-s);
+    padding: var(--space-s);
     cursor: pointer;
+    
+    &:hover {
+      background-color: #f0f0f0;
+    }
+  }
+
+  .loading-spinner {
+    position: absolute;
+    right: 10px;
+    top: 30%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 3px solid #3498db;
+    animation: spin 1s linear infinite;
+    pointer-events: none; /* Ensure clicks pass through to the input field */
   }
   
-  .suggestion-item:hover {
-    background-color: #f0f0f0;
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
-  
+
   .error {
     color: red;
     margin-top: 8px;
   }
+
+
+}
