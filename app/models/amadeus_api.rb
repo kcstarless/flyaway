@@ -18,12 +18,13 @@ class AmadeusApi
     )
   end
 
-  def flight_offers_search(origin, destination, departureDate, adults)
+  def flight_offers_search(origin, destination, departureDate, adults, currencyCode)
     @amadeus.shopping.flight_offers_search.get(
       originLocationCode: origin,
       destinationLocationCode: destination,
       departureDate: departureDate,
-      adults: adults
+      adults: adults,
+      currencyCode: currencyCode
     )
   end
 end

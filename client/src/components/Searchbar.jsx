@@ -1,192 +1,159 @@
-import React, { useState, useCallback } from 'react';
-import { fetchSuggestions } from '../helpers/suggestionHelper'; // Adjust the import path as necessary
-import { debounce } from '../helpers/utilHelpers'; // Debounce helper
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import React, { useState, useCallback, useEffect } from 'react';
+import { fetchSuggestions } from './searchbar/fetchSuggestions';
+import { fetchFlights } from './searchbar/fetchFlights';
+import { debounce } from '../helpers/debounce';
+import SearchInput from './searchbar/SearchInput';
+import DatePickerInput from './searchbar/DatePickerInput';
+import PassengersInput from './searchbar/PassengersInput';
+import { useFlightContext } from '../contexts/FlightContext';
+import { useLocalizationContext } from '../contexts/LocalizationContext';
 
 const SearchBar = () => {
-  const [departingInput, setDepartingInput] = useState('');
-  const [destinationInput, setDestinationInput] = useState('');
-  const [departingSuggestions, setDepartingSuggestions] = useState([]);
-  const [destinationSuggestions, setDestinationSuggestions] = useState([]);
+  const { setFlightData } = useFlightContext();
+  const { localizationData } = useLocalizationContext();
+  const { currency } = localizationData;
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [suggestions, setSuggestions] = useState({ departing: [], destination: [] });
+  const [loading, setLoading] = useState({ departing: false, destination: false });
+  const [focused, setFocused] = useState({ departing: false, destination: false });
   const [error, setError] = useState(null);
-  const [departLoading, setDepartLoading] = useState(false);
-  const [destLoading, setDestLoading] = useState(false);
-  const [isDepartingFocused, setIsDepartingFocused] = useState(false);
-  const [isDestinationFocused, setIsDestinationFocused] = useState(false);
-  const [departDate, setDepartDate] = useState(null);
-  const [returnDate, setReturnDate] = useState(null);
 
-  // Debounced fetch function
+  
+  const [formData, setFormData] = useState({
+    departingInput: '',
+    departingIATA: '',
+    destinationInput: '',
+    destinationIATA: '',
+    departDate: null,
+    returnDate: null,
+    passengers: 1,
+    currencyCode: currency,
+  });
+
+  useEffect(() => {
+    // Update currencyCode whenever the currency in context changes
+    setFormData(prev => ({ ...prev, currencyCode: currency }));
+  }, [currency]); // Runs whenever currency changes
+
+  useEffect(() => {
+    if (isSubmitted) {
+      // Fetch flight data again with updated currency
+      const fetchData = async () => {
+        try {
+          const flights = await fetchFlights({ ...formData, currencyCode: currency });
+          setFlightData(flights); // Update flight data with new currency
+        } catch (error) {
+          setError('Error fetching flights: ' + error.message);
+        }
+      };
+      fetchData();
+    }
+  }, [currency, isSubmitted]);
+
+
+
   const debouncedFetchSuggestions = useCallback(
-    debounce(async (query, type, setSuggestions) => {
-      setLoadingState[type]?.();
+    debounce(async (query, type) => {
+      setLoading(prev => ({ ...prev, [type]: true }));
       try {
         const results = await fetchSuggestions(query);
-        setSuggestions(results);
+        setSuggestions(prev => ({ ...prev, [type]: results }));
       } catch (err) {
         setError(err.message);
-        setSuggestions([]);
+        setSuggestions(prev => ({ ...prev, [type]: [] }));
       } finally {
-        setDepartLoading(false);
-        setDestLoading(false);
+        setLoading(prev => ({ ...prev, [type]: false }));
       }
     }, 300),
     []
   );
 
-  // Set loading state
-  const setLoadingState = {
-    departing: () => setDepartLoading(true),
-    destination: () => setDestLoading(true),
+  const handleInputChange = (event, type) => {
+    const value = event.target.value;
+    setFormData(prev => ({ ...prev, [`${type}Input`]: value }));
+    debouncedFetchSuggestions(value, type);
   };
 
-  // Handle input focus
-  const handleFocus = (type) => {
-    if (type === 'departing') {
-      setIsDepartingFocused(true);
-    } else if (type === 'destination') {
-      setIsDestinationFocused(true);
-    }
-  };
-
-  // Handle input blur
-  const handleBlur = (type) => {
-    if (type === 'departing') {
-      setTimeout(() => setIsDepartingFocused(false), 50); // Delay to allow click
-    } else if (type === 'destination') {
-      setTimeout(() => setIsDestinationFocused(false), 50);
-    }
-  };
-  // Handle input change
-  const handleInputChange = (event, value, type) => {
-    if (type === 'departing') {
-      setDepartingInput(value);
-      debouncedFetchSuggestions(value, type, setDepartingSuggestions);
-    } else if (type === 'destination') {
-      setDestinationInput(value);
-      debouncedFetchSuggestions(value, type, setDestinationSuggestions);
-    }
-  };
-
-  // Handle suggestion click
   const handleSuggestionClick = (suggestion, type) => {
-    console.log(`Suggestion clicked: ${suggestion}, Type: ${type}`); 
-    if (type === 'departing') {
-      setDepartingInput(suggestion);
-      setDepartingSuggestions([]); // Close dropdown after selection
-    } else if (type === 'destination') {
-      setDestinationInput(suggestion);
-      setDestinationSuggestions([]); // Close dropdown after selection
-    }
+    const formattedSuggestion = `${suggestion.locationName} (${suggestion.iataCode})`;
+    setFormData(prev => ({
+      ...prev,
+      [`${type}Input`]: formattedSuggestion,
+      [`${type}IATA`]: suggestion.iataCode,
+    }));
+    setSuggestions(prev => ({ ...prev, [type]: [] }));
   };
 
-  // Handle form submission
-  const handleSubmit = (event) => {
+  const handleFocus = (type) => setFocused(prev => ({ ...prev, [type]: true }));
+  const handleBlur = (type) => setTimeout(() => setFocused(prev => ({ ...prev, [type]: false })), 200);
+
+  const validateForm = () => {
+    const { departingInput, destinationInput, departDate, passengers } = formData;
+    if (!departingInput || !destinationInput || !departDate || !passengers) {
+      setError('Please fill out all required fields.');
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Gather form data
-    const formData = {
-      departing: departingInput,
-      destination: destinationInput,
-      departDate: departDate,
-      returnDate: returnDate,
-    };
-    console.log('Form submitted with data:', formData);
-    // You can now send this data to your backend or perform other actions
+    if (!validateForm()) return;
+
+    // Fetch flight data using individual parameters
+    try {
+      const flights = await fetchFlights(formData);
+      // console.log('Fetched flight data:', JSON.stringify(flights, null, 2));
+      setFlightData(flights); // Store the fetched flights
+      setIsSubmitted(true); // Mark the form as submitted
+    } catch (error) {
+      setError('Error fetching flights: ' + error.message); // Handle errors
+    }
   };
 
   return (
+    <div className="search-bar">
     <form className="search-flight" onSubmit={handleSubmit}>
-      <div className="search-item">
-        <div className="input-wrapper">
-          <label>From</label>
-          <input
-            type="text"
-            value={departingInput}
-            onChange={(event) => handleInputChange(event, event.target.value, 'departing')}
-            onFocus={() => handleFocus('departing')}
-            onBlur={() => handleBlur('departing')}
-            placeholder="Country, city or airport"
-            autoComplete="off"
-          />
-          {departLoading && <div className="loading-spinner"></div>}
-        </div>
-
-        {/* Render suggestions dropdown */}
-        {(departingSuggestions.length > 0 && isDepartingFocused) && (
-          <ul className="suggestions-list">
-            {departingSuggestions.map((suggestion, index) => (
-              <li
-                key={index}
-                className="suggestion-item"
-                onClick={() => handleSuggestionClick(suggestion.locationName, 'departing')}
-              >
-              <img src={suggestion.imageUrl} alt="icon" className='type-icon' />
-              <div>
-                <p className="p-medium">{suggestion.cityName} {suggestion.subType === 'AIRPORT' && suggestion.locationName} ({suggestion.iataCode})</p>
-                <p className="p-small">{suggestion.country}</p>
-              </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      <div className="search-item">
-        <div className="input-wrapper">
-          <label>To</label>
-          <input
-            type="text"
-            value={destinationInput}
-            onChange={(event) => handleInputChange(event, event.target.value, 'destination')}
-            onFocus={() => handleFocus('destination')}
-            onBlur={() => handleBlur('destination')}
-            placeholder="Country, city or airport"
-            autoComplete="off"
-          />
-          {destLoading && <div className="loading-spinner"></div>}
-        </div>
-        {/* Render suggestions dropdown */}
-        {(destinationSuggestions.length > 0 && isDestinationFocused) && (
-          <ul className="suggestions-list">
-            {destinationSuggestions.map((suggestion, index) => (
-              <li
-                key={index}
-                className="suggestion-item"
-                onClick={() => handleSuggestionClick(suggestion.locationName, 'destination')}
-              >
-              <img src={suggestion.imageUrl} alt="icon" className='type-icon' />
-              <div>
-                <p className="p-medium">{suggestion.cityName} {suggestion.subType === 'AIRPORT' && suggestion.locationName} ({suggestion.iataCode})</p>
-                <p className="p-small">{suggestion.country}</p>
-              </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      <div className="search-item">
-        <label>Depart</label><br />
-        <DatePicker
-          selected={departDate}
-          onChange={(date) => setDepartDate(date)}
-          placeholderText='Add Date'
-        />
-      </div>
-
-      <div className="search-item">
-        <label>Return</label><br />
-        <DatePicker
-          selected={returnDate}
-          onChange={(date) => setReturnDate(date)}
-          placeholderText='Add Date'
-        />
-      </div>
+      <SearchInput
+        label="From"
+        value={formData.departingInput}
+        onChange={(event) => handleInputChange(event, 'departing')}
+        onFocus={() => handleFocus('departing')}
+        onBlur={() => handleBlur('departing')}
+        loading={loading.departing}
+        suggestions={suggestions.departing}
+        onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, 'departing')}
+        isFocused={focused.departing}
+      />
+      <SearchInput
+        label="To"
+        value={formData.destinationInput}
+        onChange={(event) => handleInputChange(event, 'destination')}
+        onFocus={() => handleFocus('destination')}
+        onBlur={() => handleBlur('destination')}
+        loading={loading.destination}
+        suggestions={suggestions.destination}
+        onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, 'destination')}
+        isFocused={focused.destination}
+      />
+      <DatePickerInput
+        label="Depart"
+        selectedDate={formData.departDate}
+        onChange={(date) => setFormData(prev => ({ ...prev, departDate: date }))} // Update departDate
+      />
+      <DatePickerInput
+        label="Return"
+        selectedDate={formData.returnDate}
+        onChange={(date) => setFormData(prev => ({ ...prev, returnDate: date }))} // Update returnDate
+      />
+      <PassengersInput
+        passengers={formData.passengers}
+        onChange={(event) => setFormData(prev => ({ ...prev, passengers: event.target.value }))} // Update passengers
+      />
       {error && <div className="error">Error: {error}</div>}
-
       <button type="submit" className="submit-button">Search</button>
     </form>
+  </div>
   );
 };
 

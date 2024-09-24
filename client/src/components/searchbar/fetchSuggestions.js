@@ -1,7 +1,7 @@
-// src/helpers/suggestionHelper.js
+// ./searchBar/suggestionHelper.js
 import axios from 'axios';
-import city_icon from '../assets/images/icon_city.svg';
-import airport_icon from '../assets/images/icon_airport.svg';
+import city_icon from '../../assets/images/icon_city.svg';
+import airport_icon from '../../assets/images/icon_airport.svg';
 // Persistent cache to store suggestions
 const suggestionCache = new Map();
 
@@ -38,7 +38,7 @@ export const fetchSuggestions = async (query) => {
         imageUrl: imageUrls[location.subType],
       }));
 
-      const limitedSuggestions = filteredSuggestions.slice(0, 5);
+      const limitedSuggestions = filteredSuggestions.slice(0, 10);
       suggestionCache.set(query, limitedSuggestions); // Cache the results
 
       return limitedSuggestions;
