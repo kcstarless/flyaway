@@ -28,6 +28,10 @@ I have decided on this approach instead of React directly making request to exte
 This app will be using [Amadeus API](https://www.flightapi.io/flight-status-and-tracking-api) to grab all flight and travel related information.
 Including airports, airliner, flight schedule and etc. 
 
+[OpenCage Geocoder](https://opencagedata.com/) is used for collecting user location data. I could have used IP based location finder but I decided to go with geolocation for possible expansion allowing user to use map to set origin and destiantion.
+
+[Restcountries](https://restcountires.com) is used to collect related country data from opencage for country language and country flag. 
+
 ## DB dependencies
 Using PostgreSQL for DB of choice. Us
 
@@ -42,6 +46,7 @@ Using PostgreSQL for DB of choice. Us
 
 ## React Library dependencies
 - React datepicker
+- React modal
 
 ## Testing
 

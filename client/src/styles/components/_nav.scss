@@ -1,6 +1,7 @@
 nav {
   display: flex;
-  // align-items: center;
+  justify-content: center;
+  padding-bottom: var(--space-s);
 
   ul {
       font-size: var(--font-size-s);
@@ -11,46 +12,60 @@ nav {
     li {
       position: relative;
       // border: var(--border-dark);
-      padding: var(--space-s);
+      padding-right: var(--space-xxxs);
       // padding-top: var(--space-xl);
       
       a {
-        display: block;    
-           
-        
-        &:hover {
-            color: var(--color-primary);
-        }
-         &::before {
-           transition: 400ms;
-           height: 4px;
-           content: "";
-           position: absolute;
-           background-color: hsl(44, 100%, 49%);;
-           width: 0%;
-           bottom: 0px;   
-        }
+        display: block;
+        padding: var(--space-xs);
+        padding-left: var(--space-m);
+        padding-right: var(--space-m);
+        border-radius: var(--border-radius);
+        background-color: var(--color-light);        
 
-        &:hover::before{
-          width: 80%;
+        &:hover {
+          font-weight: bold;
         }
+           
+        &.active {
+          font-weight: bold;
+          color: var(--color-light);
+          background-color: var(--color-secondary-rotate);
+        }
+        
+        // &:hover {
+        //     color: var(--color-primary);
+        // }
+        //  &::before {
+        //    transition: 400ms;
+        //    height: 4px;
+        //    content: "";
+        //    position: absolute;
+        //    background-color: var(--color-secondary);
+        //    width: 0%;
+        //    bottom: 0px;   
+        // }
+
+        // &:hover::before{
+        //   width: 80%;
+        // }
       } 
     }
   }
 
-  @media (max-width: 680px) {
-    ul {
-      font-size: var(--font-size-xs);
-      list-style: none;
-      display: flex;
-      justify-content: space-evenly;
-    li {
+//   @media (max-width: 680px) {
+//     ul {
+//       font-size: var(--font-size-xs);
+//       list-style: none;
+//       display: flex;
+//       justify-content: space-evenly;
+//     li {
       
-      a {
-        display: block;
-        padding: 0px 5px 0px 0px;
-      }
-    }
-  }
-}
+//       a {
+//         display: block;
+//         padding: 0px 5px 0px 0px;
+//       }
+//     }
+//   }
+// }
 }

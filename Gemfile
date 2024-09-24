@@ -51,3 +51,4 @@ gem "rails-controller-testing", "~> 1.0"
 gem "amadeus"
 gem "faraday"
 gem 'flight_radar'
+gem 'opencage-geocoder'

@@ -4,6 +4,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users
       get 'search/airport_city', to: 'search#airport_city'
+      post 'search/flight_offers', to: 'search#flight_offers'
+      get 'search/geocode', to: 'search#geocode'
       get 'search/flight_offers', to: 'search#flight_offers'
     end
   end

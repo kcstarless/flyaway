@@ -1,6 +1,8 @@
 :root {
     // Simple fonts
     --font-family-sans: 'Poppins', system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --font-family-title: 'Lilita One';
+    --font-family-description: 'Playpen Sans';
 
     // Classical line heights
     --line-height-headers: 1.1;
@@ -37,6 +39,8 @@
 
     // Application colors
     --color-primary:          hsl(0, 0%, 5%);
+    --color-secondary:        #74bec1;
+    --color-secondary-rotate: #516091;
     --color-error:            hsl(0, 100%, 50%);   
     --color-confirmed:        hsl(147, 100%, 50%); 
 

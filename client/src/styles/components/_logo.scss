@@ -1,0 +1,22 @@
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-family-title);
+    font-weight: 500;
+  }
+
+  .logo-image {
+    width: 75px;
+    height: 75px;
+  }
+
+  .title {
+    .title-header {
+      font-size: var(--font-size-xl);
+    }
+    .title-description {
+      // font-family: var(--font-family-description);
+      font-size: var(--font-size-xxs);
+    }
+}
