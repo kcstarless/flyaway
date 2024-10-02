@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useLocalizationContext } from '../../contexts/LocalizationContext';
+import { useLocalizationContext } from '../contexts/LocalizationContext';
 import SetLocalization from './SetLocalization';
 
 const Localization = () => {
-    const { localizationData } = useLocalizationContext();
+    const { localizationData, localizationQuery } = useLocalizationContext();
     const { country, currency, language, flag, currencySymbol } = localizationData;
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -14,6 +14,8 @@ const Localization = () => {
     const handleModalClose = () => {
         setModalIsOpen(false);
     };
+
+    if (localizationQuery.isLoading) return <div className="user-local">Loading..</div>
 
     return (
         <>

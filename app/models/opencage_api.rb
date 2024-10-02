@@ -11,4 +11,8 @@ class OpencageApi
   def geocode_search(lat, lon)
     @geocoder.reverse_geocode(lat, lon)
   end
+
+  def geocode_destination_search(destinationLocationName)
+    @geocoder.geocode(destinationLocationName)
+  end
 end

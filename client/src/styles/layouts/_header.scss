@@ -1,6 +1,11 @@
 .header {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  padding-bottom: var(--space-l);
+  padding-right: var(--space-m);
+  padding-left: var(--space-m);
   // background-color: var(--color-secondary);
 
   .header-bar {
@@ -20,4 +25,11 @@
     // margin-left: -100%; // Extend to the left
     // margin-right: -100%; // Extend to the right
   }
+
+  @include media(tabletAndUp) {
+    padding-right: var(--space-m);
+    padding-left: var(--space-m);
+    max-width: 70rem;
+  }
 }
+

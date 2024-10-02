@@ -14,6 +14,7 @@
 @import "layouts/container";
 @import "layouts/header";
 @import "layouts/footer";
+@import "layouts/content";
 
 // Components
 @import "components/nav";
@@ -22,3 +23,5 @@
 @import "components/flightoffers";
 @import "components/userlocal";
 @import "components/logo";
+@import "components/temp";
+@import "components/itineary_card"

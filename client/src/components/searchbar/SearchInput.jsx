@@ -1,9 +1,11 @@
+// SearchInput.jsx
+
 import React from 'react';
 import SuggestionsList from './SuggestionsList';
 
-const SearchInput = ({ label, value, onChange, onFocus, onBlur, loading, suggestions, onSuggestionClick, isFocused }) => (
-  <div className="search-item">
-    <div className="input-wrapper">
+const SearchInput = ({ label, value, onChange, onFocus, onBlur, loading, suggestions, onSuggestionClick, isFocused, className }) => (
+  <div className={`search-item search-item--${className}`}>
+    <div className={`input-wrapper-${className}`}>
       <label>{label}</label>
       <input
         type="text"
@@ -12,6 +14,7 @@ const SearchInput = ({ label, value, onChange, onFocus, onBlur, loading, suggest
         onFocus={onFocus}
         onBlur={onBlur}
         placeholder="Country, city or airport"
+        className={`input-${className}`}
         autoComplete="off"
       />
       {loading && <div className="loading-spinner"></div>}

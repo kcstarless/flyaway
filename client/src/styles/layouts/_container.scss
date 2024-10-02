@@ -3,17 +3,16 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    // padding-right: var(--space-xs);
-    // padding-left: var(--space-xs);
-    margin-left: auto;
-    margin-right: auto;
-
-    // background-color: var(--color-secondary);
-    // border: var(--border-dark);
-  // 
-    @include media(tabletAndUp) {
-      padding-right: var(--space-m);
-      padding-left: var(--space-m);
-      max-width: 70rem;
-    }
+    
+  .c1 {
+    display: flex;
+    justify-content: center;
+    background-color: white;
   }
+  .c2 {
+    display: flex;
+    justify-content: center;
+    background-color: #e6f2f7;
+  }
+  
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 
-const PassengersInput = ({ passengers, onChange }) => (
-  <div className="search-item">
+const PassengersInput = ({ passengers, onChange, className }) => (
+  <div className={`search-item search-item--${className}`}>
     <label>Passengers</label>
     <input
       type="number"

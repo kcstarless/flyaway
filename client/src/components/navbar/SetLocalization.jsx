@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Modal from 'react-modal';
-import { useLocalizationContext } from '../../contexts/LocalizationContext';
-// import Localization from "./Localization";
-
-const fetchCountries = async () => {
-    const response = await fetch('https://restcountries.com/v3.1/all?fields=name,currencies,cca2,flags');
-    const countries = await response.json();
-    // console.log(countries);
-    return countries;
-};
+import { useLocalizationContext } from '../contexts/LocalizationContext';
+import { fetchCountries } from "../apicalls/fetchLocalizationData";
 
 const currenciesList = (countries) => {
     // Create a unique set of currencies with their symbols
@@ -86,7 +79,7 @@ const SetLocalization = ({ isOpen, onRequestClose }) => {
             currency: selectedCurrency,
             flag: newCountry.flags.svg, // Directly get flag
             country: newCountry.name.common, // Directly get country name
-            // language: 'English', // Or the selected language
+            language: 'English', // Or the selected language
             currencySymbol: currenciesList(countries).find(([code]) => code === selectedCurrency)[1],
         });
         onRequestClose(); // Close the modal

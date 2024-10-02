@@ -1,21 +1,22 @@
 // app/assets/stylesheets/components/_btn.scss
 
 .btn {
-    display: inline-block;
-    padding: var(--space-xxs) var(--space-m);
+    // display: inline-block;
+    padding: var(--space-xxxs) var(--space-m);
     border-radius: var(--border-radius);
-    background-origin: border-box; // Invisible borders with linear gradients
-    background-color: transparent;
-    border: solid 2px transparent;
     font-weight: bold;
+    border: none;
     cursor: pointer;
-    outline: none;
-    color: var(--color-glint);
+    // color: var(--color-glint);
+    //     background-origin: border-box; // Invisible borders with linear gradients
+    // background-color: transparent;
+    // border: solid 2px transparent;
 
     &--primary {
         color: var(--color-white);
-        background-image: linear-gradient(to right, var(--color-primary), var(--color-primary-rotate));
-    
+        background-color: var(--color-secondary-rotate);
+        // background-image: linear-gradient(to right, var(--color-secondary), var(--color-secondary-rotate));
+        font-size: var(--font-size-s);
         &:hover,
         &:focus,
         &:focus-within,
@@ -24,103 +25,31 @@
           filter: saturate(1.4) brightness(115%);
         }
       }
-    
-      &--secondary {
-        font-size: var(--space-s);
-        color: var(--color-white);
-        background-image: linear-gradient(to right, var(--color-secondary), var(--color-secondary-rotate));
-    
-        &:hover,
-        &:focus,
-        &:focus-within,
-        &:active {
-          color: var(--color-dark);
-          filter: saturate(1.2) brightness(110%);
-        }
-      &--secondary-alt {
-        font-size: var(--space-s);
-        color: var(--color-white);
-        background-image: linear-gradient(to right, var(--color-secondary), var(--color-secondary-rotate));
-    
-        &:hover,
-        &:focus,
-        &:focus-within,
-        &:active {
-          color: var(--color-dark);
-          filter: saturate(1.2) brightness(110%);
-        }
+  
+    &--secondary {
+      font-size: var(--space-s);
+      color: var(--color-white);
+      background-color: var(--color-secondary);
+  
+      &:hover,
+      &:focus,
+      &:focus-within,
+      &:active {
+        // color: var(--color-dark);
+        filter: saturate(1.1) brightness(110%);
       }
-      }
-
-      &--accept_reject {
-        color: var(--color-white);
-        background-image: linear-gradient(to right, var(--color-secondary), var(--color-secondary-rotate));
-        font-size: var(--font-size-xs);
-        border-radius: var(--border-radius-round);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 22px;  /* Set to desired width */
-        height: 22px; /* Set to desired height */
-        padding: 0;
-        // margin-right: var(--space-xs);
-        // margin-left: var(--space-xs);
-        // float: right;
-        // padding: var(--space-m);
-        &:hover,
-        &:focus,
-        &:focus-within,
-        &:active {
-          color: var(--color-dark);
-          filter: saturate(1.2) brightness(110%);
-        }
-      }
-
-      &--follow_unfollow {
-        color: var(--color-white);
-        background-image: linear-gradient(to right, var(--color-secondary), var(--color-secondary-rotate));
-        font-size: var(--font-size-l);
-        border-radius: var(--border-radius-round);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 20px;  /* Set to desired width */
-        height: 20px; /* Set to desired height */
-        padding: 0;
-
-        &:hover,
-        &:focus,
-        &:focus-within,
-        &:active {
-          color: var(--color-dark);
-          filter: saturate(1.2) brightness(110%);
-        }
-      }
-    
-      &--light {
+    &--secondary-alt {
+      font-size: var(--space-s);
+      color: var(--color-white);
+      background-image: linear-gradient(to right, var(--color-secondary), var(--color-secondary-rotate));
+  
+      &:hover,
+      &:focus,
+      &:focus-within,
+      &:active {
         color: var(--color-dark);
-        background-color: var(--color-light);
-    
-        &:hover,
-        &:focus,
-        &:focus-within,
-        &:active {
-          color: var(--color-dark);
-          filter: brightness(92%);
-        }
+        filter: saturate(1.2) brightness(110%);
       }
-    
-      &--dark {
-        color: var(--color-white);
-        border-color: var(--color-dark);
-        background-color: var(--color-dark);
-    
-        &:hover,
-        &:focus,
-        &:focus-within,
-        &:active {
-          color: var(--color-white);
-        }
-      }
-    
+    }
+  }
 }

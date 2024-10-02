@@ -47,74 +47,38 @@ Using PostgreSQL for DB of choice. Us
 ## React Library dependencies
 - React datepicker
 - React modal
+- TanStack Query
 
 ## Testing
 
 
+                        itinerary.segments.map((segment, segIndex) => (
 
-        {
-            "type": "amadeusOAuth2Token",
-            "username": "jwgim7786@gmail.com",
-            "application_name": "flyaway",
-            "client_id": "FquaEGZKzrLdivgG84JlIJBHFTNYIfw4",
-            "token_type": "Bearer",
-            "access_token": "9FbNEcr37THhe0VShC1DA3vhG8a5",
-            "expires_in": 1799,
-            "state": "approved",
-            "scope": ""
-        }
+                                <div>
+                                    <p><img src={`https://www.gstatic.com/flights/airline_logos/70px/${segment.operating.carrierCode}.png`}
+                                            className="airline-logo"
+                                            alt="Airline Logo" />
+                                    {(segment.airlineName)}
+                                    </p>
+                                    <p>{segment.operating.carrierCode}{segment.number}</p>
+                                </div>
 
-        import { useState, useEffect } from 'react';
-import axios from 'axios';
+                                <div>
+                                    <p>{segment.departure.iataCode} at {segment.departure.at}</p>
+                                </div>
 
-function LocationSearch() {
-    const [query, setQuery] = useState('');
-    const [suggestions, setSuggestions] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+                                <div>
+                                    <p>Duration: {itinerary.duration}</p>
+                                    <p>Stops: {getNumberOfStops(offer.itineraries)}</p>
+                                </div>
 
-    // Debounce delay in milliseconds
-    const debounceDelay = 300;
-
-    // Debounce effect to limit the number of API calls
-    useEffect(() => {
-        const debounce = setTimeout(() => {
-            if (query.length > 1) {
-                fetchSuggestions(query);
-            }
-        }, debounceDelay);
-
-        return () => clearTimeout(debounce); // Cleanup
-    }, [query]);
-
-    const fetchSuggestions = async (searchQuery) => {
-        setIsLoading(true);
-        try {
-            const response = await axios.get(`/api/v1/search/locations`, {
-                params: { query: searchQuery }
-            });
-            setSuggestions(response.data.locations);
-        } catch (error) {
-            console.error('Error fetching location suggestions:', error);
-        }
-        setIsLoading(false);
-    };
-
-    return (
-        <div>
-            <input
-                type="text"
-                placeholder="Origin..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-            />
-            {isLoading && <p>Loading...</p>}
-            <ul>
-                {suggestions.map((location) => (
-                    <li key={location.code}>{location.name}</li>
-                ))}
-            </ul>
-        </div>
-    );
-}
-
-export default LocationSearch;
+                                <div>
+                                    <p>Arrival: {segment.arrival.iataCode} at {segment.arrival.at}</p>
+                                </div>
+                                
+                                <div>
+                                    <p>Total Price: {offer.price.total} {offer.price.currency}</p>
+                                </div>
+                        </div>
+                        ))
+                    ))

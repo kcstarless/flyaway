@@ -1,0 +1,112 @@
+.itinerary-card {
+    display: flex;
+    flex-direction: row;
+    // justify-content: space-between;
+    background-color: white;
+    border-radius: var(--border-radius);
+    // box-shadow: var(--shadow-small-profile);
+
+    cursor: pointer;
+    
+    .card-wrapper-c1{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        color: var(--color-text-muted);
+        gap: var(--space-s);
+        width: 400px;
+        padding: var(--space-l);
+        
+        .description {
+            font-size: var(--font-size-xxs);
+            text-align: center;
+        }
+        .description2 {
+            font-size: var(--font-size-s);
+        }
+        .img-airline-logo {
+            width: 30px;
+        }
+        .itinerary-card-c1 {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-xxxs);
+            width: 150px;
+            // border: var(--border-dark);
+        }
+        .itinerary-card-c2 {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: var(--font-size-l);
+            // border: solid 2px black;
+        }
+        .itinerary-card-c3 {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            // text-align: center;
+    
+            .flight-path {
+                display: flex;
+                position: relative; /* To position the dot and line correctly */
+                align-items: center;
+    
+                .flight-path-line {
+                    width: 120px;
+                    height:40px;
+                    background: transparent;
+                    border: none;
+                    border-top: dashed 2px rgb(209, 206, 199);
+                    border-radius: 50%;
+                }
+                .red-dot {
+                    width: 7px;
+                    height: 5px;
+                    background-color: rgb(214, 50, 50);
+                    border-radius: 50%;
+                    position: absolute;
+                    left: calc(50% - 4.5px); /* Center the dot */
+                    top: -2px; /* Position it above the line */
+                }
+            }
+            .stops {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: -30px;
+                .duration {
+                    font-size: var(--font-size-xxs);
+                }
+                .stop {
+                    font-size: var(--font-size-xxs);
+                    color: var(--color-text-alert);
+                }
+            }
+        }
+
+    }
+    
+    .card-wrapper-c2 {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-left: solid 1px #b6d5e1;
+        padding-left: var(--space-xxl);
+        padding-right: var(--space-xxl);
+        .itinerary-card-c4 {
+            // padding: var(--space-l);
+            font-weight: bold;
+        }
+    }
+    
+    &:hover {
+        // background-color: #e2eff1;
+    }
+}
