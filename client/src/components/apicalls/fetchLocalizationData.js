@@ -1,12 +1,14 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-
-const LocalizationContext = createContext();
+// fetchLocalizationData.js
 
 const getLocation = async () => {
     return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
     });
 }
+
+// const getDestinationGeoCode = async (destination, countryCode) => {
+//     const response = await fetch(`/api/v1/search/geocode_search_destination?`);
+// }
 
 const getLanguageByCountryCode = async (countryCode) => {
     const response = await fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`);
@@ -43,38 +45,22 @@ const getCountryData = async (position) => {
         currencySymbol: countryCurrencySymbol
     }
 }
-export const LocalizationProvider = ({ children }) => {
-    const [localizationData, setLocalizationData] = useState(
-        {
-            language: 'English', flag: null, country: 'United State', currency: 'USD', currencySymbol: '$', countryCode: 'US'
-        });
-    
-    const updateLocalizationData = (newData) => {
-        setLocalizationData((prevData) => ({
-            ...prevData,
-            ...newData
-        }));
-    };
-    
-    useEffect(() => {
-        const fetchLocalizationData = async () => {
-            try {
-                const position = await getLocation();
-                const countryData = await getCountryData(position);
-                // console.log(countryData); 
-                setLocalizationData(countryData);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchLocalizationData();
-    }, []);
+export const fetchCountries = async () => {
+    const response = await fetch('https://restcountries.com/v3.1/all?fields=name,currencies,cca2,flags');
+    const countries = await response.json();
+    // console.log(countries);
+    return countries;
+};
 
-    return (
-        <LocalizationContext.Provider value={ {localizationData, updateLocalizationData} } >
-            {children}
-        </LocalizationContext.Provider>
-    )
+export const fetchLocalizationData = async () => {
+    console.log("Fetching localization data..."); // Add this line
+    try {
+        const position = await getLocation();
+        const countryData = await getCountryData(position);
+        // console.log(countryData); 
+        return countryData
+    } catch (error) {
+        console.log(error);
+    }
 }
-
-export const useLocalizationContext = () => useContext(LocalizationContext);
+// fetchLocalizationData();

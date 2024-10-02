@@ -23,7 +23,8 @@
     // Three different text colors
     --color-text-header: hsl(0, 1%, 16%);
     --color-text-body:   #433d3d;
-    --color-text-muted:  hsl(0, 1%, 44%);
+    --color-text-muted:  #716f6f;
+    --color-text-alert:  hsl(0, 100%, 50%);   
 
     // Classical and robust spacing system
     --space-xxxs: 0.25rem; // 4px
@@ -39,7 +40,7 @@
 
     // Application colors
     --color-primary:          hsl(0, 0%, 5%);
-    --color-secondary:        #74bec1;
+    --color-secondary:        #639cd9;
     --color-secondary-rotate: #516091;
     --color-error:            hsl(0, 100%, 50%);   
     --color-confirmed:        hsl(147, 100%, 50%); 
@@ -47,7 +48,7 @@
     // Neutral colors
     --color-white:      hsl(0, 0%, 100%);
     --color-background: hsl(30, 50%, 98%);
-    --color-light:      hsl(0, 6%, 93%);
+    --color-light:      rgb(238, 236, 236);
     --color-dark:       hsl(0, 0%, 7%);
 
 
@@ -59,8 +60,15 @@
     --border-radius-round: 3rem;
 
     // Shadows
+    --box-shadow:
+            0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+            0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+            0 12.5px 10px rgba(0, 0, 0, 0.06),
+            0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+            0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+            0 100px 80px rgba(0, 0, 0, 0.12);
     --shadow-large:  2px 4px 10px hsl(0 0% 0% / 0.1);
     --shadow-small:  1px 3px 6px hsl(0 0% 0% / 0.1);
     --shadow-small-comments:  0px 2px 0px hsl(0 0% 0% / 0.1);
-    --shadow-small-profile: 0 4px 8px hsla(0, 100%, 0%, 0.3); 
+    --shadow-small-profile: 0.1px 1px 1px 1px hsla(0, 100%, 0%, 0.3); 
 }

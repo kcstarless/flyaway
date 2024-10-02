@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 function Navbar() {
     const [activeIndex, setActiveIndex] = useState(0);
 
-    const handleClick = (index) => {
+    const handleMenuClick = (index) => {
         setActiveIndex(index);
       };
     
@@ -24,8 +24,7 @@ function Navbar() {
                 <div className="user-info">
                     <Localization />
                     <div className="user-login">
-                        <img src={login_icon} alt="login" />
-                        <a href="/login"><p>login</p></a>
+                        <a href="#"><img src={login_icon} alt="login" className="login-icon" /></a>
                     </div>
                 </div>
             </div>
@@ -36,7 +35,7 @@ function Navbar() {
                         <li key={index}>
                             <a
                             href="#"
-                            onClick={() => handleClick(index)}
+                            onClick={() => handleMenuClick(index)}
                             className={activeIndex === index ? 'active' : ''}
                             >
                             {item}

@@ -1,23 +1,30 @@
 // App.jsx
 import Navbar from "./components/Navbar" 
 import SearchBar from "./components/Searchbar" 
-import { FlightProvider } from "./contexts/FlightContext"
-import FlightDisplay from "./components/FlightDisplay"
-import { LocalizationProvider } from "./contexts/LocalizationContext"
+import { FlightOffersProvider } from "./components/contexts/FlightOffersContext"
+import { LocalizationProvider } from "./components/contexts/LocalizationContext"
+import FlightSearchResultDisplay from "./components/FlightSearchResultDisplay"
+// import TempContainer from "./components/TempContainer"
 
 function App() {
   return (
     <div className="container">
       <LocalizationProvider>
-      <FlightProvider>
-        <div className="header">
-          <Navbar />
-          <SearchBar /> 
+      <FlightOffersProvider>
+        <div className="c1">
+          <div className="header">
+            <Navbar />
+            <SearchBar />
+          </div>
         </div>
-        <div className="content">        
-            <FlightDisplay />
+
+        <div className="c2">  
+          <div className="content"> 
+              {/* <TempContainer />         */}
+              <FlightSearchResultDisplay />
+          </div>
         </div>
-      </FlightProvider>
+      </FlightOffersProvider>
       </LocalizationProvider>
     </div>
   )

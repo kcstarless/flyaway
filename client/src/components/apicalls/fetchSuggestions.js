@@ -27,17 +27,21 @@ export const fetchSuggestions = async (query) => {
     const response = await axios.get(`/api/v1/search/airport_city`, {
       params: { location: query }
     });
-
+    // console.log(response.data);
     if (response.data.data) {
       const filteredSuggestions = response.data.data.map((location) => ({
         subType: location.subType,
         cityName: location.address.cityName,
+        cityCode: location.address.cityCode,
         locationName: location.name,
         iataCode: location.iataCode,
         country: location.address.countryName,
+        countryCode: location.address.countryCode,
+        redgionCode: location.address.regionCode,
+        geoCode: location.geoCode,
         imageUrl: imageUrls[location.subType],
       }));
-
+      console.log(filteredSuggestions);
       const limitedSuggestions = filteredSuggestions.slice(0, 10);
       suggestionCache.set(query, limitedSuggestions); // Cache the results
 

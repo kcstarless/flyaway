@@ -18,13 +18,18 @@ class AmadeusApi
     )
   end
 
-  def flight_offers_search(origin, destination, departureDate, adults, currencyCode)
+  def airline_search(code)
+    @amadeus.reference_data.airlines.get(airlineCodes: code)
+  end
+
+  def flight_offers_search(origin, destination, departureDate, adults, currencyCode, nonStop)
     @amadeus.shopping.flight_offers_search.get(
       originLocationCode: origin,
       destinationLocationCode: destination,
       departureDate: departureDate,
       adults: adults,
-      currencyCode: currencyCode
+      currencyCode: currencyCode,
+      nonStop: nonStop
     )
   end
 end

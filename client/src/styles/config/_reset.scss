@@ -24,7 +24,7 @@ body {
   flex-direction: column;
   min-height: 100%;
 
-  // background-color: var(--color-background);
+  // background-color: #d1f5fa;
   color: var(--color-text-body);
   line-height: var(--line-height-body);
   font-family: var(--font-family-sans);
@@ -35,6 +35,13 @@ picture,
 svg {
   display: block;
   max-width: 100%;
+}
+
+label {
+  padding-left: var(--space-xxxs);
+  font-weight: bold;
+  font-size: var(--font-size-xs);
+  border-radius: var(--border-radius);
 }
 
 input,

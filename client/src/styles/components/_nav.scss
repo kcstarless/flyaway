@@ -30,42 +30,10 @@ nav {
         &.active {
           font-weight: bold;
           color: var(--color-light);
-          background-color: var(--color-secondary-rotate);
+          background-color: var(--color-secondary);
         }
         
-        // &:hover {
-        //     color: var(--color-primary);
-        // }
-        //  &::before {
-        //    transition: 400ms;
-        //    height: 4px;
-        //    content: "";
-        //    position: absolute;
-        //    background-color: var(--color-secondary);
-        //    width: 0%;
-        //    bottom: 0px;   
-        // }
-
-        // &:hover::before{
-        //   width: 80%;
-        // }
       } 
     }
   }
-
-//   @media (max-width: 680px) {
-//     ul {
-//       font-size: var(--font-size-xs);
-//       list-style: none;
-//       display: flex;
-//       justify-content: space-evenly;
-//     li {
-      
-//       a {
-//         display: block;
-//         padding: 0px 5px 0px 0px;
-//       }
-//     }
-//   }
-// }
 }
