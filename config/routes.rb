@@ -9,6 +9,9 @@ Rails.application.routes.draw do
       get 'search/flight_offers', to: 'search#flight_offers'
       get 'search/airline', to: 'search#airline'
       get 'search/geocode_destination', to: 'search#geocode_destination'
+      post 'search/poi_offers', to: 'search#poi_offers'
+      get 'search/poi_offers', to: 'search#poi_offers'
+      get 'search/flight_history', to: 'search#flight_history'
     end
   end
 end

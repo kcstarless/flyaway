@@ -1,0 +1,69 @@
+.filters {
+    grid-area: filter;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-m);
+    padding-right: var(--space-l);
+    // border: var(--border-dark);
+
+    .filter-r1 {
+        padding-bottom: var(--space-s);
+        border-bottom: solid 1px white;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-s);
+
+        .select-all {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .filter-title {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            .slider-title {
+                display: flex;
+                font-size: var(--font-size-xs);
+                .outbound-title {
+                    color: rgb(82, 79, 79);
+                    padding-right: var(--space-xxs);
+                }
+                .outbound-time {
+                    font-weight: bold;
+                }
+            }
+        }
+
+        .r1-item {
+            display: flex;
+            flex-direction: column;
+            .item-title {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                .title {
+                    font-size: var(--font-size-xs);
+                    font-weight: bold;
+                    padding-left: var(--space-xxs);
+                }
+            }
+            .item-from-price {
+                padding-left: var(--space-l);
+                font-size: var(--font-size-xxs)
+            }
+        }  
+    }
+}
+
+.filters.loading {
+    background-color: rgba(0, 0, 0, 0.1); /* Greyed-out background */
+    pointer-events: none; /* Optional: to prevent interaction during loading */
+    opacity: 0.5; /* Optional: to make it look disabled */
+}

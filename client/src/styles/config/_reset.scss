@@ -51,13 +51,20 @@ select {
   font: inherit;
 }
 
+input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  accent-color: #007BFF; /* Changes checkbox color in modern browsers */
+}
+
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  color: var(--color-secondary);
+  // color: var(--color-secondary);
   line-height: var(--line-height-headers);
 }
 

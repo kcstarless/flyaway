@@ -1,7 +1,9 @@
 // SortOptions.js
-import React from 'react';
+import { useLoadingContext } from '../contexts/LoadingContext';
 
 const SortOptions = ({ sortOption, setSortOption, offersCount }) => {
+
+    const {loadingFlightOffers} = useLoadingContext();
     const handleSortChange = (event) => {
         setSortOption(event.target.value);
     };
@@ -9,7 +11,11 @@ const SortOptions = ({ sortOption, setSortOption, offersCount }) => {
     return (
         <div className="sort">
             <div className="no-results">
-                <label>{offersCount} results</label>
+                {loadingFlightOffers ? (
+                    <div className="loading__bar"></div>
+                ) : (
+                    <label>{offersCount} results</label>
+                )}
             </div>
             <div className="sort-selection">
                 <label>Sort by</label>

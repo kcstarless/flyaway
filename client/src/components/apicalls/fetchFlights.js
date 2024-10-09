@@ -1,43 +1,25 @@
 // fetchFlight.js
 import axios from 'axios';
+import { isoDateToHHMM24, formatDuration } from '../helpers/general';
 
 export const fetchFlights = async (data) => {
-  try {
-    // Format dates as yyyy-mm-dd
-    const formattedDepartDate = data.departDate ? data.departDate.toISOString().slice(0, 10) : null;
-    const formattedReturnDate = data.returnDate ? data.returnDate.toISOString().slice(0, 10) : null;
-    
+  try {    
     const response = await axios.post('/api/v1/search/flight_offers', {
         origin: data.departingIATA,         // e.g., 'LHR'
         destination: data.destinationIATA,    // e.g., 'JFK'
-        departureDate: formattedDepartDate,  // e.g., '2024-09-25'
+        departureDate: data.departDate,  // e.g., '2024-09-25'
+        returnDate: data.returnDate,
         adults: data.passengers,         // e.g., 1
         currencyCode: data.currencyCode,      // e.g., 'USD'
     });
-
-    // console.log(response.data);
-
-    function formatDateTime(dateTime) {
-      const date = new Date(dateTime);
-      const options = { hour: 'numeric', minute: 'numeric', hour12: false };
-      return date.toLocaleString('en-US', options);
-    }
-
-    function formatDuration(duration) {
-      const regex = /PT(?:(\d+)H)?(?:(\d+)M)?/;
-      const matches = duration.match(regex);
-      const hours = matches[1] ? parseInt(matches[1], 10) : 0;
-      const minutes = matches[2] ? parseInt(matches[2], 10) : 0;
-
-      const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`; // Format HH:MM
-      return [formattedTime, hours * 60 + minutes]; // Total minutes
-    }
 
     // Remapping of reponse data to a new flightData structure.
     if (response.data.data && response.data.data.length > 0) {
       const flightOffers = response.data.data;
       const carriers = response.data.result.dictionaries.carriers; // Extract carriers from dictionaries
+
       // console.log(flightOffers);
+
       // Map over flightOffers to a new flightData
       const filteredFlightOffers = flightOffers
         .filter(offer => {
@@ -49,29 +31,44 @@ export const fetchFlights = async (data) => {
           )
         });
       
-      const itineraryData = filteredFlightOffers.flatMap(offer =>
-        offer.itineraries.map(itinerary => {
-          const lastSegment = itinerary.segments.length - 1;
-          return {
-            offerId: offer.id,
-            departureIata: itinerary.segments[0].departure.iataCode,
-            departureTime: formatDateTime(itinerary.segments[0].departure.at),
-            duration: formatDuration(itinerary.duration),
-            arrivalIata: itinerary.segments[lastSegment].arrival.iataCode,
-            arrivalTime: formatDateTime(itinerary.segments[lastSegment].arrival.at),
-            carrierCode: itinerary.segments[0].carrierCode,
-            carrierLogo: `https://www.gstatic.com/flights/airline_logos/70px/${itinerary.segments[0].carrierCode}.png`,
-            carrierName: carriers[itinerary.segments[0].carrierCode],
-            stops: lastSegment,
-            price: offer.price.total,
-            currency: offer.price.currency,
-          }
-        })
-      );
-      // console.log(itineraryData);
+        const itineraryData = filteredFlightOffers.map(offer => ({
+          offerId: offer.id,
+          price: offer.price.total,
+          currency: offer.price.currency,
+          itineraries: offer.itineraries.map(itinerary => {
+            //Each Segment information
+            const segments = itinerary.segments.map(segment => ({
+              segmentId: segment.id,
+              carrierCode: segment.carrierCode,
+              flightNumber: segment.number,
+              carrierName: carriers[segment.carrierCode],
+              carrierLogo: `https://www.gstatic.com/flights/airline_logos/70px/${segment.carrierCode}.png`,
+              departureIata: segment.departure.iataCode,
+              departureTime: segment.departure.at,
+              arrivalIata: segment.arrival.iataCode,
+              arrivalTime: segment.arrival.at,
+              flightDuration: formatDuration(segment.duration),
+              numberOfStops: segment.numberOfStops,
+              aircraft: segment.aircraft.code,
+              // operatingCarrier: segment.operating.carrierCode,
+            }));
+        
+            return {
+              //Each Itinerary information
+              legDuration: formatDuration(itinerary.duration), // Total itinerary duration
+              legStops: segments.length - 1, // Number of stops in the itinerary
+              legSegments: segments, // Array of all segments in this itinerary
+              legDeparting: itinerary.segments[0].departure.iataCode,
+              legDepartingTime: itinerary.segments[0].departure.at,
+              legArrival: itinerary.segments[segments.length - 1].arrival.iataCode,
+              legArrivalTime: itinerary.segments[segments.length -1].arrival.at,
+            };
+          }),
+        }));
+      console.log(itineraryData);
       return itineraryData;
     }
-
+    return []; 
     // // Using raw JSON data.
     // if (response.data.data && response.data.data.length > 0) {
     //   const flightOffers = response.data.data;
@@ -105,6 +102,7 @@ export const fetchFlights = async (data) => {
 
 
   } catch (err) {
+    console.error("Error fetching flights:", err);
     throw new Error(err.message);
   }
 };

@@ -3,36 +3,41 @@ import { useLocalizationContext } from './contexts/LocalizationContext';
 import { filterFlightOffers, sortFlightOffers } from './helpers/filterandsortflightOffers';
 import DisplayFlights from './display_search_result/DisplayFlights';
 import SortOptions from './display_search_result/SortOptions';
+import FlightPriceHistory from './display_search_result/FlightPriceHistory';
 import FilterOptions from './display_search_result/FilterOptions';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const FlightSearchResultDisplay = () => {
     const { flightOffersData } = useFlightOffersContext();
     const { localizationData } = useLocalizationContext();
     const { currencySymbol } = localizationData;
 
-    const [error, setError] = useState(null);
+    const [noMatch, setNoMatch] = useState(null);
     const [offers, setOffers] = useState([]);
     const [sortOption, setSortOption] = useState("best");
 
+    // List of filters for flight offers data
     const [filterOption, setFilterOption] = useState({
         direct: true,
         oneStop: true,
         twoPlusStops: true,
-        airlines: {}
+        departTimeRange: [0, 1439],
+        travelTime: null,
+        airlines: {}, //Keeps track of airlines eg{ name: true }
     });
     
+    // Filters offers first then sort fight offers
     useEffect(() => {
         const filteredOffers = filterFlightOffers(filterOption, flightOffersData);
         const sorted = sortFlightOffers(sortOption, filteredOffers);
         setOffers(sorted); // Store the filtered and sorted offers
 
-                // Check if no flights match and set the error state
-                if (sorted.length === 0) {
-                    setError("No Flights Matched");
-                } else {
-                    setError(null); // Reset error if flights are found
-                }
+        // Check if no flights match and set the noMatch state
+        if (sorted.length === 0) {
+            setNoMatch("No flights matched. Please refine your search and filters.");
+        } else {
+            setNoMatch(null); // Reset noMatch if flights are found
+        }
 
     }, [filterOption, flightOffersData, sortOption]);
 
@@ -44,6 +49,7 @@ const FlightSearchResultDisplay = () => {
 
     return (
         <div className="search-result">
+            <FlightPriceHistory />
             <SortOptions 
                 sortOption={sortOption} 
                 setSortOption={setSortOption} 
@@ -53,8 +59,16 @@ const FlightSearchResultDisplay = () => {
                 filters={filterOption} 
                 setFilters={setFilterOption}
             />
-            {error ? (
-                <div>{error}</div>
+            {noMatch ? (
+                <div className="results">
+                    <div className="itinerary-card">
+                        <div className="no-match">
+                            <p>{noMatch}
+                            <button className="btn btn--select-all">Show all results</button>
+                            </p> 
+                        </div>
+                    </div>
+                </div>
             ) : (
                 <DisplayFlights
                     sortedOffers={offers}
@@ -62,7 +76,6 @@ const FlightSearchResultDisplay = () => {
                 />
             )}
             <div className="ads">ads</div>
-            {/* <div>{error}</div> */}
         </div>
     );
 };

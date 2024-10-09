@@ -1,7 +1,10 @@
 // sortFlightOffers.js
+import { hhmm24ToMinutes } from "./general";
 
+// Filters data based on filter (eg. direct, airline)
 export const filterFlightOffers = (filters, data) => {
     let filteredOffers = data;
+    // console.log(filteredOffers[0])
 
     // If no filters are selected, return all data
     if (!filters.direct && !filters.oneStop && !filters.twoPlusStops && Object.keys(filters.airlines).length === 0) {
@@ -10,11 +13,20 @@ export const filterFlightOffers = (filters, data) => {
 
     // Apply filters by including offers that match any of the selected filters
     filteredOffers = filteredOffers.filter(offer => {
+        if(offer.itineraries.length > 1) {
+            console.log("More than 1 leg");
+        } 
+        const minutes = hhmm24ToMinutes(offer.departureTime); // departure time to minutes
+        const duration = offer.duration[1];
+        // console.log(duration);
+
+        const isInTimeRange = (minutes >= filters.departTimeRange[0] && minutes <= filters.departTimeRange[1]) || false;
+        const isInTravelTimeRange = (duration <= filters.travelTime) || false;
         const isAirlineIncluded  = filters.airlines[offer.carrierName] || false;
         
-        const isDirect = (filters.direct && isAirlineIncluded) && offer.stops === 0;
-        const isOneStop = (filters.oneStop && isAirlineIncluded)  && offer.stops === 1;
-        const isTwoPlusStops = (filters.twoPlusStops && isAirlineIncluded)  && offer.stops >= 2;
+        const isDirect = (filters.direct && isAirlineIncluded && isInTimeRange && isInTravelTimeRange) && offer.stops === 0;
+        const isOneStop = (filters.oneStop && isAirlineIncluded && isInTimeRange && isInTravelTimeRange)  && offer.stops === 1;
+        const isTwoPlusStops = (filters.twoPlusStops && isAirlineIncluded && isInTimeRange && isInTravelTimeRange)  && offer.stops >= 2;
 
 
         // If any of the conditions match, include the offer
@@ -24,8 +36,45 @@ export const filterFlightOffers = (filters, data) => {
     return filteredOffers;
 }
 
+
+// Sorts data based on sortOption(eg cheapest price)
 export const sortFlightOffers = (sortOption, data) => {
     let sorted = [...data];
+
+    if (sorted.length === 0) return sorted; // Return if no data
+
+    const minPrice = Math.min(...sorted.map(offer => offer.price));
+    const maxPrice = Math.max(...sorted.map(offer => offer.price));
+    const minDuration = Math.min(...sorted.map(offer => offer.duration[1]));
+    const maxDuration = Math.max(...sorted.map(offer => offer.duration[1]));
+    const minStops = Math.min(...sorted.map(offer => offer.stops));
+    const maxStops = Math.max(...sorted.map(offer => offer.stops));
+
+    // Best sorting weights
+    const weights = {
+        price: 0.5,
+        duration: 0.4,
+        stops: 0.1
+    }
+
+    // Normalise the best sorting criteria
+    function normalizeValue(value, min, max) {
+        return (value - min) / (max - min);
+    }
+
+    // Calculates scores of each offer
+    function calculateScore(offer) {
+        const priceScore = normalizeValue(offer.price, minPrice, maxPrice) * weights.price;
+        const durationScore = normalizeValue(offer.duration[1], minDuration, maxDuration) * weights.duration;
+        const stopsScore = normalizeValue(offer.stops, minStops, maxStops) * weights.stops;
+
+        const totalScore = priceScore + durationScore + stopsScore;
+
+        // Debugging: log each score calculation
+        // console.log(`Offer: ${offer.carrierName}, Price Score: ${priceScore}, Duration Score: ${durationScore}, Stops Score: ${stopsScore}, Total Score: ${totalScore}`);
+
+        return totalScore;
+    }
 
     switch (sortOption) {
         case 'price':
@@ -38,16 +87,18 @@ export const sortFlightOffers = (sortOption, data) => {
             break;
         case 'departure-time':
             sorted.sort((a, b) => {
-                const [hoursA, minutesA] = a.departureTime.split(':').map(Number);
-                const [hoursB, minutesB] = b.departureTime.split(':').map(Number);
-                
-                const totalMinutesA = hoursA * 60 + minutesA;
-                const totalMinutesB = hoursB * 60 + minutesB;
+                const totalMinutesA = hhmm24ToMinutes(a.departureTime)
+                const totalMinutesB = hhmm24ToMinutes(b.departureTime)
 
                 return totalMinutesA - totalMinutesB;
             });
             break;
         case 'best':
+            sorted.sort((a, b) => {
+                const scoreA = calculateScore(a);
+                const scoreB = calculateScore(b);
+                return scoreA - scoreB;
+            })
             // Add your weighted sorting logic here
             break;
         default:

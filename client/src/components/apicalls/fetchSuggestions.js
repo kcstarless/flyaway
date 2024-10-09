@@ -5,14 +5,13 @@ import airport_icon from '../../assets/images/icon_airport.svg';
 // Persistent cache to store suggestions
 const suggestionCache = new Map();
 
-// Define image URLs for airport and city icons
+// Icons for CITY and AIRPORT subTypes
 const imageUrls = {
   CITY: city_icon,
   AIRPORT: airport_icon,
 };
 
-
-// Define the function for fetching suggestions
+// Fetch location suggestion
 export const fetchSuggestions = async (query) => {
   if (query.length < 2) {
     return []; // Return an empty array if input is too short
@@ -23,12 +22,14 @@ export const fetchSuggestions = async (query) => {
     return suggestionCache.get(query);
   }
 
+  const noMatchedSuggestion = { cityName: "No match found", noMatch: true };
+
   try {
     const response = await axios.get(`/api/v1/search/airport_city`, {
       params: { location: query }
     });
-    // console.log(response.data);
-    if (response.data.data) {
+
+    if (response.data.data && response.data.data.length > 0) {
       const filteredSuggestions = response.data.data.map((location) => ({
         subType: location.subType,
         cityName: location.address.cityName,
@@ -40,17 +41,18 @@ export const fetchSuggestions = async (query) => {
         redgionCode: location.address.regionCode,
         geoCode: location.geoCode,
         imageUrl: imageUrls[location.subType],
+        noMatch: false,
       }));
-      console.log(filteredSuggestions);
+      // console.log(filteredSuggestions);
       const limitedSuggestions = filteredSuggestions.slice(0, 10);
       suggestionCache.set(query, limitedSuggestions); // Cache the results
 
       return limitedSuggestions;
     } else {
-      console.log("No Data Found");
-      return [];
+      return [noMatchedSuggestion];
     }
   } catch (err) {
-    throw new Error(err.message);
+    console.log(err)
+    throw new Error(`Fetch Suggestion Error: ${err.message}`);
   }
 };

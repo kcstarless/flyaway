@@ -4,9 +4,15 @@ const FlightOffersContext = createContext();
 
 export const FlightOffersProvider = ({ children }) => {
     const[flightOffersData, setFlightOffersData] = useState([]);
+    const[priceHistory, setPriceHistory] = useState([]);
 
     return (
-        <FlightOffersContext.Provider value={{ flightOffersData, setFlightOffersData }}>
+        <FlightOffersContext.Provider value={{ 
+            flightOffersData, 
+            setFlightOffersData,
+            priceHistory,
+            setPriceHistory,
+             }}>
             {children}
         </FlightOffersContext.Provider>
     );
