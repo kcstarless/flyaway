@@ -1,3 +1,5 @@
+// Searchbar.jsx
+
 import { useState, useCallback, useEffect } from 'react';
 import { fetchSuggestions } from './apicalls/fetchSuggestions';
 import { debounce } from './helpers/debounce';
@@ -5,10 +7,12 @@ import SearchInput from './searchbar/SearchInput';
 import DatePickerInput from './searchbar/DatePickerInput';
 import PassengersInput from './searchbar/PassengersInput';
 import { useLocalizationContext } from './contexts/LocalizationContext';
+import { useFlightOffersContext } from './contexts/FlightOffersContext';
 import { useFlightSearchQuery } from './hooks/useFlightSearchQuery';
 import { getDateYYYYMMDD, validateForm } from './helpers/general';
 
 const SearchBar = () => {
+  const { setSelectedOutboundFlight, setSelectedReturnFlight } = useFlightOffersContext();
   const { localizationData } = useLocalizationContext();
   const { currency } = localizationData;
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -18,6 +22,8 @@ const SearchBar = () => {
   const [focused, setFocused] = useState({ departing: false, destination: false });
   const [isSwapped, setIsSwapped] = useState(false);
   const [formError, setFormError] = useState('');
+  const [isReturn, setIsReturn] = useState(false);
+
 
   // Form data
   const [formData, setFormData] = useState({
@@ -36,8 +42,16 @@ const SearchBar = () => {
     currencyCode: currency, // Initialize with current currency
   });
 
-  // Custom Hooks
-  const { refetchAll } = useFlightSearchQuery(formData, isSubmitted, currencyChanged)
+  // If return date is present then set legs to 2 else 1
+  useEffect (() => {
+    if (formData.returnDate) {
+      setIsReturn(true) ;
+    } else {
+      setIsReturn(false);
+    }
+  }, [formData.returnDate, isReturn])
+  // Custom hook to fetch search formData.
+  const { refetchAll } = useFlightSearchQuery(formData, isSubmitted, currencyChanged, isReturn)
 
   // Updates form currency properties
   useEffect(() => {
@@ -114,8 +128,8 @@ const SearchBar = () => {
 
     setIsSubmitted(true); // Set form as submitted
     setCurrencyChanged(false); // Reset currency changed after submission
-
     refetchAll();
+
   };
 
   return (

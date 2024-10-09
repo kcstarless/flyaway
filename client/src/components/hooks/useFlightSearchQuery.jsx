@@ -11,64 +11,64 @@ import { useEffect, useState } from 'react';
 
 export const useFlightSearchQuery = (formData, isSubmitted, currencyChanged) => {
   const { setLoadingFlightOffers, setLoadingPriceHistory } = useLoadingContext();
-  const { setFlightOffersData, setPriceHistory } = useFlightOffersContext(); 
+  const { setFlightOffers, setFlightPriceHistory } = useFlightOffersContext(); 
   const [queryError, setQueryError] = useState(null);
 
-  // console.log(formData);
-  // Fetch both flight offers and activities offers only if form is submitted and currency is changed. 
-  const queryOffers = useQueries({
-    queries: [
-      {
-        queryKey: ['flights', formData],
-        queryFn: () => fetchFlights(formData),
-        enabled: isSubmitted && currencyChanged && formData.departingIATA && !!formData.destinationIATA,
-      },
-      // {
-      //   queryKey: ['activities', formData],
-      //   queryFn: () => fetchPoI(formData), 
-      //   enabled: isSubmitted && currencyChanged && formData.departingIATA && !!formData.destinationIATA,
-      // },
-      {
-        queryKey: ['priceHistory', formData],
-        queryFn: () => fetchFlightPriceHistory(formData),
-        enabled: isSubmitted && currencyChanged && formData.departingIATA && !!formData.destinationIATA,
-      }
-    ],
-  });
+// Fetch both flight offers and activities offers only if form is submitted and currency is changed. 
+// Create a common enabled condition
+const isEnabled = isSubmitted && currencyChanged && formData.departingIATA && !!formData.destinationIATA;
+const queryResults = useQueries({
+  queries: [
+    {
+      queryKey: ['outboundFlight', formData],
+      queryFn: () => fetchFlights(formData, false),
+      enabled: isEnabled,
+    },
+    {
+      queryKey: ['flightPriceHistory', formData],
+      queryFn: () => fetchFlightPriceHistory(formData, false),
+      enabled: isEnabled,
+    },
+  ],
+});
 
-  const [flights, priceHistory] = queryOffers; // Deconstruction of queries. 
-
+// Destructure outboundFlight and flightPriceHistory directly
+const [outboundFlight, flightPriceHistory] = queryResults;
+  
+  // if (isReturn) console.log(returnFlight.data);
   // Refetch all data
   const refetchAll = () => {
-    flights.refetch();
-    priceHistory.refetch();
+    outboundFlight.refetch();
+    flightPriceHistory.refetch();
   };
+
+  // isReturn && console.log(returnFlight.data[0]);
 
   // sets data for each query. 
   useEffect(() => {
-    flights.data && setFlightOffersData(flights.data);
-    priceHistory.data ? setPriceHistory(priceHistory.data) : setPriceHistory([]);
+    outboundFlight.data && setFlightOffers(outboundFlight.data);
+    flightPriceHistory.data && setFlightPriceHistory(flightPriceHistory.data)
   
-  }, [flights.data, setFlightOffersData, priceHistory.data, setPriceHistory]);
+  }, [outboundFlight.data, flightPriceHistory]);
 
   // Set loading for flight and price history on loading context
   useEffect(() => {
-    setLoadingFlightOffers(flights.isLoading);
-    setLoadingPriceHistory(priceHistory.isLoading);
-  }, [flights.isLoading, priceHistory.isLoading, setLoadingFlightOffers, setLoadingPriceHistory]);
+    setLoadingFlightOffers(outboundFlight.isFetching);
+    setLoadingPriceHistory(flightPriceHistory.isFetching);
+  }, [outboundFlight.isFetching, flightPriceHistory.isFetching]);
 
   // Handle queries error(s) message
   useEffect(() => {
-    if (flights.error) {
-      setQueryError('Error fetching flights: ' + flights.error.message); 
+    if (outboundFlight.error) {
+      setQueryError('Error fetching flights: ' + outboundFlight.error.message); 
       console.log(queryError);
     }
-    if (priceHistory.error) {
-      setQueryError('Error fetching price history: ' + priceHistory.error.message); 
+    if (flightPriceHistory.error) {
+      setQueryError('Error fetching price history: ' + flightPriceHistory.error.message); 
       // console.log(querError)
     }
-  }, [flights.error, priceHistory.error, queryError]);
+  }, [outboundFlight.error, flightPriceHistory.error, queryError]);
 
-  return { flights, priceHistory, refetchAll, queryError }
+  return { outboundFlight, flightPriceHistory, refetchAll, queryError }
 }
 

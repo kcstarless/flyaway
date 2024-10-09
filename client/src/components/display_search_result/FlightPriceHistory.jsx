@@ -2,13 +2,13 @@ import { useFlightOffersContext } from '../contexts/FlightOffersContext';
 import { useLocalizationContext } from '../contexts/LocalizationContext';
 import { useLoadingContext } from '../contexts/LoadingContext';
 
-const FlightPriceHistory = () => {
-    const {priceHistory} = useFlightOffersContext();
+const FlightflightPriceHistory = () => {
+    const {flightPriceHistory, returnPriceHistory, selectedOutboundFlight} = useFlightOffersContext();
     const {localizationData} = useLocalizationContext();
     const {loadingPriceHistory} = useLoadingContext();
     const currencySymbol = localizationData.currencySymbol;
 
-    // console.log(priceHistory);
+    const priceHistory = selectedOutboundFlight === null ? flightPriceHistory : returnPriceHistory;
 
     return (
         <div className="flight-history">
@@ -16,7 +16,7 @@ const FlightPriceHistory = () => {
                 {loadingPriceHistory ? (
                     <div className="loading__bar"><p>&nbsp;</p></div>
                 ) : ( 
-                priceHistory.length > 0 ? (
+                    priceHistory.length > 0 ? (
                     <p>Route Price History</p>
                 ) : (
                     <p>No Price history on this route</p>
@@ -69,4 +69,4 @@ const FlightPriceHistory = () => {
     )
 }
 
-export default FlightPriceHistory
+export default FlightflightPriceHistory

@@ -5,6 +5,7 @@ import { FlightOffersProvider } from "./components/contexts/FlightOffersContext"
 import { LocalizationProvider } from "./components/contexts/LocalizationContext"
 import { LoadingProvider } from "./components/contexts/LoadingContext"
 import FlightSearchResultDisplay from "./components/FlightSearchResultDisplay"
+import ErrorBoundary from "./components/ErrorBoundary"
 // import TempContainer from "./components/TempContainer"
 
 function App() {
@@ -16,7 +17,9 @@ function App() {
         <div className="c1">
           <div className="header">
             <Navbar />
+            <ErrorBoundary>
             <SearchBar />
+            </ErrorBoundary>
           </div>
         </div>
 

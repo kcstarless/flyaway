@@ -9,7 +9,7 @@ import { minutesToHHMM24, minutesToHH } from "../helpers/general";
 import Slider from '@mui/material/Slider';
 
 const FilterOptions = ({ filters, setFilters}) => {
-    const { flightOffersData } = useFlightOffersContext();
+    const { flightOffers } = useFlightOffersContext();
     const { localizationData } = useLocalizationContext();
     const { loadingFlightOffers } = useLoadingContext();
     const [stopsOpen, setStopsOpen] = useState(true);
@@ -17,8 +17,8 @@ const FilterOptions = ({ filters, setFilters}) => {
     const [departureTimeOpen, setDepartureTimeOpen] = useState(false);
     const [travelTimeOpen, setTravelTimeOpen] = useState(false);
 
-    // Compute stops found based on flightOffersData
-    const stopsFound = flightOffersData.reduce((acc, offer) => {
+    // Compute stops found based on flightOffers
+    const stopsFound = flightOffers.reduce((acc, offer) => {
         if (offer.stops === 0) acc.direct = true;
         if (offer.stops === 1) acc.oneStop = true;
         if (offer.stops >= 2) acc.twoPlusStops = true;
@@ -30,9 +30,9 @@ const FilterOptions = ({ filters, setFilters}) => {
 
     // Populate the filter airline properties with all available airlines
     useEffect (() => {
-        if (flightOffersData.length > 0) {
+        if (flightOffers.length > 0) {
             const populateAirlines = {};
-            flightOffersData.forEach(offer => {
+            flightOffers.forEach(offer => {
                 populateAirlines[offer.carrierName] = true; // Add each airline with value of true
             });
 
@@ -41,10 +41,10 @@ const FilterOptions = ({ filters, setFilters}) => {
                 airlines: populateAirlines, // Update filters with all the airlines
             }));
         }
-    }, [flightOffersData, setFilters]);
+    }, [flightOffers, setFilters]);
 
     useEffect (() => {
-        const duration = flightOffersData.map(offer => offer.duration[1]);
+        const duration = flightOffers.map(offer => offer.duration[1]);
         // const min = Math.min(...duration);
         const max = Math.max(...duration);
         // const minMax = [min, max];
@@ -53,11 +53,11 @@ const FilterOptions = ({ filters, setFilters}) => {
             ...prevFilters,
             travelTime: max,
         }))
-    }, [flightOffersData, setFilters])
+    }, [flightOffers, setFilters])
 
     // Gets lowest price for given filter eg(direct)
     function getPrice(stops) {
-        const query = flightOffersData
+        const query = flightOffers
             .filter(offer => stops >= 1 ? offer.stops >= stops : offer.stops === stops)
             .map(offer => offer.price);
         if (query.length === 0) {
@@ -68,16 +68,16 @@ const FilterOptions = ({ filters, setFilters}) => {
     }
 
     // Get min and max flight duration
-    const travelTimeRange = flightOffersData.length > 0 
+    const travelTimeRange = flightOffers.length > 0 
         ? [
-            Math.min(...flightOffersData.map(offer => offer.duration[1])),
-            Math.max(...flightOffersData.map(offer => offer.duration[1]))
+            Math.min(...flightOffers.map(offer => offer.duration[1])),
+            Math.max(...flightOffers.map(offer => offer.duration[1]))
         ]
         : [0, 0]; // Fallback in case there are no offers
 
     // Gets Airline lowest price
     function getAirlinePrice(airline) {
-        const query = flightOffersData
+        const query = flightOffers
             .filter(offer => offer.carrierName === airline)
             .map(offer => offer.price);
         

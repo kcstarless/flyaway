@@ -4,7 +4,7 @@ import { useLoadingContext } from '../contexts/LoadingContext';
 import PropTypes from 'prop-types'; // Import PropTypes
 import { useEffect, useState } from 'react';
 
-const DisplayFlights = ({sortedOffers, currencySymbol}) => {
+const DisplayFlights = ({sortedOffers, currencySymbol, onFlightSelect }) => {
     const [visibleCount, setVisibleCount] = useState(10);
     const offers = sortedOffers.slice(0, visibleCount);
     const {loadingFlightOffers} = useLoadingContext();
@@ -17,6 +17,10 @@ const DisplayFlights = ({sortedOffers, currencySymbol}) => {
         setVisibleCount(10);
     }, [sortedOffers]);
 
+    const handleSelectedFlight = (offer) => {
+        onFlightSelect(offer);
+    }
+    
     return (
         <div className={loadingFlightOffers ? "results loading" : "results"}>
             {offers.map((offer) => 
@@ -51,7 +55,7 @@ const DisplayFlights = ({sortedOffers, currencySymbol}) => {
                         <div className="itinerary-card-c4">
                             {currencySymbol}{offer.price}
                         </div>
-                        <button type="button" className="btn btn--secondary">Select</button>
+                        <button type="button" onClick={() => handleSelectedFlight(offer)} className="btn btn--secondary">Select</button>
                     </div>
                 </div>
             )}

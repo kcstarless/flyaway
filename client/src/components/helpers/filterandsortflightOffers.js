@@ -13,9 +13,6 @@ export const filterFlightOffers = (filters, data) => {
 
     // Apply filters by including offers that match any of the selected filters
     filteredOffers = filteredOffers.filter(offer => {
-        if(offer.itineraries.length > 1) {
-            console.log("More than 1 leg");
-        } 
         const minutes = hhmm24ToMinutes(offer.departureTime); // departure time to minutes
         const duration = offer.duration[1];
         // console.log(duration);

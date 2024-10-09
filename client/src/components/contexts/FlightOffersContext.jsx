@@ -1,17 +1,24 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 const FlightOffersContext = createContext();
 
 export const FlightOffersProvider = ({ children }) => {
-    const[flightOffersData, setFlightOffersData] = useState([]);
-    const[priceHistory, setPriceHistory] = useState([]);
+    const[flightOffers, setFlightOffers] = useState([]);
+    const[flightPriceHistory, setFlightPriceHistory] = useState([]);
+    const[isReturn, setIsReturn] = useState(false);
+    const[selectedOutboundFlight, setSelectedOutboundFlight] = useState(null);
+    const[selectedReturnFlight, setSelectedReturnFlight] = useState(null);
 
     return (
         <FlightOffersContext.Provider value={{ 
-            flightOffersData, 
-            setFlightOffersData,
-            priceHistory,
-            setPriceHistory,
+            flightOffers, 
+            setFlightOffers,
+            flightPriceHistory,
+            setFlightPriceHistory,
+            selectedOutboundFlight,
+            setSelectedOutboundFlight,
+            selectedReturnFlight,
+            setSelectedReturnFlight,
              }}>
             {children}
         </FlightOffersContext.Provider>
