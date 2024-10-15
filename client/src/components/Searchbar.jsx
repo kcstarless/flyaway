@@ -1,59 +1,60 @@
-import React, { useState, useCallback, useEffect } from 'react';
+// Searchbar.jsx
+
+import { useState, useCallback, useEffect } from 'react';
 import { fetchSuggestions } from './apicalls/fetchSuggestions';
-import { fetchFlights } from './apicalls/fetchFlights';
 import { debounce } from './helpers/debounce';
 import SearchInput from './searchbar/SearchInput';
 import DatePickerInput from './searchbar/DatePickerInput';
 import PassengersInput from './searchbar/PassengersInput';
 import { useFlightOffersContext } from './contexts/FlightOffersContext';
-import { useLocalizationContext } from './contexts/LocalizationContext';
-import { useQuery, useQueries } from '@tanstack/react-query';
+import { useFlightSearchQuery } from './hooks/useFlightSearchQuery';
+import { getDateYYYYMMDD, validateForm } from './helpers/general';
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
-  const { setFlightOffersData } = useFlightOffersContext();
-  const { localizationData } = useLocalizationContext();
-  const { currency } = localizationData;
-
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [currencyChanged, setCurrencyChanged] = useState(false); // New state for currency change
-  const [formData, setFormData] = useState({
-    departingInput: '',
-    departingIATA: '',
-    departingCityName: '',
-    departingCountryCode: '',
-    destinationInput: '',
-    destinationIATA: '',
-    destinationCityName: '',
-    destinationCountryCode: '',
-    departDate: null,
-    returnDate: null,
-    passengers: 1,
-    currencyCode: currency, // Initialize with current currency
-  });
+  const { formData, setFormData, setCurrencyChanged, isSubmitted, setIsSubmitted,  setSelectedOutboundFlight, setSelectedReturnFlight } = useFlightOffersContext();
 
   const [suggestions, setSuggestions] = useState({ departing: [], destination: [] });
   const [loading, setLoading] = useState({ departing: false, destination: false });
   const [focused, setFocused] = useState({ departing: false, destination: false });
-  const [error, setError] = useState(null);
   const [isSwapped, setIsSwapped] = useState(false);
+  const [formError, setFormError] = useState('');
+  const navigate = useNavigate(); 
 
-  useEffect(() => {
-    // Update currency in formData when currency changes
-    setFormData(prev => ({ ...prev, currencyCode: currency }));
-    setCurrencyChanged(true); // Mark that currency has changed
-  }, [currency]);
+  // Custom hook to fetch search formData.
+  const { refetchAll } = useFlightSearchQuery();
 
+  // Local component state to manage the inputs without formData
+  const [localInputs, setLocalInputs] = useState({
+    departingInput: '',
+    departingIATA: '',
+    destinationInput: '',
+    destinationIATA: '',
+    departingCityName: '',
+    destinationCityName: '',
+    departingCountryCode: '',
+    destinationCountryCode: '',
+    departDate: null,
+    returnDate: null,
+    departingGeoCode: {},  // Initialize geoCode as an empty object
+    destinationGeoCode: {}, // Initialize geoCode as an empty object
+  });
+
+  // Switch inputs field data between From and To without re-rendering
   const handleToggle = () => {
     setIsSwapped(prev => !prev);
-    setFormData(prev => ({
+    setLocalInputs(prev => ({
       ...prev,
       departingInput: prev.destinationInput,
       destinationInput: prev.departingInput,
+      departingCityName: prev.destinationCityName,
+      destinationCityName: prev.departingCityName,
       departingIATA: prev.destinationIATA,
       destinationIATA: prev.departingIATA,
     }));
   };
 
+  // Debounce for location search
   const debouncedFetchSuggestions = useCallback(
     debounce(async (query, type) => {
       setLoading(prev => ({ ...prev, [type]: true }));
@@ -61,7 +62,7 @@ const SearchBar = () => {
         const results = await fetchSuggestions(query);
         setSuggestions(prev => ({ ...prev, [type]: results }));
       } catch (err) {
-        setError(err.message);
+        console.log(err.message);
         setSuggestions(prev => ({ ...prev, [type]: [] }));
       } finally {
         setLoading(prev => ({ ...prev, [type]: false }));
@@ -72,67 +73,60 @@ const SearchBar = () => {
 
   const handleInputChange = (event, type) => {
     const value = event.target.value;
-    setFormData(prev => ({ ...prev, [`${type}Input`]: value }));
-    debouncedFetchSuggestions(value, type);
+    // Update local input state for current input value
+    setLocalInputs(prev => ({ ...prev, [`${type}Input`]: value }));
+    if (value.trim().length > 0) {
+      debouncedFetchSuggestions(value, type); // Fetch suggestions based on value
+    } else {
+      setSuggestions(prev => ({ ...prev, [type]: [] })); // Clear suggestions when input is empty
+    }
   };
 
+  // Sets form data with required this field type with additional information for required search
   const handleSuggestionClick = (suggestion, type) => {
-    const formattedSuggestion = `${suggestion.locationName} (${suggestion.iataCode})`;
-    setFormData(prev => ({
-      ...prev,
-      [`${type}Input`]: formattedSuggestion,
-      [`${type}IATA`]: suggestion.iataCode,
-      [`${type}CityName`]: suggestion.cityName,
-      [`${type}CountryCode`]: suggestion.countryCode,
-    }));
-  };
+    if (!suggestion.noMatch) { // Only if there are suggestions
+        const formattedSuggestion = `${suggestion.locationName} (${suggestion.iataCode})`;
+
+        // Attempt to set the localInputs state
+        setLocalInputs(({
+            ...localInputs,
+            [`${type}Input`]: formattedSuggestion,
+            [`${type}IATA`]: suggestion.iataCode,
+            [`${type}CityName`]: suggestion.cityName || '', // Ensure to fall back to empty string
+            [`${type}CountryCode`]: suggestion.countryCode || '', // Ensure to fall back to empty string
+            [`${type}GeoCode`]: suggestion.geoCode || '', // Ensure to fall back to empty string
+        }));
+        console.log(localInputs);
+    }
+};
 
   const handleFocus = (type) => setFocused(prev => ({ ...prev, [type]: true }));
   const handleBlur = (type) => setTimeout(() => setFocused(prev => ({ ...prev, [type]: false })), 200);
 
-  const validateForm = () => {
-    const { departingIATA, destinationInput, departDate, passengers } = formData;
-    if (!departingIATA || !destinationInput || !departDate || !passengers) {
-      setError('Please fill out all required fields.');
-      return false;
-    }
-    return true;
-  };
-
-  // UseQuery to fetch flight offers based on form data and currency
-  // const { data: queryOffers, isLoading, error: queryError, refetch } = useQuery({
-  const queryOffers = useQuery ({
-    queryKey: ['queryFlightOffers', formData], // Cache key includes formData, which includes currency
-    queryFn: () => fetchFlights(formData), // Query function
-    enabled: isSubmitted && currencyChanged && formData.departingIATA && !!formData.destinationIATA, // Re-fetch if form has been submitted, currency has changed, and valid IATA codes exist
-  });
-
-  if (queryOffers.isSuccess) {
-    console.log("Offers fetched");
-  }
-  // UseQuery to fetch destination offers.
-  // const { data: activtiesOffers, isLoading, error: queryError }
-
-  useEffect(() => {
-    if (queryOffers.data) {
-      setFlightOffersData(queryOffers.data); // Set the fetched flight offers
-    }
-  }, [queryOffers.data, setFlightOffersData]);
-
-  useEffect(() => {
-    if (queryOffers.error) {
-      setError('Error fetching flights: ' + queryOffers.error.message); // Handle errors
-    }
-  }, [queryOffers.error]);
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!validateForm()) return;
 
-    setIsSubmitted(true); // Set form as submitted
-    setCurrencyChanged(false); // Reset currency changed after submission
-    queryOffers.refetch(); // Trigger fetching of flights manually
+    // Update formData with localInputs data
+    setFormData(prev => ({
+      ...prev,
+      ...localInputs
+    }));
+    // Mark the form as submitted
+    // setCurrencyChanged(false);
+    setSelectedOutboundFlight(null);
+    setSelectedReturnFlight(null);
+    setIsSubmitted(true);
   };
+
+  // Listen for changes in formData or isSubmitted
+  useEffect(() => {
+    if (isSubmitted) {
+      // Perform the search after formData is updated
+      refetchAll();
+      // Redirect to flight_search_result
+      navigate("/flight_search_result");
+    }
+  }, [formData, isSubmitted]);
 
   return (
     <div className="search-bar">
@@ -140,7 +134,7 @@ const SearchBar = () => {
         <div className="location-toggle">
           <SearchInput
             label="From"
-            value={formData.departingInput}
+            value={localInputs.departingInput}
             onChange={(event) => handleInputChange(event, 'departing')}
             onFocus={() => handleFocus('departing')}
             onBlur={() => handleBlur('departing')}
@@ -155,7 +149,7 @@ const SearchBar = () => {
           </button>
           <SearchInput
             label="To"
-            value={formData.destinationInput}
+            value={localInputs.destinationInput}
             onChange={(event) => handleInputChange(event, 'destination')}
             onFocus={() => handleFocus('destination')}
             onBlur={() => handleBlur('destination')}
@@ -168,13 +162,13 @@ const SearchBar = () => {
         </div>
         <DatePickerInput
           label="Depart"
-          selectedDate={formData.departDate}
-          onChange={(date) => setFormData(prev => ({ ...prev, departDate: date }))}
+          selectedDate={localInputs.departDate}
+          onChange={(date) => setLocalInputs(prev => ({ ...prev, departDate: getDateYYYYMMDD(date) }))}
         />
         <DatePickerInput
           label="Return"
-          selectedDate={formData.returnDate}
-          onChange={(date) => setFormData(prev => ({ ...prev, returnDate: date }))}
+          selectedDate={localInputs.returnDate}
+          onChange={(date) => setLocalInputs(prev => ({ ...prev, returnDate: getDateYYYYMMDD(date) }))}
         />
         <PassengersInput
           passengers={formData.passengers}
@@ -183,9 +177,7 @@ const SearchBar = () => {
         />
         <button type="submit" className="btn btn--secondary">Search</button>
       </form>
-      {queryOffers.isLoading && <div>Loading flight offers...</div>}
-      {queryOffers.queryError && <div>Query Error: {error}</div>}
-      {error && <div>Form Error: {error} </div>}
+      <p>{formError}</p>
     </div>
   );
 };

@@ -13,11 +13,19 @@ const SuggestionsList = ({ suggestions, isFocused, onSuggestionClick }) => {
           className="suggestion-item"
           onClick={() => onSuggestionClick(suggestion)}
         >
-          <img src={suggestion.imageUrl} alt="icon" className='type-icon' />
-          <div>
-            <p className="p-medium">{suggestion.cityName} {suggestion.subType === 'AIRPORT' && suggestion.locationName} ({suggestion.iataCode})</p>
-            <p className="p-small">{suggestion.country}</p>
-          </div>
+          {suggestion.noMatch ? (
+            <div>
+              <p className="p-medium">{suggestion.cityName}</p>
+            </div>
+          ) : (
+            <>
+            <img src={suggestion.imageUrl} alt="icon" className='type-icon' />
+            <div>
+              <p className="p-medium">{suggestion.cityName} {suggestion.subType === 'AIRPORT' && suggestion.locationName} ({suggestion.iataCode})</p>
+              <p className="p-small">{suggestion.country}</p>
+            </div>
+            </>
+          )}
         </li>
       ))}
     </ul>

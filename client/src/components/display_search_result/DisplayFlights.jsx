@@ -1,12 +1,14 @@
 import takeoff_icon from '../../assets/images/icon_flighttakeoff.svg';
 import landing_icon from '../../assets/images/icon_flightland.svg';
+import { useLoadingContext } from '../contexts/LoadingContext';
 import PropTypes from 'prop-types'; // Import PropTypes
-// import { getPagedOffers } from '../helpers/general';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const DisplayFlights = ({sortedOffers, currencySymbol}) => {
+const DisplayFlights = ({sortedOffers, currencySymbol, onFlightSelect }) => {
     const [visibleCount, setVisibleCount] = useState(10);
     const offers = sortedOffers.slice(0, visibleCount);
+    const {loadingFlightOffers} = useLoadingContext();
+
     const handleShowMore = () => {
         setVisibleCount((prevCount) => prevCount + 10);
     }
@@ -15,14 +17,18 @@ const DisplayFlights = ({sortedOffers, currencySymbol}) => {
         setVisibleCount(10);
     }, [sortedOffers]);
 
+    const handleSelectedFlight = (offer) => {
+        onFlightSelect(offer);
+    }
+    
     return (
-        <div className="results">
+        <div className={loadingFlightOffers ? "results loading" : "results"}>
             {offers.map((offer) => 
                 <div key={offer.offerId} className="itinerary-card">
                     <div className="card-wrapper-c1">
                         <div className="itinerary-card-c1">
                             <img src={offer.carrierLogo} alt="airline logo" className="img-airline-logo" />
-                            <span className="description">{offer.carrierName}</span>
+                            {/* <span className="description">{capitalizeFirstLetters(offer.carrierName)}</span> */}
                         </div>
                         <div className="itinerary-card-c2">
                             <span><b>{offer.departureTime}</b></span>
@@ -49,7 +55,7 @@ const DisplayFlights = ({sortedOffers, currencySymbol}) => {
                         <div className="itinerary-card-c4">
                             {currencySymbol}{offer.price}
                         </div>
-                        <button type="button" className="btn btn--secondary">Select</button>
+                        <button type="button" onClick={() => handleSelectedFlight(offer)} className="btn btn--secondary">Select</button>
                     </div>
                 </div>
             )}
@@ -75,7 +81,7 @@ DisplayFlights.propTypes = {
         ])).isRequired,
         arrivalTime: PropTypes.string.isRequired,
         arrivalIata: PropTypes.string.isRequired,
-        price: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
     })).isRequired,
     currencySymbol: PropTypes.string.isRequired,
 };

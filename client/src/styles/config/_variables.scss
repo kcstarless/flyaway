@@ -10,6 +10,7 @@
     // --line-height-navbar:    3;
 
     // Classical and robust font sizes system
+    --font-size-xxxs: 0.55rem;
     --font-size-xxs: 0.625rem;  //10px
     --font-size-xs: 0.75rem;   //12px
     --font-size-s: 0.875rem;    //14px
@@ -23,7 +24,7 @@
     // Three different text colors
     --color-text-header: hsl(0, 1%, 16%);
     --color-text-body:   #433d3d;
-    --color-text-muted:  #716f6f;
+    --color-text-muted:  #f3e3e3;
     --color-text-alert:  hsl(0, 100%, 50%);   
 
     // Classical and robust spacing system
@@ -55,8 +56,9 @@
     // Border
     --border: solid 2px var(--color-light);
     --border-dark: solid 1px var(--color-dark);
-    --border-light: solid 1px var(--color-dark);
+    --border-light: solid 2px var(--color-white);
     --border-radius: 0.275rem;
+    --border-radius-more: 0.575rem;
     --border-radius-round: 3rem;
 
     // Shadows
@@ -65,8 +67,8 @@
             0 6.7px 5.3px rgba(0, 0, 0, 0.048),
             0 12.5px 10px rgba(0, 0, 0, 0.06),
             0 22.3px 17.9px rgba(0, 0, 0, 0.072),
-            0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-            0 100px 80px rgba(0, 0, 0, 0.12);
+            0 41.8px 33.4px rgba(245, 238, 238, 0.086),
+            0 100px 80px rgba(255, 253, 253, 0.12);
     --shadow-large:  2px 4px 10px hsl(0 0% 0% / 0.1);
     --shadow-small:  1px 3px 6px hsl(0 0% 0% / 0.1);
     --shadow-small-comments:  0px 2px 0px hsl(0 0% 0% / 0.1);

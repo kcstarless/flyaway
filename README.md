@@ -9,6 +9,10 @@ For this project I will be using Vite for javascript bundler with React and Sass
 I thought about using Vue.js instead of React but I am still learning React so decided to spend more time on it. 
 Sass is my go to CSS as I like was it's structured and able to separate different components. 
 
+## Material UI
+I tried using minimal MUI to start with but after and instead try to build my own. But after trying to create auto complete in Javascript/React and seeing how much time it consumed (I got faster but still) I decided to use MUI for following components.
+- Departure time and flight duration slider. 
+
 ## API requests
 Rails will handle all API request and React will use it to provide Real-time Feedback, eg destination location in flight search.
 
@@ -48,6 +52,8 @@ Using PostgreSQL for DB of choice. Us
 - React datepicker
 - React modal
 - TanStack Query
+- Material UI
+    - Slider, Box
 
 ## Testing
 

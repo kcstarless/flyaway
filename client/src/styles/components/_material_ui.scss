@@ -1,0 +1,57 @@
+.filter-slider {
+    display: flex; // Added to control alignment
+    // flex-direction: column;
+    justify-content: center; // Center-align the content
+    align-items: center; // 
+    .MuiSlider-root {
+        // width: 90%; // Ensure the slider itself takes full width
+      }
+    .MuiSlider-thumb {
+        background-color: var(--color-secondary); // Define your desired color for the thumb here
+        width: 15px;
+        height: 15px;
+    }
+    .MuiSlider-rail {
+        background-color: white; // Change rail color
+        opacity: 1;
+    }
+    .MuiSlider-track {
+        background-color: var(--color-secondary-rotate);
+        margin-left: auto; // Center-align the track with `auto` margins
+        margin-right: auto; // Center-align the track with `auto` margins
+        border: none;
+    }
+    .MuiSlider-valueLabel {
+        background-color: #fff; // Change the background of value label
+        color: #000; // Change text color inside value label
+        border-radius: var(--border-radius-more);
+    }
+    .MuiSlider-markLabel {
+        // color: #007bff; // Change mark label color?
+        font-size: var(--font-size-xxs); // Optional: Change font size of marks
+    }
+    .MuiSlider-mark {
+        background-color: white;
+    }
+    .Mui-disabled {
+        .MuiSlider-thumb {
+          background-color: lightgray !important; // Thumb color when disabled
+        }
+    
+        .MuiSlider-track {
+          background-color: lightgray !important; // Track color when disabled
+        }
+    
+        .MuiSlider-rail {
+          background-color: #ccc !important; // Rail color when disabled
+        }
+    
+        .MuiSlider-mark {
+          background-color: lightgray !important; // Mark color when disabled
+        }
+    
+        .MuiSlider-markLabel {
+          color: #999 !important; // Label color when disabled
+        }
+      }
+  }
