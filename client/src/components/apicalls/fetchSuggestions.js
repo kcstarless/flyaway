@@ -12,21 +12,21 @@ const imageUrls = {
 };
 
 // Fetch location suggestion
-export const fetchSuggestions = async (query) => {
-  if (query.length < 2) {
+export const fetchSuggestions = async (location) => {
+  if (location.length < 2) {
     return []; // Return an empty array if input is too short
   }
 
   // Check cache first
-  if (suggestionCache.has(query)) {
-    return suggestionCache.get(query);
+  if (suggestionCache.has(location)) {
+    return suggestionCache.get(location);
   }
 
   const noMatchedSuggestion = { cityName: "No match found", noMatch: true };
 
   try {
     const response = await axios.get(`/api/v1/search/airport_city`, {
-      params: { location: query }
+      params: { location: location }
     });
 
     if (response.data.data && response.data.data.length > 0) {
@@ -45,7 +45,7 @@ export const fetchSuggestions = async (query) => {
       }));
       // console.log(filteredSuggestions);
       const limitedSuggestions = filteredSuggestions.slice(0, 10);
-      suggestionCache.set(query, limitedSuggestions); // Cache the results
+      suggestionCache.set(location, limitedSuggestions); // Cache the results
 
       return limitedSuggestions;
     } else {

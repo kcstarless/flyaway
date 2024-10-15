@@ -64,7 +64,7 @@ h3,
 h4,
 h5,
 h6 {
-  // color: var(--color-secondary);
+  // color: var(--color-light);
   line-height: var(--line-height-headers);
 }
 
@@ -99,13 +99,16 @@ a {
 p {
   align-self: end;
   font-size: var(--font-size-xs);
-  &.p-large {
+  &.large {
     font-size: var(--font-size-m);
   }
-  &.p-medium {
+  &.medium {
     font-size: var(--font-size-s);
   }
-  &.p-small {
+  &.medium-small {
+    font-size: var(--font-size-xs);
+  }
+  &.small {
     font-size: var(--font-size-xxs);
   }
 }

@@ -1,23 +1,25 @@
 // FlightSearchResultDisplay.jsx
 
-import { useFlightOffersContext } from './contexts/FlightOffersContext';
-import { useLocalizationContext } from './contexts/LocalizationContext';
-import { filterFlightOffers, sortFlightOffers } from './helpers/filterandsortflightOffers';
-import DisplayFlights from './display_search_result/DisplayFlights';
-import SortOptions from './display_search_result/SortOptions';
-import FlightPriceHistory from './display_search_result/FlightPriceHistory';
-import FilterOptions from './display_search_result/FilterOptions';
-import { useState, useEffect } from 'react';
+import { useFlightOffersContext } from '../contexts/FlightOffersContext';
+import { useLocalizationContext } from '../contexts/LocalizationContext';
+import { filterFlightOffers, sortFlightOffers } from '../helpers/filterandsortflightOffers';
+import DisplayFlights from './DisplayFlights';
+import SortOptions from './SortOptions';
+import FlightPriceHistory from './FlightPriceHistory';
+import FilterOptions from './FilterOptions';
+import { useFlightSearchQuery } from '../hooks/useFlightSearchQuery';
+import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const FlightSearchResultDisplay = () => {
-    const { flightOffers, selectedOutboundFlight, setSelectedOutboundFlight } = useFlightOffersContext();
-    const { localizationData } = useLocalizationContext();
-    const { currencySymbol } = localizationData;
+    const { flightOffers, selectedOutboundFlight, selectedReturnFlight, isReturn, setSelectedOutboundFlight, setSelectedReturnFlight } = useFlightOffersContext();
+    const { localizationData: { currencySymbol } } = useLocalizationContext();
+    const navgiate = useNavigate();
 
     const [noMatch, setNoMatch] = useState(null);
-    const [offers, setOffers] = useState([]);
     const [sortOption, setSortOption] = useState("best");
     
+    const { refetchAll } = useFlightSearchQuery();
     // List of filters for flight offers data
     const [filterOption, setFilterOption] = useState({
         direct: true,
@@ -27,32 +29,37 @@ const FlightSearchResultDisplay = () => {
         travelTime: null,
         airlines: {}, //Keeps track of airlines eg{ name: true }
     });
-    
-    // Filters offers first then sort fight offers
-    useEffect(() => {
-        // const data = !selectedOutboundFlight ? flightOffers : returnFlights 
-        const filteredOffers = filterFlightOffers(filterOption, flightOffers);
-        const sorted = sortFlightOffers(sortOption, filteredOffers);
-        setOffers(sorted); // Store the filtered and sorted offers
 
+    // Inside your FlightSearchResultDisplay component
+    const offers = useMemo(() => {
+        const filteredOffers = filterFlightOffers(filterOption, flightOffers);
+        const sortedOffers = sortFlightOffers(sortOption, filteredOffers);
+    
         // Check if no flights match and set the noMatch state
-        if (sorted.length === 0) {
+        if (sortedOffers.length === 0) {
             setNoMatch("No flights matched. Please refine your search and filters.");
         } else {
             setNoMatch(null); // Reset noMatch if flights are found
         }
-
-    }, [filterOption, flightOffers, sortOption, selectedOutboundFlight]);
+    
+        return sortedOffers;
+    }, [filterOption, flightOffers, sortOption]); // Dependencies
 
     if (!flightOffers || flightOffers.length === 0) {
         return null;
     }
     
     const handleflightOfferselect = (flight) => {
-        selectedOutboundFlight === null && setSelectedOutboundFlight(flight);
+        if (selectedOutboundFlight === null) {
+            setSelectedOutboundFlight(flight);
+            isReturn ? refetchAll() : navgiate("/flight_details");
+        } 
+        if (selectedOutboundFlight && isReturn) {
+            setSelectedReturnFlight(flight);
+            navgiate("/flight_details");
+        }
     }
-    // console.log(selectedOutboundFlight);
-    // console.log(selectedReturnFlight);
+   
     return (
         <div className="search-result">
             <FlightPriceHistory />

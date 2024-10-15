@@ -2,12 +2,12 @@
 import axios from 'axios';
 import { isoDateToHHMM24, formatDuration } from '../helpers/general';
 
-export const fetchFlights = async (data, isReturn) => {
+export const fetchFlights = async (data) => {
   try {    
     const response = await axios.post('/api/v1/search/flight_offers', {
-        origin: isReturn ? data.destinationIATA : data.departingIATA, // Origin is the destination IATA for return flights
-        destination: isReturn ? data.departingIATA : data.destinationIATA, // Destination is the departing IATA for return flights
-        departureDate: isReturn ? data.returnDate : data.departDate,
+        origin: data.departingIATA, //= Origin is the destination IATA for return flights
+        destination: data.destinationIATA, // Destination is the departing IATA for return flights
+        departureDate: data.departDate,
         adults: data.passengers,         // e.g., 1
         currencyCode: data.currencyCode,      // e.g., 'USD'
     });
@@ -16,6 +16,8 @@ export const fetchFlights = async (data, isReturn) => {
     if (response.data.data && response.data.data.length > 0) {
       const flightOffers = response.data.data;
       const carriers = response.data.result.dictionaries.carriers; // Extract carriers from dictionaries
+      const dictionary = response.data.result.dictionaries;
+      // const locations = response.data.result.dictionaries.locations;
       // console.log(flightOffers);
       // Map over flightOffers to a new flightData
       const filteredFlightOffers = flightOffers
@@ -32,8 +34,10 @@ export const fetchFlights = async (data, isReturn) => {
         offer.itineraries.map(itinerary => {
           const lastSegment = itinerary.segments.length - 1;
           return {
+            offer: offer,
             offerId: offer.id,
             departureIata: itinerary.segments[0].departure.iataCode,
+            departureDateTime: itinerary.segments[0].departure.at,
             departureTime: isoDateToHHMM24(itinerary.segments[0].departure.at),
             duration: formatDuration(itinerary.duration),  // duration is array eg [HH:MM, timeInMintues]
             arrivalIata: itinerary.segments[lastSegment].arrival.iataCode,
@@ -42,8 +46,10 @@ export const fetchFlights = async (data, isReturn) => {
             carrierLogo: `https://www.gstatic.com/flights/airline_logos/70px/${itinerary.segments[0].carrierCode}.png`,
             carrierName: carriers[itinerary.segments[0].carrierCode],
             stops: lastSegment,
-            price: offer.price.total,
+            price: parseInt(offer.price.total, 10),
             currency: offer.price.currency,
+            dictionary: dictionary,
+            carriers: carriers,
           }
         })
       );

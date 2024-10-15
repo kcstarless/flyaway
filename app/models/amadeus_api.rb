@@ -12,12 +12,19 @@ class AmadeusApi
   end
 
   # Airport/City/Location API calls for location suggestion list (autocomplete)
-  def airport_search(keyword)
+  def airport_city_search(keyword, countryCode = nil)
     @amadeus.reference_data.locations.get(
       keyword: keyword,
-      subType: Amadeus::Location::ANY
+      subType: Amadeus::Location::ANY,
+      countryCode:
     )
   end
+
+  # Location search by Iata Code
+  def location_by_iata_search(code)
+    @amadeus.reference_data.location(code).get
+  end
+
 
   # Airline detail API call
   def airline_search(code)
@@ -54,7 +61,7 @@ class AmadeusApi
     #   latitude: latitude,
     #   longitude: longitude,
     # )
-    @amadeus.reference_data.locations.points_of_interest.get(
+    @amadeus.get('/v1/shopping/activities',
       latitude: latitude,
       longitude: longitude,
       radius: radius,

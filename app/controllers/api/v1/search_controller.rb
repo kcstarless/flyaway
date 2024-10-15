@@ -6,9 +6,30 @@ class Api::V1::SearchController < ApplicationController
   def airport_city
     begin
       location = params[:location]
-      @response = AmadeusApi.new.airport_search(location)
+      countryCode = params[:countryCode]
+      @response = AmadeusApi.new.airport_city_search(location, countryCode)
       render json: @response
     rescue Amadeus::ResponseError  => e
+      render json: { error: e.message }
+    end
+  end
+
+  def airport_iata
+    begin
+      iata_code = params[:iataCode]
+      @response = FlightradarApi.new.airport_iata_search(iata_code)
+      render json: @response
+    rescue StandardError => e
+      render json: { error: e.message }, status: :unprocessable_entity
+    end
+  end
+
+  def location_by_iata
+    begin
+      iataCode = params[:iataCode]
+      @response = AmadeusApi.new.location_by_iata_search(iataCode)
+      render json: @reponse
+    rescue Amadeus::ResponseError => e
       render json: { error: e.message }
     end
   end

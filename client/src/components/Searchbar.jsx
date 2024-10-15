@@ -6,66 +6,49 @@ import { debounce } from './helpers/debounce';
 import SearchInput from './searchbar/SearchInput';
 import DatePickerInput from './searchbar/DatePickerInput';
 import PassengersInput from './searchbar/PassengersInput';
-import { useLocalizationContext } from './contexts/LocalizationContext';
 import { useFlightOffersContext } from './contexts/FlightOffersContext';
 import { useFlightSearchQuery } from './hooks/useFlightSearchQuery';
 import { getDateYYYYMMDD, validateForm } from './helpers/general';
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
-  const { setSelectedOutboundFlight, setSelectedReturnFlight } = useFlightOffersContext();
-  const { localizationData } = useLocalizationContext();
-  const { currency } = localizationData;
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [currencyChanged, setCurrencyChanged] = useState(false);
+  const { formData, setFormData, setCurrencyChanged, isSubmitted, setIsSubmitted,  setSelectedOutboundFlight, setSelectedReturnFlight } = useFlightOffersContext();
+
   const [suggestions, setSuggestions] = useState({ departing: [], destination: [] });
   const [loading, setLoading] = useState({ departing: false, destination: false });
   const [focused, setFocused] = useState({ departing: false, destination: false });
   const [isSwapped, setIsSwapped] = useState(false);
   const [formError, setFormError] = useState('');
-  const [isReturn, setIsReturn] = useState(false);
+  const navigate = useNavigate(); 
 
+  // Custom hook to fetch search formData.
+  const { refetchAll } = useFlightSearchQuery();
 
-  // Form data
-  const [formData, setFormData] = useState({
+  // Local component state to manage the inputs without formData
+  const [localInputs, setLocalInputs] = useState({
     departingInput: '',
     departingIATA: '',
-    departingCityName: '',
-    departingCountryCode: '',
     destinationInput: '',
     destinationIATA: '',
+    departingCityName: '',
     destinationCityName: '',
+    departingCountryCode: '',
     destinationCountryCode: '',
-    destinationGeoCode: '',
     departDate: null,
     returnDate: null,
-    passengers: 1,
-    currencyCode: currency, // Initialize with current currency
+    departingGeoCode: {},  // Initialize geoCode as an empty object
+    destinationGeoCode: {}, // Initialize geoCode as an empty object
   });
 
-  // If return date is present then set legs to 2 else 1
-  useEffect (() => {
-    if (formData.returnDate) {
-      setIsReturn(true) ;
-    } else {
-      setIsReturn(false);
-    }
-  }, [formData.returnDate, isReturn])
-  // Custom hook to fetch search formData.
-  const { refetchAll } = useFlightSearchQuery(formData, isSubmitted, currencyChanged, isReturn)
-
-  // Updates form currency properties
-  useEffect(() => {
-    setFormData(prev => ({ ...prev, currencyCode: currency }));
-    setCurrencyChanged(true); // Mark that currency has changed
-  }, [currency]);
-
-  // Switch inputs field data between From and To. 
+  // Switch inputs field data between From and To without re-rendering
   const handleToggle = () => {
     setIsSwapped(prev => !prev);
-    setFormData(prev => ({
+    setLocalInputs(prev => ({
       ...prev,
       departingInput: prev.destinationInput,
       destinationInput: prev.departingInput,
+      departingCityName: prev.destinationCityName,
+      destinationCityName: prev.departingCityName,
       departingIATA: prev.destinationIATA,
       destinationIATA: prev.departingIATA,
     }));
@@ -90,47 +73,60 @@ const SearchBar = () => {
 
   const handleInputChange = (event, type) => {
     const value = event.target.value;
-    // Update the form data with the current input value
-    setFormData(prev => ({ ...prev, [`${type}Input`]: value }));
-    // fetch only if there is at least one character
+    // Update local input state for current input value
+    setLocalInputs(prev => ({ ...prev, [`${type}Input`]: value }));
     if (value.trim().length > 0) {
-      debouncedFetchSuggestions(value, type); // Search location for change value
+      debouncedFetchSuggestions(value, type); // Fetch suggestions based on value
     } else {
-      // Optionally reset suggestions if the input is empty
       setSuggestions(prev => ({ ...prev, [type]: [] })); // Clear suggestions when input is empty
     }
   };
 
   // Sets form data with required this field type with additional information for required search
   const handleSuggestionClick = (suggestion, type) => {
-    if (!suggestion.noMatch) {  // Only if there is suggestions
-      const formattedSuggestion = `${suggestion.locationName} (${suggestion.iataCode})`;
-      setFormData(prev => ({
-        ...prev,
-        [`${type}Input`]: formattedSuggestion, // Displays on input field
-        [`${type}IATA`]: suggestion.iataCode,
-        [`${type}CityName`]: suggestion.cityName,
-        [`${type}CountryCode`]: suggestion.countryCode,
-        [`${type}GeoCode`]: suggestion.geoCode,
-      }));
-    };
-    // if (formData.departingIATA === formData.destinationIATA) {
-    //   setFormError("Origin and destination can't be same.");
-    // }
-  };
+    if (!suggestion.noMatch) { // Only if there are suggestions
+        const formattedSuggestion = `${suggestion.locationName} (${suggestion.iataCode})`;
+
+        // Attempt to set the localInputs state
+        setLocalInputs(({
+            ...localInputs,
+            [`${type}Input`]: formattedSuggestion,
+            [`${type}IATA`]: suggestion.iataCode,
+            [`${type}CityName`]: suggestion.cityName || '', // Ensure to fall back to empty string
+            [`${type}CountryCode`]: suggestion.countryCode || '', // Ensure to fall back to empty string
+            [`${type}GeoCode`]: suggestion.geoCode || '', // Ensure to fall back to empty string
+        }));
+        console.log(localInputs);
+    }
+};
 
   const handleFocus = (type) => setFocused(prev => ({ ...prev, [type]: true }));
   const handleBlur = (type) => setTimeout(() => setFocused(prev => ({ ...prev, [type]: false })), 200);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!validateForm(formData, setFormError)) return;
 
-    setIsSubmitted(true); // Set form as submitted
-    setCurrencyChanged(false); // Reset currency changed after submission
-    refetchAll();
-
+    // Update formData with localInputs data
+    setFormData(prev => ({
+      ...prev,
+      ...localInputs
+    }));
+    // Mark the form as submitted
+    // setCurrencyChanged(false);
+    setSelectedOutboundFlight(null);
+    setSelectedReturnFlight(null);
+    setIsSubmitted(true);
   };
+
+  // Listen for changes in formData or isSubmitted
+  useEffect(() => {
+    if (isSubmitted) {
+      // Perform the search after formData is updated
+      refetchAll();
+      // Redirect to flight_search_result
+      navigate("/flight_search_result");
+    }
+  }, [formData, isSubmitted]);
 
   return (
     <div className="search-bar">
@@ -138,7 +134,7 @@ const SearchBar = () => {
         <div className="location-toggle">
           <SearchInput
             label="From"
-            value={formData.departingInput}
+            value={localInputs.departingInput}
             onChange={(event) => handleInputChange(event, 'departing')}
             onFocus={() => handleFocus('departing')}
             onBlur={() => handleBlur('departing')}
@@ -153,7 +149,7 @@ const SearchBar = () => {
           </button>
           <SearchInput
             label="To"
-            value={formData.destinationInput}
+            value={localInputs.destinationInput}
             onChange={(event) => handleInputChange(event, 'destination')}
             onFocus={() => handleFocus('destination')}
             onBlur={() => handleBlur('destination')}
@@ -166,13 +162,13 @@ const SearchBar = () => {
         </div>
         <DatePickerInput
           label="Depart"
-          selectedDate={formData.departDate}
-          onChange={(date) => setFormData(prev => ({ ...prev, departDate: getDateYYYYMMDD(date) }))}
+          selectedDate={localInputs.departDate}
+          onChange={(date) => setLocalInputs(prev => ({ ...prev, departDate: getDateYYYYMMDD(date) }))}
         />
         <DatePickerInput
           label="Return"
-          selectedDate={formData.returnDate}
-          onChange={(date) => setFormData(prev => ({ ...prev, returnDate: getDateYYYYMMDD(date) }))}
+          selectedDate={localInputs.returnDate}
+          onChange={(date) => setLocalInputs(prev => ({ ...prev, returnDate: getDateYYYYMMDD(date) }))}
         />
         <PassengersInput
           passengers={formData.passengers}

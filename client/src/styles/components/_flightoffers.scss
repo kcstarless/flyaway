@@ -5,7 +5,7 @@
         "filter sort ads"
         "filter display ads";
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 3rem 3rem auto;
+    grid-template-rows: 3rem 4rem auto;
     gap: var(--space-xs);
 
     .results {
@@ -15,11 +15,23 @@
         gap: var(--space-s);
     }
     .results.loading {
-        background-color: rgba(0, 0, 0, 0.1); /* Greyed-out background */
+        // background-color: rgba(0, 0, 0, 0.1); /* Greyed-out background */
         pointer-events: none; /* Optional: to prevent interaction during loading */
         opacity: 0.5; /* Optional: to make it look disabled */
     }
-
+    .flight-leg {
+        display: flex;
+        justify-content: end;
+        font-size: var(--font-size-xs);
+        font-weight: bold;
+        padding-right: var(--space-s);
+        // border: solid 2px white;
+    }
+    .flight-history.loading {
+        // background-color: rgba(0, 0, 0, 0.1); /* Greyed-out background */
+        pointer-events: none; /* Optional: to prevent interaction during loading */
+        opacity: 0.5; /* Optional: to make it look disabled */
+    }
     .flight-history {
         display: flex;
         flex-direction: column;
@@ -27,10 +39,9 @@
         // background-color: white;
         // border: solid 2px white;
         border-radius: var(--border-radius);
-
-        padding-top: var(--space-s);
-        padding-bottom: var(--space-xxxl);
-        // gap: var(--space-s);
+        // padding-top: var(--space-m);
+        // padding-bottom: var(--space-xxxxl);
+        gap: var(--space-m);
 
         .history-title {
             align-self: end;

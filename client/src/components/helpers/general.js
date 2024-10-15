@@ -1,5 +1,36 @@
 // general.js
 
+// Calculate layover time eg. "2024-10-16T15:15:00" and "2024-10-17T19:10:00"
+// Used in: FlightDetails.jsx
+export const getLayoverTime = (timeDate1, timeDate2) => {
+    const date1 = new Date(timeDate1);
+    const date2 = new Date(timeDate2);
+
+    const diffInMilliseconds = date2 - date1; // Difference in milliseconds
+    const diffInHours = diffInMilliseconds / (1000 * 60 * 60); // Convert to hours
+
+    return parseFloat(diffInHours.toFixed(2));
+}
+
+
+// Long day format eg. Wendesday, 16 Oct 2024
+// Used in: FlightDetails.jsx
+export const getDateDayDDMMYYYY = (dateString) => {
+    const date = new Date(dateString);
+
+    // Options for formatting the date
+    const options = {
+        weekday: 'long', // e.g., "Wednesday"
+        year: 'numeric', // e.g., "2024"
+        month: 'short', // e.g., "Oct"
+        day: '2-digit' // e.g., "16"
+    };
+
+    // Convert to desired format
+    return date.toLocaleDateString('en-US', options);
+}
+
+
 // Validates flight search form data and set feedback
 // Used in: Searchbar.jsx
 export const validateForm = (formData, setFormError) => {

@@ -1,7 +1,7 @@
 // fetchFlightHistory.js
 import axios from "axios";
 
-export const fetchFlightPriceHistory = async(formData, isReturn) => {
+export const fetchFlightPriceHistory = async(formData) => {
     try {
         const response = await axios.get(`api/v1/search/flight_history`, {
             params: { 

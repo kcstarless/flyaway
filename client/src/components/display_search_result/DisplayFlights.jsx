@@ -81,7 +81,7 @@ DisplayFlights.propTypes = {
         ])).isRequired,
         arrivalTime: PropTypes.string.isRequired,
         arrivalIata: PropTypes.string.isRequired,
-        price: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
     })).isRequired,
     currencySymbol: PropTypes.string.isRequired,
 };

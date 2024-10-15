@@ -4,35 +4,36 @@ import SearchBar from "./components/Searchbar"
 import { FlightOffersProvider } from "./components/contexts/FlightOffersContext"
 import { LocalizationProvider } from "./components/contexts/LocalizationContext"
 import { LoadingProvider } from "./components/contexts/LoadingContext"
-import FlightSearchResultDisplay from "./components/FlightSearchResultDisplay"
-import ErrorBoundary from "./components/ErrorBoundary"
+import MainContent from "./components/MainContent"
+import { BrowserRouter as Router } from "react-router-dom";
+
+// import ErrorBoundary from "./components/ErrorBoundary"
 // import TempContainer from "./components/TempContainer"
 
 function App() {
   return (
-    <div className="container">
-      <LocalizationProvider>
-      <FlightOffersProvider>
-      <LoadingProvider>
-        <div className="c1">
-          <div className="header">
-            <Navbar />
-            <ErrorBoundary>
-            <SearchBar />
-            </ErrorBoundary>
+    <Router>
+      <div className="container">
+        <LocalizationProvider>
+        <FlightOffersProvider>
+        <LoadingProvider>
+          <div className="c1">
+            <div className="header">
+              <Navbar />
+              <SearchBar />
+            </div>
           </div>
-        </div>
 
-        <div className="c2">  
-          <div className="content"> 
-              {/* <TempContainer />         */}
-              <FlightSearchResultDisplay />
+          <div className="c2">  
+            <div className="content">
+                <MainContent />
+            </div>
           </div>
-        </div>
-      </LoadingProvider>
-      </FlightOffersProvider>
-      </LocalizationProvider>
-    </div>
+        </LoadingProvider>
+        </FlightOffersProvider>
+        </LocalizationProvider>
+      </div>
+    </Router>
   )
 }
 
