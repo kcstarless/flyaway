@@ -72,7 +72,6 @@ const SetLocalization = ({ isOpen, onRequestClose }) => {
         event.preventDefault();
 
         const newCountry = countries.find(country => country.cca2 === selectedCountryCode)
-        console.log(newCountry);
         
         updateLocalizationData({
             countryCode: selectedCountryCode,
@@ -82,6 +81,7 @@ const SetLocalization = ({ isOpen, onRequestClose }) => {
             language: 'English', // Or the selected language
             currencySymbol: currenciesList(countries).find(([code]) => code === selectedCurrency)[1],
         });
+        console.log(localizationData);
         onRequestClose(); // Close the modal
     };
 

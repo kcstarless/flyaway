@@ -3,9 +3,11 @@
     flex-direction: column;
     justify-content: center;
     width: 100%;
+    
     padding-top: var(--space-l);
     padding-right: var(--space-m);
     padding-left: var(--space-m);
+    
 
     @include media(tabletAndUp) {
         padding-right: var(--space-m);

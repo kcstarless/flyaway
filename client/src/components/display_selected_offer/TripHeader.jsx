@@ -1,9 +1,11 @@
 // TripHeader.jsx
 import { useFlightOffersContext } from '../contexts/FlightOffersContext';
+import { numberCommas } from '../helpers/general';
+import { useLocalizationContext } from '../contexts/LocalizationContext';
 
 const TripHeader = () => {
     const { selectedOutboundFlight, selectedReturnFlight, formData, isReturn } = useFlightOffersContext();
-    
+    const {localizationData} = useLocalizationContext();
     if (!selectedOutboundFlight) {
         return null; // Or handle the loading state appropriately
     }
@@ -25,7 +27,8 @@ const TripHeader = () => {
             </div>
         </div>
         <div className="trip-price">
-            <p>{formData.currencyCode}{formData.currencySymbol}{totalPrice}</p>
+            <h3>{localizationData.currency} {localizationData.currencySymbol}{numberCommas(totalPrice)}</h3>
+            <p>total price</p>
         </div>   
     </div>
     )

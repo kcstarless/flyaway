@@ -1,12 +1,17 @@
 import { useFlightOffersContext } from '../contexts/FlightOffersContext';
 import { useLocalizationContext } from '../contexts/LocalizationContext';
 import { useLoadingContext } from '../contexts/LoadingContext';
+import { validCurrency, numberCommas } from '../helpers/general';
+import { toolTipHelper } from '../helpers/toolTipHelper';
+import Tooltip from '@mui/material/Tooltip';
+import { CiCircleInfo } from "react-icons/ci";
 
 const FlightflightPriceHistory = () => {
     const {flightPriceHistory, formData} = useFlightOffersContext();
     const {localizationData} = useLocalizationContext();
     const {loadingPriceHistory} = useLoadingContext();
     const currencySymbol = localizationData.currencySymbol;
+    const currencyValid = validCurrency.includes(localizationData.currency);
 
     return (
         <div>
@@ -29,7 +34,7 @@ const FlightflightPriceHistory = () => {
                 <div className="first">
                     {flightPriceHistory.length > 0 ? (
                     <div className="first-price">
-                        <span>{currencySymbol}{flightPriceHistory[1].amount}</span>
+                        {currencyValid && <span>{currencySymbol}{numberCommas(flightPriceHistory[1].amount)}</span>}
                     </div>
                     ) : (
                     <div className="first-price">
@@ -42,7 +47,10 @@ const FlightflightPriceHistory = () => {
                     {flightPriceHistory.length > 0 ? (
                         <>
                             <div className="dialog_box bottom">
-                                {currencySymbol}{flightPriceHistory[2].amount} is typical price
+                            {currencyValid
+                                ? (<div>{currencySymbol}{numberCommas(flightPriceHistory[2]?.amount)} is typical price</div>) 
+                                : (<div>currency {currencySymbol} not supported. <Tooltip  placement="top-start" title={toolTipHelper("price_history")}><div><CiCircleInfo /></div></Tooltip></div>)
+                            }
                             </div>
                         </>
                         ) : (
@@ -55,7 +63,7 @@ const FlightflightPriceHistory = () => {
                     <div className="third-price">
                     {flightPriceHistory.length > 0 ? (
                     <div className="first-price">
-                        <span>{currencySymbol}{flightPriceHistory[3].amount}</span>
+                        {currencyValid && <span>{currencySymbol}{numberCommas(flightPriceHistory[3].amount)}</span>}
                     </div>
                     ) : (
                     <div className="first-price">

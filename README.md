@@ -11,7 +11,11 @@ Sass is my go to CSS as I like was it's structured and able to separate differen
 
 ## Material UI
 I tried using minimal MUI to start with but after and instead try to build my own. But after trying to create auto complete in Javascript/React and seeing how much time it consumed (I got faster but still) I decided to use MUI for following components.
-- Departure time and flight duration slider. 
+- Departure time and flight duration slider.
+
+## React libraries
+- react-icons: I like the fact that I can directly use css to style the icons with cluttering the return statement with svg file path or changing color `fill` individually on file it self. 
+
 
 ## API requests
 Rails will handle all API request and React will use it to provide Real-time Feedback, eg destination location in flight search.
