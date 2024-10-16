@@ -5,18 +5,23 @@
         "passenger-details flight-details";
     // grid-template-rows: 0.1fr 1fr;
     grid-template-columns: auto 0.3fr;
-    gap: var(--space-xs);
+    gap: var(--space-m);
 }
 
 .trip-details {
     grid-area: trip-details;
-    // border: solid 2px black;
+    border-bottom: solid 2px white;
+    padding-bottom: var(--space-xxxs);
     display: flex;
     justify-content: space-between;
     .trip-desc {
         display: flex;
         align-items: center;
         flex-direction: row;
+    }
+    .trip-price {
+        display: flex;
+        flex-direction: column;
     }
 }
 
@@ -33,6 +38,24 @@
     flex-direction: column;
     justify-content: space-between;
     // border: solid 2px black;
+    .float-right {
+        display: inline-flex;
+        justify-content: end;
+        h3 {
+            color: rgb(192, 191, 191);
+        }
+        
+    }
+    .flight-bound {
+        display: flex;
+        gap: var(--space-s);
+        padding-top: var(--space-s);
+        padding-bottom: var(--space-xs);
+        font-size: var(--font-size-s);
+        p.gray{
+            color: rgb(75, 75, 75);
+        }
+    }
     .flight-card {
         .itinerary-card {
             font-size: var(--font-size-xxs);
@@ -115,6 +138,7 @@
                     flex-direction: column;
                     gap: var(--space-xxs);
                     padding-left: var(--space-s);
+                    width: 100%;
                     // border: solid 2px black;
                     .airline {
                         display: flex;
@@ -141,12 +165,76 @@
                         flex-direction: row;
                         gap: var(--space-xxs);
                     }
-                    .details {
+                    .amenities {
                         display: flex;
                         flex-direction: row;
-                        p {
+                        gap: var(--space-xxs);
+                        justify-content: space-between;
+                        padding-right: var(--space-xxl);
+
+                        img {
+                            width: 15px;
+                            display: inline-block;
+                            vertical-align: middle;
+                        }
+                        .amenities-list {
                             font-size: var(--font-size-xxs);
                         }
+                        .amenities-detail {
+                            color: gray;
+                            cursor: pointer;
+                            position: relative;
+                            color: var(--color-secondary);
+                            .icon{
+                                display: inline-block;
+                                vertical-align: middle;
+                                font-size: 15px;
+                            }
+                            .amenities-dialog {
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: space-between;
+                                // width: 300px;
+                                position: absolute;
+                                left: -70px;
+                                bottom: 100%;
+                                padding: var(--space-m);
+                                padding-left: var(--space-l);
+                                transform: translateY(-10px);
+                                border: none;
+                                border-radius: var(--border-radius);
+                                background-color: #f2faff;
+                                box-shadow: var(--box-shadow);
+                                // min-width: 150px; /* Minimum width */
+                                max-width: 300px; /* Maximum width */
+                                ul {
+                                    list-style: circle;
+                                }
+                                .chargeable {
+                                    padding-left: var(--space-xs);
+                                    .yes {
+                                        font-weight: bold;
+                                        color: rgb(235, 86, 86);
+                                    }
+                                    .no {
+                                        font-weight: bold;
+                                        color: rgb(47, 165, 47);
+                                    }
+                                }
+                                .chargeable.line{
+                                    // display: flex;
+                                    // justify-content: space-between;
+                                    // width: 100%;
+                                    // border: solid 2px black;
+                                }
+
+                            }   
+                        }
+                        .amenities-detail:hover {
+                            color: var(--color-secondary);
+                        }
+   
+
                     }
                     p.time {
                         width: 40px;

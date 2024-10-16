@@ -3,7 +3,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    
+    justify-content: flex-start;
+    min-height: 100vh;
   .c1 {
     display: flex;
     justify-content: center;
@@ -11,7 +12,9 @@
   }
   .c2 {
     display: flex;
-    justify-content: center;
-    background-color: #95c9ecbd;
+    justify-content: center; /* Align content at the start horizontally */
+    align-items: flex-start;
+    background-color: #95c9ec4f;
+    flex-grow: 1; 
   }
 }

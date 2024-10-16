@@ -57,7 +57,7 @@ export const fetchLocalizationData = async () => {
     try {
         const position = await getLocation();
         const countryData = await getCountryData(position);
-        // console.log(countryData); 
+        console.log(countryData); 
         return countryData
     } catch (error) {
         console.log(error);

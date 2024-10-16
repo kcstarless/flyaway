@@ -12,6 +12,7 @@ import { getDateYYYYMMDD, validateForm } from './helpers/general';
 import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
+  // console.count("Searchbar rendered...");
   const { formData, setFormData, setCurrencyChanged, isSubmitted, setIsSubmitted,  setSelectedOutboundFlight, setSelectedReturnFlight } = useFlightOffersContext();
 
   const [suggestions, setSuggestions] = useState({ departing: [], destination: [] });

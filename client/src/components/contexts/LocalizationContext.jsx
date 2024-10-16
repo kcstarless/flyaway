@@ -17,22 +17,39 @@ export const LocalizationProvider = ({ children }) => {
     const [localizationData, setLocalizationData] = useState(defaultLocalizationData);
     
     const localizationQuery = useQuery({
-        queryKey: ["localizationQuery", localizationData.currency],
+        queryKey: ["localizationData"],
         queryFn: fetchLocalizationData,
-        // enabled: !!localizationData.currency
-    })
-
+        enabled: true,
+    });
     useEffect(() => {
         if (localizationQuery.data) {
             setLocalizationData(localizationQuery.data);
         }
     }, [localizationQuery.data]);
 
+    // useEffect(() => {
+    //     // Fetch localization data on the initial load
+    //     const loadLocalizationData = async () => {
+    //         const data = await fetchLocalizationData();
+    //         if (data) {
+    //             setLocalizationData(data);
+    //         }
+    //     };
+    //     loadLocalizationData();
+    // }, []); // Run only once on component mount
+
     const updateLocalizationData = (newData) => {
-        setLocalizationData((prevData) => ({
-            ...prevData,
-            ...newData
-        }));
+        console.log('Previous Data:', localizationData);
+        console.log('New Data:', newData);
+    
+        setLocalizationData((prevData) => {
+            const updatedData = { ...prevData, ...newData };
+    
+            // Log the updated data to see the difference
+            console.log('Updated Data:', updatedData);
+    
+            return updatedData;
+        });
     };
     
     return (

@@ -1,8 +1,13 @@
 // fetchFlightHistory.js
+import { validCurrency } from '../helpers/general';
+
 import axios from "axios";
 
 export const fetchFlightPriceHistory = async(formData) => {
+    const currencyValid = validCurrency.includes(formData.currency);
     try {
+        !currencyValid && null;
+        
         const response = await axios.get(`api/v1/search/flight_history`, {
             params: { 
                 originIataCode: formData.departingIATA,

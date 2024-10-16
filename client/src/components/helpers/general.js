@@ -1,5 +1,22 @@
 // general.js
 
+// Valid currencies for flight price history.
+// Used in: fetchFlightPriceHistory.js, FlightPriceHistory.jsx.
+export const validCurrency = [
+    'CAD', 'HKD', 'ISK', 'PHP', 'DKK', 'HUF', 'CZK', 'AUD', 'RON', 
+    'SEK', 'IDR', 'INR', 'BRL', 'RUB', 'HRK', 'JPY', 'THB', 'CHF', 
+    'SGD', 'PLN', 'BGN', 'TRY', 'CNY', 'NOK', 'NZD', 'ZAR', 
+    'USD', 'MXN', 'ILS', 'GBP', 'KRW', 'MYR', 'EUR'
+];
+
+
+// Format number into currency. Eg. 1230 -> 1,230
+// Used in: Tripheader.jsx
+export const numberCommas = (number) => {
+    const integerNumber = Math.floor(number); // or use any of the above methods
+    return integerNumber.toLocaleString();
+}
+
 // Calculate layover time eg. "2024-10-16T15:15:00" and "2024-10-17T19:10:00"
 // Used in: FlightDetails.jsx
 export const getLayoverTime = (timeDate1, timeDate2) => {
@@ -67,12 +84,26 @@ export const capitalizeFirstLetters = (str) => {
         .join(' ');    // Join the words back into a single string
 }
 
-// Converts minutes to hours HH.H
+// Caplializes the first letter of string only (eg "Axxx xxx")
+// Used in: FlightDetailsExpanded
+export const capitalizeFirstLetterOnly = (str) => {
+    if (str.length === 0) return str; // Handle empty string case
+    // Capitalize the first character and convert the rest to lowercase
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+// Converts minutes to hours HH.H rounded
 // Used in: FilterOptions.jsx
 export const minutesToHH = (value) => {
     const decimalHours = value / 60;
     const roundedHours = Math.round(decimalHours * 2) / 2;
     return roundedHours.toFixed(1);
+}
+
+// Convert mintues to hours in decimal form
+export const minutesToHHDecimal = (value) => {
+    const decimalHours = value / 60;
+    return decimalHours.toFixed(1);
 }
 
 // Function to format the slider value as "HH:MM" (24hr)

@@ -12,7 +12,7 @@ import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const FlightSearchResultDisplay = () => {
-    const { flightOffers, selectedOutboundFlight, selectedReturnFlight, isReturn, setSelectedOutboundFlight, setSelectedReturnFlight } = useFlightOffersContext();
+    const { flightOffers, selectedOutboundFlight, isReturn, setSelectedOutboundFlight, setSelectedReturnFlight } = useFlightOffersContext();
     const { localizationData: { currencySymbol } } = useLocalizationContext();
     const navgiate = useNavigate();
 
