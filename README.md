@@ -4,6 +4,8 @@
 Allows user to search flights based on origin, destination and date. My goal for this project was to see how React can work with Rails.
 APP uses Rails as a backend API and React as frontend. This separates app into two which communicates via API requests. This approach allows you to decouple the frontend and backend enable it to operate independently. 
 
+No libraries was used to start with but as project expanded I have tried and implemented different libraries for better coding experience. 
+
 ## Vite + React + SASS
 For this project I will be using Vite for javascript bundler with React and Sass.
 I thought about using Vue.js instead of React but I am still learning React so decided to spend more time on it. 
@@ -15,7 +17,7 @@ I tried using minimal MUI to start with but after and instead try to build my ow
 
 ## React libraries
 - react-icons: I like the fact that I can directly use css to style the icons with cluttering the return statement with svg file path or changing color `fill` individually on file it self. 
-
+- react-hook-form: Decided to try this one out for better form building experience.
 
 ## API requests
 Rails will handle all API request and React will use it to provide Real-time Feedback, eg destination location in flight search.

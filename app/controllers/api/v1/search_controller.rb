@@ -1,7 +1,138 @@
+# search_controller.rb
+
+
 require_relative '../../../models/opencage_api'
+require_relative '../../../models/amadeus_api'
+require_relative '../../../models/amadeus_faraday_api'
 
 class Api::V1::SearchController < ApplicationController
   wrap_parameters false;
+
+    # POST /api/v1/search/confirm_price
+    def pricing
+      begin
+      offer = price_params[:offer] # Get the flight offer from the request parameters
+      # include_options = price_params[:include] || [] # Get optional include parameters
+        offer =  offer = {
+        "type": "flight-offer",
+        "id": "1",
+        "source": "GDS",
+        "instantTicketingRequired": false,
+        "nonHomogeneous": false,
+        "oneWay": false,
+        "isUpsellOffer": false,
+        "lastTicketingDate": "2024-11-01",
+        "numberOfBookableSeats": 9,
+        "itineraries": [
+          {
+            "duration": "PT18H25M",
+            "segments": [
+              {
+                "departure": {
+                  "iataCode": "CDG",
+                  "at": "2024-11-01T10:00:00"
+                },
+                "arrival": {
+                  "iataCode": "FRA",
+                  "at": "2024-11-01T14:30:00"
+                },
+                "carrierCode": "6X",
+                "number": "501",
+                "aircraft": {
+                  "code": "744"
+                },
+                "operating": {
+                  "carrierCode": "6X"
+                },
+                "duration": "PT4H30M",
+                "id": "1",
+                "numberOfStops": 0
+              },
+              {
+                "departure": {
+                  "iataCode": "FRA",
+                  "at": "2024-11-01T18:10:00"
+                },
+                "arrival": {
+                  "iataCode": "ICN",
+                  "at": "2024-11-02T11:25:00"
+                },
+                "carrierCode": "6X",
+                "number": "9744",
+                "aircraft": {
+                  "code": "744"
+                },
+                "operating": {
+                  "carrierCode": "6X"
+                },
+                "duration": "PT10H15M",
+                "id": "2",
+                "numberOfStops": 0
+              }
+            ]
+          }
+        ],
+        "price": {
+          "currency": "EUR",
+          "total": "272.36",
+          "base": "136.00",
+          "grandTotal": "272.36"
+        },
+        "pricingOptions": {
+          "fareType": ["PUBLISHED"],
+          "includedCheckedBagsOnly": true
+        },
+        "validatingAirlineCodes": ["6X"],
+        "travelerPricings": [
+          {
+            "travelerId": "1",
+            "fareOption": "STANDARD",
+            "travelerType": "ADULT",
+            "price": {
+              "currency": "EUR",
+              "total": "136.18",
+              "base": "68.00"
+            },
+            "fareDetailsBySegment": [
+              {
+                "segmentId": "1",
+                "cabin": "ECONOMY",
+                "fareBasis": "YCNV1",
+                "class": "Y",
+                "includedCheckedBags": {
+                  "quantity": 1
+                }
+              },
+              {
+                "segmentId": "2",
+                "cabin": "ECONOMY",
+                "fareBasis": "YCNV1",
+                "class": "Y",
+                "includedCheckedBags": {
+                  "quantity": 1
+                }
+              }
+            ]
+          }
+        ]
+      }
+      # Call the flight_offer_price method with the provided offer and include options
+      @response = AmadeusFaradayApi.new.flight_offer_price(offer)
+
+      Rails.logger.info("Received response from Amadeus API: #{@response}")
+
+      render json: @response
+      rescue Amadeus::ResponseError => e
+        Rails.logger.error("Response error: #{e.message}")
+        render json: { error: e.message }, status: :unprocessable_entity
+      rescue Amadeus::NetworkError => e
+        Rails.logger.error("Network error occurred: #{e.message}")
+        render json: { error: 'Network error occurred. Please try again later.' }, status: :service_unavailable
+      rescue StandardError => e
+        Rails.logger.error("Unexpected error: #{e.message}")
+        render json: { error: 'An unexpected error occurred.', details: e.message }, status: :internal_server_error
+      end
+    end
 
   def airport_city
     begin
@@ -115,6 +246,13 @@ class Api::V1::SearchController < ApplicationController
     rescue StandardError => e
       render json: { error: e.message }
     end
+  end
+
+
+  private
+
+  def price_params
+    params.permit(:offer, include: [])
   end
 
 end

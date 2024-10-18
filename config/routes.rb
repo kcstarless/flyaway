@@ -2,7 +2,6 @@ Rails.application.routes.draw do
   # APIroutes should be in /api/v1
   namespace :api do
     namespace :v1 do
-      resources :users
       get 'search/airport_city', to: 'search#airport_city'
       post 'search/flight_offers', to: 'search#flight_offers'
       get 'search/geocode', to: 'search#geocode'
@@ -14,6 +13,7 @@ Rails.application.routes.draw do
       get 'search/flight_history', to: 'search#flight_history'
       get 'search/location_by_iata', to: 'search#location_by_iata'
       get 'search/airport_iata/:iataCode', to: 'search#airport_iata'
+      post 'search/pricing', to: 'search#pricing'
     end
   end
 end

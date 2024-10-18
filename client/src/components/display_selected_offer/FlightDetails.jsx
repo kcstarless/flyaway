@@ -2,7 +2,7 @@
 import { useFlightOffersContext } from '../contexts/FlightOffersContext';
 import { useState, useEffect, useRef } from 'react';
 import { fetchLocation } from '../apicalls/fetchLocation';
-import { isoDateToHHMM24, capitalizeFirstLetters, getDateDayDDMMYYYY, getLayoverTime, formatDuration, minutesToHH } from '../helpers/general';
+import { getDateDayDDMMYYYY } from '../helpers/general';
 import FlightDetailsExpanded from './FlightDetailsExpanded';
 
 async function fetchSegmentLocations(flight, newLocations) {
@@ -31,7 +31,6 @@ const FlightDetails = () => {
     const returnCarriers = selectedReturnFlight?.carriers || {};
     const carriers = { ...outboundCarriers, ...returnCarriers };
 
-    console.log(selectedOutboundFlight);
     // Fetch location details for each segment
     useEffect(() => {
         const fetchLocations = async () => {
@@ -54,7 +53,7 @@ const FlightDetails = () => {
     
     return (
         <div className="flight-details">
-            <h4 className="float-right">Flight details</h4>
+            <h3 className="float-right">Flight details</h3>
 
             {selectedOutboundFlight && (
                 <>

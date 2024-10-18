@@ -8,6 +8,7 @@ export const fetchFlights = async (data) => {
         origin: data.departingIATA, //= Origin is the destination IATA for return flights
         destination: data.destinationIATA, // Destination is the departing IATA for return flights
         departureDate: data.departDate,
+        returnDate: data.returnDate,
         adults: data.passengers,         // e.g., 1
         currencyCode: data.currencyCode,      // e.g., 'USD'
     });

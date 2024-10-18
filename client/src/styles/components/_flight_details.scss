@@ -6,6 +6,7 @@
     // grid-template-rows: 0.1fr 1fr;
     grid-template-columns: auto 0.3fr;
     gap: var(--space-m);
+    // width: 100%;
 }
 
 .trip-details {
@@ -19,25 +20,22 @@
         align-items: center;
         flex-direction: row;
     }
+    .trip-confirmation {
+        display: flex;
+        flex-direction: row;
+    }
     .trip-price {
         display: flex;
         flex-direction: column;
     }
 }
 
-.passenger-details {
-    grid-area: passenger-details;
-    display: flex;
-    justify-content: space-between;
-    // border: solid 2px black;
-}
 
 .flight-details {
     grid-area: flight-details;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    // border: solid 2px black;
+
     .float-right {
         display: inline-flex;
         justify-content: end;

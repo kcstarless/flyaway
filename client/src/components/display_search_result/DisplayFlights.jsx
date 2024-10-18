@@ -3,7 +3,6 @@ import landing_icon from '../../assets/images/icon_flightland.svg';
 import { useLoadingContext } from '../contexts/LoadingContext';
 import PropTypes from 'prop-types'; // Import PropTypes
 import { useEffect, useState } from 'react';
-import { numberCommas } from '../helpers/general';
 
 const DisplayFlights = ({sortedOffers, currencySymbol, onFlightSelect }) => {
     const [visibleCount, setVisibleCount] = useState(10);
@@ -54,7 +53,7 @@ const DisplayFlights = ({sortedOffers, currencySymbol, onFlightSelect }) => {
                     </div>
                     <div className="card-wrapper-c2">
                         <div className="itinerary-card-c4">
-                            {currencySymbol}{numberCommas(offer.price)}
+                            {currencySymbol}{offer.price}
                         </div>
                         <button type="button" onClick={() => handleSelectedFlight(offer)} className="btn btn--secondary">Select</button>
                     </div>
