@@ -11,10 +11,7 @@ const PassengersDetails = () => {
     return (
         <div className="passenger-details">
             <h3>Traveller Details</h3>
-            <div className="form-title"><b>Passenger</b></div>
             <PassengerForm />
-            
-            
         </div>
     )
 }

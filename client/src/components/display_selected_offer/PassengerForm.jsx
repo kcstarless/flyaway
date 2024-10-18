@@ -3,11 +3,14 @@ import {useForm} from "react-hook-form";
 import { useCountries } from "../hooks/useCountries";
 import Select from "react-select";
 import { useLocalizationContext } from "../contexts/LocalizationContext";
+import { useFlightOffersContext } from '../contexts/FlightOffersContext';
 import React, { useEffect, useState } from "react";
 
+
 const PassengerForm = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm()
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const { countries } = useCountries();
+    const { formData } = useFlightOffersContext();
     const { localizationData } = useLocalizationContext(); // Getting localization data
     const [selectedCountry, setSelectedCountry] = useState(null);
 
@@ -30,7 +33,7 @@ const PassengerForm = () => {
         }
     }, [localizationData, countries]);
 
-    // Map countries for react-select
+    // Map countries for phone number
     const countryOptions = countries.map(country => {
         const iddCode = country.idd ? `${country.idd.root}${country.idd.suffixes[0]}` : ""; // Combine root and first suffix
         return {
@@ -44,19 +47,26 @@ const PassengerForm = () => {
         };
     });
 
-    console.log(countries);
+    // console.log(countries);
     const onSubmit = (data) => {
         console.log(data);
     }
+    
 
-    return (
-        <form onSubmit={handleSubmit(onSubmit)} >
-            <fieldset className="passenger-form">
+    function createPassengerForm() {
+        const passengers = formData.passengers;
+        const formsPassengers = [];
+
+        for (let index = 1; index <= passengers; index++) {
+            formsPassengers.push(
+                <div key={index}>
+                <div className="form-title"><b>Passenger {index}</b></div>
+                <fieldset className="passenger-form">
             {/* <legend>Required fields, please fill in as it appears on passport</legend> */}
                 <div className="items">
-                    <div className="item-title">First name {errors.first_name && <span className="validation">{errors.first_name.message}</span>}</div>
+                    <div className="item-title">First name {errors[`firstname${index}`] && <span className="validation">{errors[`firstname${index}`].message}</span>}</div>
                     <div className="item-input">
-                        <input {...register("first_name",{
+                        <input {...register(`firstname${index}`,{
                             required: " is required.",
                             validate: (value) => {
                                 if(value.length < 2) {
@@ -177,9 +187,18 @@ const PassengerForm = () => {
                         </div>
                     </div>
                 </div>
-
                 </fieldset>
-                <input type="submit"></input>
+                </div>
+            )
+        }
+        return formsPassengers;
+    }
+
+    
+    return (
+        <form onSubmit={handleSubmit(onSubmit)}>
+                {createPassengerForm()}
+            <input type="submit"></input>
         </form>
     )
 }
