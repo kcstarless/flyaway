@@ -37,6 +37,7 @@ I have decided on this approach instead of React directly making request to exte
 ## API dependencies
 This app will be using [Amadeus API](https://www.flightapi.io/flight-status-and-tracking-api) to grab all flight and travel related information.
 Including airports, airliner, flight schedule and etc. 
+Amadeus API limitation - limited cached data for all api calls.
 
 [OpenCage Geocoder](https://opencagedata.com/) is used for collecting user location data. I could have used IP based location finder but I decided to go with geolocation for possible expansion allowing user to use map to set origin and destiantion.
 
@@ -62,35 +63,3 @@ Using PostgreSQL for DB of choice. Us
     - Slider, Box
 
 ## Testing
-
-
-                        itinerary.segments.map((segment, segIndex) => (
-
-                                <div>
-                                    <p><img src={`https://www.gstatic.com/flights/airline_logos/70px/${segment.operating.carrierCode}.png`}
-                                            className="airline-logo"
-                                            alt="Airline Logo" />
-                                    {(segment.airlineName)}
-                                    </p>
-                                    <p>{segment.operating.carrierCode}{segment.number}</p>
-                                </div>
-
-                                <div>
-                                    <p>{segment.departure.iataCode} at {segment.departure.at}</p>
-                                </div>
-
-                                <div>
-                                    <p>Duration: {itinerary.duration}</p>
-                                    <p>Stops: {getNumberOfStops(offer.itineraries)}</p>
-                                </div>
-
-                                <div>
-                                    <p>Arrival: {segment.arrival.iataCode} at {segment.arrival.at}</p>
-                                </div>
-                                
-                                <div>
-                                    <p>Total Price: {offer.price.total} {offer.price.currency}</p>
-                                </div>
-                        </div>
-                        ))
-                    ))

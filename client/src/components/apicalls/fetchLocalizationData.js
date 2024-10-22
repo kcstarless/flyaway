@@ -28,7 +28,6 @@ const getCountryData = async (position) => {
 
     const response = await fetch(`/api/v1/search/geocode?latitude=${latitude}&longitude=${longitude}`);
     const data = await response.json();
-    console.log(data);
     const countryName = data.result.components.country;
     const countryCode = data.result.components.country_code;
     const countryCurrency = data.result.annotations.currency.iso_code;
@@ -57,7 +56,7 @@ export const fetchLocalizationData = async () => {
     try {
         const position = await getLocation();
         const countryData = await getCountryData(position);
-        console.log(countryData); 
+        // console.log(countryData); 
         return countryData
     } catch (error) {
         console.log(error);

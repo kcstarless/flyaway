@@ -1,6 +1,4 @@
 # search_controller.rb
-
-
 require_relative '../../../models/opencage_api'
 require_relative '../../../models/amadeus_api'
 require_relative '../../../models/amadeus_faraday_api'

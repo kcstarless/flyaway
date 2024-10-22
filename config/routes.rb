@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       get 'search/location_by_iata', to: 'search#location_by_iata'
       get 'search/airport_iata/:iataCode', to: 'search#airport_iata'
       post 'search/pricing', to: 'search#pricing'
+      post 'booking/book_flight', to: 'booking#book_flight'
     end
   end
 end

@@ -9,6 +9,9 @@ export const FlightBookingProvider = ({ children }) => {
 
     const [pricingOutbound, setPricingOutbound] = useState(null);
     const [pricingReturn, setPricingReturn] = useState(null);
+    const [bookedOutbound, setBookedOutbound] = useState({});
+    const [bookedReturn, setBookedReturn] = useState({});
+    const [passengers, setPassengers] = useState({});
 
     useEffect(() => {
         const fetchPricing = async () => {
@@ -33,14 +36,15 @@ export const FlightBookingProvider = ({ children }) => {
         
           fetchPricing();
     }, [selectedOutboundFlight, selectedReturnFlight]);
-
-    console.log(pricingOutbound);
-    console.log(pricingReturn);
     
     return (
         <FlightBookingContext.Provider value= {{
             pricingOutbound,
             pricingReturn,
+            bookedOutbound,
+            setBookedOutbound,
+            bookedReturn,
+            setBookedReturn,
         }}>
             {children}
         </FlightBookingContext.Provider>

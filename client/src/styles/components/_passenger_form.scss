@@ -19,7 +19,6 @@
     background-color: white;
     border-radius: var(--border-radius);
 
-
     // legend {
     //     font-size: var(--font-size-xs);
     //     padding: var(--space-xxs);
@@ -37,11 +36,7 @@
         flex-direction: column;
         // gap: var(--space-l);
         input {
-            // height: 35px;
-            // outline: none;
-            // border-radius: var(--border-radius);
             font-size: var(--font-size-s);
-            // outline: none;
             border: solid 2px gray;
             border-radius: var(--border-radius);
             padding: var(--space-xs);
@@ -61,22 +56,29 @@
             border: solid 2px #007bff;
         }
     }
-    .item-input-phone {
+    .item-input-select {
         display: flex;
         gap: var(--space-xs);
+        width: 100%;
+
         .country-option {
             display: flex;
             font-size: var(--font-size-xxs);
             // box-sizing: border-box; /* Ensure padding is included in the total width */
         }
+        .select-country {
+            width: 100%;
+        }
+        .select-phone {
+            width: 80px;
+        }
         /* Control styles */
+        .select-phone .react-select__menu {
+            width: 300%; /* Set a minimum width if needed */
+        }
+        
         .react-select__control {
-            // min-width: 50px; /* Minimum width for the control */
-            height: 41px; /* Set the desired height for the control */
-            display: flex;
-            justify-content: center;
-            align-items: center; /* Center the items vertically */
-            // border-color: #007bff; 
+            font-size: var(--font-size-s);
             border: solid 2px gray;
             box-shadow: none; /* Remove any box shadow */
         }
@@ -85,12 +87,12 @@
         }
         /* Dropdown menu width */
         .react-select__menu {
-            width: 200px; /* Set the desired width for the dropdown menu */
+            width: 100%; 
         }
 
         /* Single value styles */
         .react-select__single-value {
-            padding-bottom: 6px;
+            // padding-bottom: 6px;
             // padding: 0 10px; /* Add padding to the single value */
         }
 
@@ -100,14 +102,16 @@
             // padding: 0 10px; /* Add padding to the placeholder text */
         }
         .react-select__dropdown-indicator {
-            padding-bottom: 14px;
+            width: 30px;
         }
         .react-select__indicator-separator {
-            margin-bottom: 14px; /* Hide the default indicator separator */
+            // margin-bottom: 14px; /* Hide the default indicator separator */
+            display: none;
+            padding: none;
         }
         .react-select__menu-list {
-            padding-bottom: 10px; /* Reset padding for the menu list */
-            margin: 0; /* Reset margin for the menu list */
+            // padding-bottom: 10px; /* Reset padding for the menu list */
+            // margin: 0; /* Reset margin for the menu list */
         }
     }
     .item-input-dob {

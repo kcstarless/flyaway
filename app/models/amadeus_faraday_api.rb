@@ -62,4 +62,40 @@ class AmadeusFaradayApi
     puts "JSON parsing error: #{e.message}"
     nil
   end
+
+
+  # flight_create_order API calls to create booking confirmation.
+  def flight_create_order(offer, travelers)
+    access_token = fetch_access_token
+    retun nil unless access_token
+
+    travelers = JSON.parse(travelers) if travelers.is_a?(String)
+
+    request_body = {
+      data: {
+        type: "flight-order",
+        flightOffers: [offer],
+        travelers: travelers
+      }
+    }
+
+    response = @conn.post('/v1/booking/flight-orders') do |req|
+      req.headers['Authorization'] = "Bearer #{access_token}"
+      req.headers['Content-type'] = 'application/json'
+      req.body = request_body.to_json
+    end
+
+    if response.success?
+      JSON.parse(response.body)
+    else
+      puts "Error: #{response.status} - #{response.body}"
+      nil
+    end
+  rescue Faraday::ConnectionFailed => e
+    puts "Connection error: #{e.message}"
+    nil
+  rescue JSON::ParserError => e
+    puts "JSON parsing error: #{e.message}"
+    nil
+  end
 end
