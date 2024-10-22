@@ -2,8 +2,18 @@
 import axios from 'axios';
 import { isoDateToHHMM24, formatDuration } from '../helpers/general';
 
+const CACHE_KEY = 'cachedFlightOffers'; // Key for local storage
+
 export const fetchFlights = async (data) => {
-  try {    
+    // Check local storage for cached data
+    // const cachedData = localStorage.getItem(CACHE_KEY);
+  
+    // if (cachedData) {
+    //   console.log("Using cached data");
+    //   return JSON.parse(cachedData); // Return cached data if available
+    // }
+    
+  try {      
     const response = await axios.post('/api/v1/search/flight_offers', {
         origin: data.departingIATA, //= Origin is the destination IATA for return flights
         destination: data.destinationIATA, // Destination is the departing IATA for return flights
@@ -54,6 +64,11 @@ export const fetchFlights = async (data) => {
         })
       );
       // console.log(itineraryData);
+
+      // Cache the first response in local storage for future use
+      // Using local data saving api calls for development purpose. 
+      // localStorage.setItem(CACHE_KEY, JSON.stringify(itineraryData));
+
       return itineraryData;
     }
     return [];

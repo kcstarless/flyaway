@@ -26,6 +26,14 @@ const TripHeader = () => {
                 </p>
             </div>
         </div>
+        <div className="trip-confirmation">
+            <p>1. Passengers</p>
+            <p>2. Seats</p>
+            <p>3. Extras</p>
+            <p>4. Pay</p>
+            <p>5. Confirmed</p>
+
+        </div>
         <div className="trip-price">
             <h3>{localizationData.currency} {localizationData.currencySymbol}{numberCommas(totalPrice)}</h3>
             <p>total price</p>

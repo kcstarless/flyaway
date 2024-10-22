@@ -1,0 +1,133 @@
+.passenger-details {
+    grid-area: passenger-details;
+    display: flex;
+    flex-direction: column;
+}
+.form-title {
+    display: flex;
+    gap: var(--space-s);
+    padding-top: var(--space-s);
+    padding-bottom: var(--space-xs);
+    font-size: var(--font-size-s);
+}
+.passenger-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-s);
+    padding: var(--space-s);
+    border: 1px solid gray;
+    background-color: white;
+    border-radius: var(--border-radius);
+
+    // legend {
+    //     font-size: var(--font-size-xs);
+    //     padding: var(--space-xxs);
+    // }
+    .item-title {
+        font-size: var(--font-size-xs);
+        .validation {
+            font-size: var(--font-size-xxs);
+            color: var(--color-error);
+        }
+    }
+
+    .item-input {
+        display: flex;
+        flex-direction: column;
+        // gap: var(--space-l);
+        input {
+            font-size: var(--font-size-s);
+            border: solid 2px gray;
+            border-radius: var(--border-radius);
+            padding: var(--space-xs);
+        }
+        input:focus{
+            border: solid 2px #007bff;
+            outline: none;
+        }
+        select {
+            font-size: var(--font-size-s);
+            border: solid 2px gray;
+            border-radius: var(--border-radius);
+            padding: var(--space-xs);
+        }
+        select:focus {
+            outline: none;
+            border: solid 2px #007bff;
+        }
+    }
+    .item-input-select {
+        display: flex;
+        gap: var(--space-xs);
+        width: 100%;
+
+        .country-option {
+            display: flex;
+            font-size: var(--font-size-xxs);
+            // box-sizing: border-box; /* Ensure padding is included in the total width */
+        }
+        .select-country {
+            width: 100%;
+        }
+        .select-phone {
+            width: 80px;
+        }
+        /* Control styles */
+        .select-phone .react-select__menu {
+            width: 300%; /* Set a minimum width if needed */
+        }
+        
+        .react-select__control {
+            font-size: var(--font-size-s);
+            border: solid 2px gray;
+            box-shadow: none; /* Remove any box shadow */
+        }
+        .react-select__control--is-focused {
+            border-color: #007bff; /* Change border color on focus */
+        }
+        /* Dropdown menu width */
+        .react-select__menu {
+            width: 100%; 
+        }
+
+        /* Single value styles */
+        .react-select__single-value {
+            // padding-bottom: 6px;
+            // padding: 0 10px; /* Add padding to the single value */
+        }
+
+        /* Placeholder styles */
+        .react-select__placeholder {
+            // padding-bottom: 5px;
+            // padding: 0 10px; /* Add padding to the placeholder text */
+        }
+        .react-select__dropdown-indicator {
+            width: 30px;
+        }
+        .react-select__indicator-separator {
+            // margin-bottom: 14px; /* Hide the default indicator separator */
+            display: none;
+            padding: none;
+        }
+        .react-select__menu-list {
+            // padding-bottom: 10px; /* Reset padding for the menu list */
+            // margin: 0; /* Reset margin for the menu list */
+        }
+    }
+    .item-input-dob {
+        display: flex;
+        flex-direction: row;
+        gap: var(--space-xs);
+    }
+    .item-input-dob input {
+        flex-grow: 1; /* Allow the inputs to share available space */
+        max-width: 60px; /* Adjust the max-width of day and month inputs */
+    }
+
+    .item-input-dob input:last-child {
+        flex-grow: 2; /* Allow the year input to take more space */
+        max-width: 120px;
+    }
+}
+
+

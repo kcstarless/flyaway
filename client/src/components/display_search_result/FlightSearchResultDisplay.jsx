@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 const FlightSearchResultDisplay = () => {
     const { flightOffers, selectedOutboundFlight, isReturn, setSelectedOutboundFlight, setSelectedReturnFlight } = useFlightOffersContext();
     const { localizationData: { currencySymbol } } = useLocalizationContext();
-    const navgiate = useNavigate();
+    const navigate = useNavigate();
 
     const [noMatch, setNoMatch] = useState(null);
     const [sortOption, setSortOption] = useState("best");
@@ -52,11 +52,11 @@ const FlightSearchResultDisplay = () => {
     const handleflightOfferselect = (flight) => {
         if (selectedOutboundFlight === null) {
             setSelectedOutboundFlight(flight);
-            isReturn ? refetchAll() : navgiate("/flight_details");
+            isReturn ? refetchAll() : navigate("/flight_details");
         } 
         if (selectedOutboundFlight && isReturn) {
             setSelectedReturnFlight(flight);
-            navgiate("/flight_details");
+            navigate("/flight_details");
         }
     }
    

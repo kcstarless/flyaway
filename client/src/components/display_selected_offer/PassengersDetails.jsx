@@ -1,5 +1,6 @@
 // PassengersDetails 
 import { useFlightOffersContext } from '../contexts/FlightOffersContext';
+import PassengerForm from './PassengerForm';
 
 const PassengersDetails = () => {
     const { selectedOutboundFlight } = useFlightOffersContext();
@@ -9,7 +10,8 @@ const PassengersDetails = () => {
     }
     return (
         <div className="passenger-details">
-            <h3>Passenger Details</h3>
+            <h3>Traveller Details</h3>
+            <PassengerForm />
         </div>
     )
 }

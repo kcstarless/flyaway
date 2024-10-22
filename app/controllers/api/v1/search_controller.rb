@@ -1,7 +1,29 @@
+# search_controller.rb
 require_relative '../../../models/opencage_api'
+require_relative '../../../models/amadeus_api'
+require_relative '../../../models/amadeus_faraday_api'
 
 class Api::V1::SearchController < ApplicationController
   wrap_parameters false;
+
+    # POST /api/v1/search/confirm_price
+    def pricing
+      begin
+        offer = params[:offer]
+        @response = AmadeusFaradayApi.new.flight_offer_price(offer)
+
+        render json: @response
+      rescue Amadeus::ResponseError => e
+        Rails.logger.error("Response error: #{e.message}")
+        render json: { error: e.message }, status: :unprocessable_entity
+      rescue Amadeus::NetworkError => e
+        Rails.logger.error("Network error occurred: #{e.message}")
+        render json: { error: 'Network error occurred. Please try again later.' }, status: :service_unavailable
+      rescue StandardError => e
+        Rails.logger.error("Unexpected error: #{e.message}")
+        render json: { error: 'An unexpected error occurred.', details: e.message }, status: :internal_server_error
+      end
+    end
 
   def airport_city
     begin

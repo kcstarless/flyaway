@@ -1,5 +1,7 @@
 # Amadeus_api.rb
 require 'amadeus'
+require 'faraday'
+require 'json'
 
 class AmadeusApi
   attr_accessor :amadeus

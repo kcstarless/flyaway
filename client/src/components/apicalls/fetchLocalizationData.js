@@ -28,7 +28,6 @@ const getCountryData = async (position) => {
 
     const response = await fetch(`/api/v1/search/geocode?latitude=${latitude}&longitude=${longitude}`);
     const data = await response.json();
-
     const countryName = data.result.components.country;
     const countryCode = data.result.components.country_code;
     const countryCurrency = data.result.annotations.currency.iso_code;
@@ -46,7 +45,7 @@ const getCountryData = async (position) => {
     }
 }
 export const fetchCountries = async () => {
-    const response = await fetch('https://restcountries.com/v3.1/all?fields=name,currencies,cca2,flags');
+    const response = await fetch('https://restcountries.com/v3.1/all?fields=name,currencies,cca2,flags,idd');
     const countries = await response.json();
     // console.log(countries);
     return countries;
@@ -57,7 +56,7 @@ export const fetchLocalizationData = async () => {
     try {
         const position = await getLocation();
         const countryData = await getCountryData(position);
-        console.log(countryData); 
+        // console.log(countryData); 
         return countryData
     } catch (error) {
         console.log(error);

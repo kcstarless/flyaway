@@ -17,7 +17,6 @@ export const useFlightSearchQuery = () => {
   // Fetch both flight offers and activities offers only if form is submitted and currency is changed. 
   // Create a common enabled condition
   const isEnabled = isSubmitted && currencyChanged;
-  
   const queryResults = useQueries({
     queries: [
       {
@@ -41,7 +40,6 @@ export const useFlightSearchQuery = () => {
     outboundFlight.refetch();
     flightPriceHistory.refetch();
   };
-
   // sets data for each query. 
   useEffect(() => {
     outboundFlight.data && setFlightOffers(outboundFlight.data);
