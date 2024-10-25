@@ -50,7 +50,7 @@ class Api::V1::SearchController < ApplicationController
     begin
       iataCode = params[:iataCode]
       @response = AmadeusApi.new.location_by_iata_search(iataCode)
-      render json: @reponse
+      render json: @response
     rescue Amadeus::ResponseError => e
       render json: { error: e.message }
     end
@@ -111,7 +111,7 @@ class Api::V1::SearchController < ApplicationController
       longitude = permitted_params[:longitude]
       radius = permitted_params[:radius]
 
-      @reponse = AmadeusApi.new.poi_search(latitude, longitude, radius)
+      @response = AmadeusApi.new.poi_search(latitude, longitude, radius)
       render json: @response
     rescue Amadeus::ResponseError => e
       render json: { error: e.message }

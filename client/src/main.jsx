@@ -11,9 +11,9 @@ Modal.setAppElement('#root'); // Replace '#root' with your app's main container 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // <StrictMode>
     <QueryClientProvider client={queryClient}>
       <App />
     </QueryClientProvider>
-  </StrictMode>,
+  // </StrictMode>,
 )

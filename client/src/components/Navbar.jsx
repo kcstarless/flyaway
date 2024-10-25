@@ -1,6 +1,7 @@
 import logo_plane from '../assets/images/logo_plane.svg';
 import Localization from './navbar/Localization';
-import login_icon from '../assets/images/icon_login.svg';
+import UserLogin from './navbar/UserLogin';
+
 import React, { useState } from 'react';
 
 function Navbar() {
@@ -23,9 +24,8 @@ function Navbar() {
                 </div>
                 <div className="user-info">
                     <Localization />
-                    <div className="user-login">
-                        <a href="#"><img src={login_icon} alt="login" className="login-icon" /></a>
-                    </div>
+                    <UserLogin />
+ 
                 </div>
             </div>
             <div className="nav-bar">

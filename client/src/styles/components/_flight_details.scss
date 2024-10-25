@@ -11,7 +11,7 @@
 
 .trip-details {
     grid-area: trip-details;
-    border-bottom: solid 2px white;
+    border-bottom: solid 2px var(--color-secondary-rotate);
     padding-bottom: var(--space-xxxs);
     display: flex;
     justify-content: space-between;
@@ -86,7 +86,7 @@
             padding-bottom: var(--space-s);
             border-bottom-left-radius: var(--border-radius);
             border-bottom-right-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
+            // box-shadow: var(--box-shadow);
             .carrier-logo {
                 width: 20px;
             }

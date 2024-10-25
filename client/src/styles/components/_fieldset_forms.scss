@@ -1,40 +1,46 @@
-.passenger-details {
-    grid-area: passenger-details;
+// default fieldset styles
+fieldset {
     display: flex;
-    flex-direction: column;
-}
-.form-title {
-    display: flex;
-    gap: var(--space-s);
-    padding-top: var(--space-s);
-    padding-bottom: var(--space-xs);
-    font-size: var(--font-size-s);
-}
-.passenger-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-s);
-    padding: var(--space-s);
-    border: 1px solid gray;
-    background-color: white;
-    border-radius: var(--border-radius);
+    border: none;
+    gap: var(--space-xs);
 
-    // legend {
-    //     font-size: var(--font-size-xs);
-    //     padding: var(--space-xxs);
-    // }
+    legend {
+        margin-left: var(--space-xxxs);
+        margin-right: var(--space-xxxs);
+        font-size: var(--font-size-s);
+        font-weight: bold;
+        // border: solid 1px black;
+    }
+    .legend-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: solid 2px var(--color-secondary-rotate);
+
+        .legend-header-title{
+            font-size: var(--font-size-s);
+            font-weight: bold;
+        }
+        .close_dialog {
+            font-size: var(--font-size-xs);
+            color: rgb(109, 109, 109);
+        }
+    }
+    .item {
+        
+    }
     .item-title {
         font-size: var(--font-size-xs);
+        line-height: 1.5rem;
         .validation {
             font-size: var(--font-size-xxs);
             color: var(--color-error);
         }
     }
-
+    
     .item-input {
         display: flex;
         flex-direction: column;
-        // gap: var(--space-l);
         input {
             font-size: var(--font-size-s);
             border: solid 2px gray;
@@ -56,9 +62,44 @@
             border: solid 2px #007bff;
         }
     }
+    
+    .item-button{
+        display: flex;
+        flex-direction: column;
+        line-height: 1.8rem;
+        font-size: var(--font-size-m);
+        padding-top: var(--space-s);
+        color: black;
+    }
+
+}
+
+.passenger-details {
+    grid-area: passenger-details;
+    display: flex;
+    flex-direction: column;
+}
+.form-title {
+    display: flex;
+    // gap: var(--space-s);
+    padding-top: var(--space-s);
+    padding-bottom: var(--space-xs);
+    font-size: var(--font-size-m);
+    color: gray;
+}
+
+.passenger-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-s);
+    padding: var(--space-s);
+    border: 1px solid gray;
+    background-color: white;
+    border-radius: var(--border-radius);
+
     .item-input-select {
         display: flex;
-        gap: var(--space-xs);
+        gap: var(--space-xxxs);
         width: 100%;
 
         .country-option {
@@ -114,11 +155,13 @@
             // margin: 0; /* Reset margin for the menu list */
         }
     }
+
     .item-input-dob {
         display: flex;
         flex-direction: row;
         gap: var(--space-xs);
     }
+
     .item-input-dob input {
         flex-grow: 1; /* Allow the inputs to share available space */
         max-width: 60px; /* Adjust the max-width of day and month inputs */
@@ -130,4 +173,45 @@
     }
 }
 
+.signup_form {
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--space-xxxs);
+    padding-bottom: var(--space-m);
+    .signup {
+        display: flex;
+        flex-direction: column;
+    }
 
+}
+
+.signin_form {
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--space-xxxs);
+    padding-bottom: var(--space-m);
+
+    .signin {
+        display: flex;
+        flex-direction: column;
+    }
+}
+.signin-options {
+    font-size: var(--font-size-xs);
+    a {
+        color: var(--color-secondary-rotate);
+        font-weight: bold;
+    }
+}
+
+.localization_form {
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--space-xxxs);
+    padding-bottom: var(--space-m);
+    
+    .localization {
+        display: flex;
+        flex-direction: column;
+    }
+}

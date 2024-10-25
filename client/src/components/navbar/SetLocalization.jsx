@@ -86,44 +86,58 @@ const SetLocalization = ({ isOpen, onRequestClose }) => {
     };
 
     return (
-        <Modal isOpen={isOpen} onRequestClose={onRequestClose} className="set-user-local">
-            <div className="modal-header">
-                <h4>Regional Settings</h4>
-            </div>
+        <dialog open={isOpen} className="dialog local"  onClick={(e) => e.stopPropagation()}>
 
-            <div className="modal-body">
-                <form className="modal-form" onSubmit={handleSubmit}>
-                    <label htmlFor="language">Language</label>
-                    <select id="language" name="language">
-                        <option value="en">English</option>
-                        <option value="es">Spanish(working progress)</option>
-                        <option value="fr">French(working progress)</option>
-                    </select>
+            <form className="localization_form" onSubmit={handleSubmit}>
+                <fieldset className="localization">
+                <div className="legend-header">
+                        <div className="legend-header-title">Sign-in</div>                  
+                        <div className="close_dialog">
+                            <div onClick={onRequestClose}>close <b>&#x2716;</b></div>
+                         </div>
+                    </div>
+                    <div className="item">
+                        <div className="item-title">Language</div>
+                        <div className="item-input">
+                            <select id="language" name="language">
+                                <option value="en">English</option>
+                                <option value="es">Spanish(working progress)</option>
+                                <option value="fr">French(working progress)</option>
+                            </select>
+                        </div>
+                    </div>
 
-                    <label htmlFor="country">Country</label>
-                    <select id="country" name="country" value={selectedCountryCode} onChange={handleCountryChange}>
-                        {countries.map((country, index) => (
-                            <option key={index} value={country.cca2}>{country.name.common}</option>
-                        ))}
-                    </select>
+                    <div className="item">
+                        <div className="item-title">Country</div>
+                        <div className="item-input">
+                            <select id="country" name="country" value={selectedCountryCode} onChange={handleCountryChange}>
+                                {countries.map((country, index) => (
+                                    <option key={index} value={country.cca2}>{country.name.common}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
 
-                    <label htmlFor="currency">Currency</label>
-                    <select id="currency" name="currency" value={selectedCurrency} onChange={handleCurrencyChange}>
-                        {currenciesList(countries).map(([currencyCode, currencySymbol], index) => (
-                            <option key={index} value={currencyCode}>
-                                {currencyCode} ({currencySymbol})
-                            </option>
-                        ))}
-                    </select>
-
-                    <button type="submit">Save</button>
-                    <button onClick={onRequestClose}>Close</button>
-                </form>
-            </div>
-
-            <div className="modal-footer">
-            </div>
-        </Modal>
+                    <div className="item">
+                        <div className="item-title">Currency</div>
+                        <div className="item-input">
+                            <select id="currency" name="currency" value={selectedCurrency} onChange={handleCurrencyChange}>
+                                {currenciesList(countries).map(([currencyCode, currencySymbol], index) => (
+                                    <option key={index} value={currencyCode}>
+                                        {currencyCode} ({currencySymbol})
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                    <div className="item">
+                        <div className="item-button">
+                            <button type="submit" className="btn btn--primary">Save</button>
+                        </div> 
+                    </div>
+                </fieldset>
+            </form>
+        </dialog>
     );
 };
 export default SetLocalization;

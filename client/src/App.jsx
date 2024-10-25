@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar"
 import SearchBar from "./components/Searchbar" 
 import { FlightOffersProvider } from "./components/contexts/FlightOffersContext"
 import { LocalizationProvider } from "./components/contexts/LocalizationContext"
+import { UserSessionProvider } from "./components/contexts/UserSessionContext"
 import { LoadingProvider } from "./components/contexts/LoadingContext"
 import MainContent from "./components/MainContent"
 import { BrowserRouter as Router } from "react-router-dom";
@@ -14,6 +15,7 @@ function App() {
   return (
     <Router>
       <div className="container">
+        <UserSessionProvider>
         <LocalizationProvider>
         <FlightOffersProvider>
         <LoadingProvider>
@@ -32,6 +34,7 @@ function App() {
         </LoadingProvider>
         </FlightOffersProvider>
         </LocalizationProvider>
+        </UserSessionProvider>
       </div>
     </Router>
   )
