@@ -176,7 +176,7 @@ const SearchBar = () => {
           className='passengers'
           onChange={(event) => setFormData(prev => ({ ...prev, passengers: event.target.value }))}
         />
-        <button type="submit" className="btn btn--secondary">Search</button>
+        <button type="submit" className="btn btn--secondary-alt">Search</button>
       </form>
       <p>{formError}</p>
     </div>

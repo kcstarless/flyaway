@@ -12,10 +12,10 @@
     align-items: center;
     gap: var(--space-xxs);
     padding: var(--space-xs);
-    // color: var(--color-light);
     border-radius: var(--border-radius);
     background-color: var(--color-light);
     cursor: pointer;
+    position: relative;
 
     .user-local-item {
         font-size: var(--font-size-xxs);
@@ -29,31 +29,6 @@
     background-color: var(--color-secondary-rotate);
 }
 
-.set-user-local {
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    margin: auto;
-    margin-top: var(--space-l);
-    border: 2px solid black;
-    border-radius: var(--border-radius);
-    background-color: white;
-    padding: var(--space-xs);
-
-    .modal-header {
-        // padding: var(--space-xs);
-    }
-    .modal-body {
-        .modal-form {
-            display: flex;
-            flex-direction: column;
-        }
-    }
-    .modal-footer {
-        // padding: var(--space-xs);
-    }
-}
-
 .user-login {
     display: flex;
     flex-direction: row;
@@ -61,13 +36,11 @@
     justify-content: center;
     align-items: center;
     padding: var(--space-xxs);
-    // border: var(--border-light);
-    // font-size: var(--font-size-xs);
-    font-weight: bold;
     background-color: var(--color-light);
     border-radius: var(--border-radius);
+    position: relative;
     cursor: pointer;
-    
+
     &:hover {
         background-color: var(--color-secondary-rotate);
         .login-icon {

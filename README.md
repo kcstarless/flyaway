@@ -9,7 +9,23 @@ No libraries was used to start with but as project expanded I have tried and imp
 ## Vite + React + SASS
 For this project I will be using Vite for javascript bundler with React and Sass.
 I thought about using Vue.js instead of React but I am still learning React so decided to spend more time on it. 
-Sass is my go to CSS as I like was it's structured and able to separate different components. 
+Sass is my go to CSS as I like was it's structured and able to separate different components.
+
+## Authentication React -> Rails
+Access Token: When a user signs in, they receive an accessToken, which is used to authenticate requests to protected resources. This token usually has a short expiration time (e.g., minutes).
+
+Refresh Token: Along with the accessToken, the user also receives a refreshToken. This token is used to obtain a new accessToken when the original one expires without requiring the user to log in again.
+
+Typical Flow:
+Initial Sign-In: The user provides their credentials, and upon successful sign-in, they receive both an accessToken and a refreshToken.
+Making Authenticated Requests: The application uses the accessToken to authenticate requests to the API.
+Token Expiration: Once the accessToken expires, the application uses the refreshToken to request a new accessToken.
+Handling Refresh: If the refreshToken is valid, the server issues a new accessToken. This can happen seamlessly in the background without requiring the user to log in again.
+Sign Out: When the user signs out, the application clears both tokens from storage.
+Implementation Steps:
+Store the refreshToken: You should store the refreshToken in localStorage (or a more secure method like an HttpOnly cookie) to use it for fetching new accessTokens.
+Handle Token Refreshing: Create a function that checks if the accessToken is expired and, if so, uses the refreshToken to get a new one.
+Call Refresh Token Endpoint: Implement the API call to the endpoint responsible for refreshing the tokens, which might look something like this:
 
 ## Material UI
 I tried using minimal MUI to start with but after and instead try to build my own. But after trying to create auto complete in Javascript/React and seeing how much time it consumed (I got faster but still) I decided to use MUI for following components.

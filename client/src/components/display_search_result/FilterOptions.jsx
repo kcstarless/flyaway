@@ -14,8 +14,8 @@ const FilterOptions = ({ filters, setFilters}) => {
     const { loadingFlightOffers } = useLoadingContext();
     const [stopsOpen, setStopsOpen] = useState(true);
     const [airlinesOpen, setAirlinesOpen] = useState(false);
-    const [departureTimeOpen, setDepartureTimeOpen] = useState(false);
-    const [travelTimeOpen, setTravelTimeOpen] = useState(false);
+    const [departureTimeOpen, setDepartureTimeOpen] = useState(true);
+    const [travelTimeOpen, setTravelTimeOpen] = useState(true);
 
     // Compute stops found based on flightOffers
     const stopsFound = flightOffers.reduce((acc, offer) => {

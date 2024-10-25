@@ -1,0 +1,32 @@
+dialog {
+    margin-top: 5px;
+    z-index: 1000;
+    border-radius: var(--border-radius);
+    border: none;
+    box-shadow: var(--box-shadow);
+    padding: var(--space-l);
+    // cursor: normal;
+
+
+}
+.login {
+    left: auto;
+    top: 100%;
+    width: 300px;
+}
+
+.local {
+    left: auto;
+    top: 100%;
+    
+}
+    
+.dialog-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Grey with 50% transparency */
+    z-index: 999; /* Ensure it's behind the dialog but above everything else */
+}

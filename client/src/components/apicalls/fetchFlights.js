@@ -6,12 +6,12 @@ const CACHE_KEY = 'cachedFlightOffers'; // Key for local storage
 
 export const fetchFlights = async (data) => {
     // Check local storage for cached data
-    // const cachedData = localStorage.getItem(CACHE_KEY);
+    const cachedData = localStorage.getItem(CACHE_KEY);
   
-    // if (cachedData) {
-    //   console.log("Using cached data");
-    //   return JSON.parse(cachedData); // Return cached data if available
-    // }
+    if (cachedData) {
+      console.log("Using cached data");
+      return JSON.parse(cachedData); // Return cached data if available
+    }
     
   try {      
     const response = await axios.post('/api/v1/search/flight_offers', {
@@ -67,7 +67,7 @@ export const fetchFlights = async (data) => {
 
       // Cache the first response in local storage for future use
       // Using local data saving api calls for development purpose. 
-      // localStorage.setItem(CACHE_KEY, JSON.stringify(itineraryData));
+      localStorage.setItem(CACHE_KEY, JSON.stringify(itineraryData));
 
       return itineraryData;
     }
