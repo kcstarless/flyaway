@@ -343,13 +343,13 @@ const PassengerForm = () => {
     const onSubmit = async (data) => {
         try {
             // Prepare the travelers' data
-            const updated = prepTravelers(data);
+            // const passengersInfo = prepTravelers(data);
             
             // Wait for the booking confirmation to complete
-            await confirmBooking(updated);
+            // await confirmBooking(passengersInfo);
     
             // Navigate only after the booking confirmation is successful
-            navigate("/booking_confirmation");
+            navigate("/payment");
         } catch (err) {
             console.log("Error confirming booking:", err);
             // Optionally, show an error message to the user

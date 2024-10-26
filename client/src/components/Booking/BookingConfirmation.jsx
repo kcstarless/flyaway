@@ -20,7 +20,7 @@ const BookingConfirmation = () => {
                 <p>No outbound flight booked.</p>
             )}
 
-            <h2>Return Flight:</h2>
+            <h4>Return Flight:</h4>
             {bookedReturn && Object.keys(bookedReturn).length > 0 ? (
                 <ul>
                     {Object.entries(bookedReturn).map(([key, value]) => (

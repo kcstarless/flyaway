@@ -27,6 +27,9 @@ Store the refreshToken: You should store the refreshToken in localStorage (or a 
 Handle Token Refreshing: Create a function that checks if the accessToken is expired and, if so, uses the refreshToken to get a new one.
 Call Refresh Token Endpoint: Implement the API call to the endpoint responsible for refreshing the tokens, which might look something like this:
 
+## Stripe payment
+Payment is processed using Stripe specifically stripe element. I first wanted to use stripe-hosted page for payment for simplicity sake but I realise this approach needs pre created product/price on stripe to work. So this approached is won't work as there are many flight with varied prices. So I had to go with second option which was to create custom payment flow. Where final price calculate on the server side and push to front end then to stripe.
+
 ## Material UI
 I tried using minimal MUI to start with but after and instead try to build my own. But after trying to create auto complete in Javascript/React and seeing how much time it consumed (I got faster but still) I decided to use MUI for following components.
 - Departure time and flight duration slider.
