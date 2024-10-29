@@ -1,4 +1,4 @@
-// src/helpers/utilHelpers.js
+// components/helpers/debounce.js
 
 // Debounce utility function
 export const debounce = (func, delay) => {

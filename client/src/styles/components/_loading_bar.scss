@@ -8,6 +8,15 @@
 	overflow: hidden;
 }
 
+.loading__bar.long {
+	position: relative;
+	height: 10px;
+	width: 100%;
+	background-color: rgb(169, 169, 169);
+	border-radius: 1em;
+	overflow: hidden;
+}
+
 .loading__bar::after {
 	position: absolute;
 	top: 0;
@@ -17,7 +26,7 @@
 	height: 100%;
 	// background-color: rgba(230, 230, 230, 0.891);
 	background: linear-gradient(90deg, #fff5, rgba(230, 230, 230, 0.891));
-	animation: loading-animation 5s infinite;
+	animation: loading-animation 10s infinite;
 	border-radius: 1em;
 }
 

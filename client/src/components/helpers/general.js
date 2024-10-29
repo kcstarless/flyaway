@@ -1,4 +1,4 @@
-// general.js
+// components/helpers/general.js
 
 // Valid currencies for flight price history.
 // Used in: fetchFlightPriceHistory.js, FlightPriceHistory.jsx.

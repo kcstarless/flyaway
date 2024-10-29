@@ -27,9 +27,13 @@ Store the refreshToken: You should store the refreshToken in localStorage (or a 
 Handle Token Refreshing: Create a function that checks if the accessToken is expired and, if so, uses the refreshToken to get a new one.
 Call Refresh Token Endpoint: Implement the API call to the endpoint responsible for refreshing the tokens, which might look something like this:
 
+
 ## Stripe payment
 Payment is processed using Stripe specifically stripe element. I first wanted to use stripe-hosted page for payment for simplicity sake but I realise this approach needs pre created product/price on stripe to work. So this approached is won't work as there are many flight with varied prices. So I had to go with second option which was to create custom payment flow. Where final price calculate on the server side and push to front end then to stripe.
 
+During testing environment I required Ngrok to allow testing of webhook over https for stripe
+
+Rails API was used to create stripe payment of intent (`client_secret`) and React handles the user payment through stripe's `confirmPayment` method. 
 ## Material UI
 I tried using minimal MUI to start with but after and instead try to build my own. But after trying to create auto complete in Javascript/React and seeing how much time it consumed (I got faster but still) I decided to use MUI for following components.
 - Departure time and flight duration slider.
@@ -37,6 +41,10 @@ I tried using minimal MUI to start with but after and instead try to build my ow
 ## React libraries
 - react-icons: I like the fact that I can directly use css to style the icons with cluttering the return statement with svg file path or changing color `fill` individually on file it self. 
 - react-hook-form: Decided to try this one out for better form building experience.
+
+- React-actioncable-provider for ActionCable interaction between Rails and react. 
+
+
 
 ## API requests
 Rails will handle all API request and React will use it to provide Real-time Feedback, eg destination location in flight search.

@@ -1,17 +1,17 @@
 // FilterOptions.jsx
 import { useState, useEffect } from "react";
-import { useFlightOffersContext } from '../contexts/FlightOffersContext';
-import { useLocalizationContext } from "../contexts/LocalizationContext";
+import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
+import { useContextLocalization } from "../contexts/ContextLocalization";
 import { capitalizeFirstLetters } from "../helpers/general";
-import { useLoadingContext } from '../contexts/LoadingContext';
+import { useContextLoading } from '../contexts/ContextLoading';
 import arrowDown_icon from '../../assets/images/icon_arrow_down.svg';
 import { minutesToHHMM24, minutesToHH } from "../helpers/general";
 import Slider from '@mui/material/Slider';
 
-const FilterOptions = ({ filters, setFilters}) => {
-    const { flightOffers } = useFlightOffersContext();
-    const { localizationData } = useLocalizationContext();
-    const { loadingFlightOffers } = useLoadingContext();
+const FlightsFilters = ({ filters, setFilters}) => {
+    const { flightOffers } = useContextFlightOffers();
+    const { localizationData } = useContextLocalization();
+    const { loadingFlightOffers } = useContextLoading();
     const [stopsOpen, setStopsOpen] = useState(true);
     const [airlinesOpen, setAirlinesOpen] = useState(false);
     const [departureTimeOpen, setDepartureTimeOpen] = useState(true);
@@ -277,4 +277,4 @@ const FilterOptions = ({ filters, setFilters}) => {
     )
 }
 
-export default FilterOptions;
+export default FlightsFilters;

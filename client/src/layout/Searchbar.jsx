@@ -1,20 +1,21 @@
 // Searchbar.jsx
 
 import { useState, useCallback, useEffect } from 'react';
-import { fetchSuggestions } from './apicalls/fetchSuggestions';
-import { debounce } from './helpers/debounce';
-import SearchInput from './searchbar/SearchInput';
-import DatePickerInput from './searchbar/DatePickerInput';
-import PassengersInput from './searchbar/PassengersInput';
-import { useFlightOffersContext } from './contexts/FlightOffersContext';
-import { useFlightSearchQuery } from './hooks/useFlightSearchQuery';
-import { getDateYYYYMMDD, validateForm } from './helpers/general';
+import { fetchSuggestions } from '../components/apicalls/fetchSuggestions';
+import { debounce } from '../components/helpers/debounce';
+import SearchInput from '../components/searchbar/SearchInput';
+import DatePickerInput from '../components/searchbar/DatePickerInput';
+import PassengersInput from '../components/searchbar/PassengersInput';
+import { useContextFlightOffers } from '../components/contexts/ContextFlightOffers';
+import { useContextFlightBooking } from '../components/contexts/ContextFlightBooking';
+import { useFlightSearchQuery } from '../components/hooks/useFlightSearchQuery';
+import { getDateYYYYMMDD, validateForm } from '../components/helpers/general';
 import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
   // console.count("Searchbar rendered...");
-  const { formData, setFormData, setCurrencyChanged, isSubmitted, setIsSubmitted,  setSelectedOutboundFlight, setSelectedReturnFlight } = useFlightOffersContext();
-
+  const { formData, setFormData, resetFlightOffer, isSubmitted, setIsSubmitted,  setSelectedOutboundFlight, setSelectedReturnFlight } = useContextFlightOffers();
+  const { resetFlightBooking } = useContextFlightBooking();
   const [suggestions, setSuggestions] = useState({ departing: [], destination: [] });
   const [loading, setLoading] = useState({ departing: false, destination: false });
   const [focused, setFocused] = useState({ departing: false, destination: false });
@@ -24,6 +25,10 @@ const SearchBar = () => {
 
   // Custom hook to fetch search formData.
   const { refetchAll } = useFlightSearchQuery();
+
+  const onFlightDetailsPage = location.pathname === "/flight_details";
+  const onCheckOutPage = location.pathname === "/checkout";
+  const onBookingConfirmaitonPage = location.pathname ==="/booking_confirmation"
 
   // Local component state to manage the inputs without formData
   const [localInputs, setLocalInputs] = useState({
@@ -52,6 +57,10 @@ const SearchBar = () => {
       destinationCityName: prev.departingCityName,
       departingIATA: prev.destinationIATA,
       destinationIATA: prev.departingIATA,
+      departingCountryCode: prev.destinationCountryCode,
+      destinationCountryCode: prev.departingCountryCode,
+      departingGeoCode: prev.destinationGeoCode,
+      destinationGeoCode: prev.departingGeoCode,
     }));
   };
 
@@ -106,7 +115,8 @@ const SearchBar = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    resetFlightBooking();
+    resetFlightOffer();
     // Update formData with localInputs data
     setFormData(prev => ({
       ...prev,
@@ -114,8 +124,8 @@ const SearchBar = () => {
     }));
     // Mark the form as submitted
     // setCurrencyChanged(false);
-    setSelectedOutboundFlight(null);
-    setSelectedReturnFlight(null);
+    // setSelectedOutboundFlight(null);
+    // setSelectedReturnFlight(null);
     setIsSubmitted(true);
   };
 
@@ -130,56 +140,63 @@ const SearchBar = () => {
   }, [formData, isSubmitted]);
 
   return (
-    <div className="search-bar">
-      <form className="search-flight" onSubmit={handleSubmit}>
-        <div className="location-toggle">
-          <SearchInput
-            label="From"
-            value={localInputs.departingInput}
-            onChange={(event) => handleInputChange(event, 'departing')}
-            onFocus={() => handleFocus('departing')}
-            onBlur={() => handleBlur('departing')}
-            loading={loading.departing}
-            suggestions={suggestions.departing}
-            onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, 'departing')}
-            isFocused={focused.departing}
-            className='departing'
+    <>
+    { onFlightDetailsPage || onCheckOutPage || onBookingConfirmaitonPage 
+      ? null 
+      : (
+      <div className="search-bar">
+        <form className="search-flight" onSubmit={handleSubmit}>
+          <div className="location-toggle">
+            <SearchInput
+              label="From"
+              value={localInputs.departingInput}
+              onChange={(event) => handleInputChange(event, 'departing')}
+              onFocus={() => handleFocus('departing')}
+              onBlur={() => handleBlur('departing')}
+              loading={loading.departing}
+              suggestions={suggestions.departing}
+              onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, 'departing')}
+              isFocused={focused.departing}
+              className='departing'
+            />
+            <button type="button" className="toggle-button" onClick={handleToggle}>
+              <span className={`arrow ${isSwapped ? 'flipped' : ''}`}>&#8596;</span>
+            </button>
+            <SearchInput
+              label="To"
+              value={localInputs.destinationInput}
+              onChange={(event) => handleInputChange(event, 'destination')}
+              onFocus={() => handleFocus('destination')}
+              onBlur={() => handleBlur('destination')}
+              loading={loading.destination}
+              suggestions={suggestions.destination}
+              onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, 'destination')}
+              isFocused={focused.destination}
+              className='destination'
+            />
+          </div>
+          <DatePickerInput
+            label="Depart"
+            selectedDate={localInputs.departDate}
+            onChange={(date) => setLocalInputs(prev => ({ ...prev, departDate: getDateYYYYMMDD(date) }))}
           />
-          <button type="button" className="toggle-button" onClick={handleToggle}>
-            <span className={`arrow ${isSwapped ? 'flipped' : ''}`}>&#8596;</span>
-          </button>
-          <SearchInput
-            label="To"
-            value={localInputs.destinationInput}
-            onChange={(event) => handleInputChange(event, 'destination')}
-            onFocus={() => handleFocus('destination')}
-            onBlur={() => handleBlur('destination')}
-            loading={loading.destination}
-            suggestions={suggestions.destination}
-            onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, 'destination')}
-            isFocused={focused.destination}
-            className='destination'
+          <DatePickerInput
+            label="Return"
+            selectedDate={localInputs.returnDate}
+            onChange={(date) => setLocalInputs(prev => ({ ...prev, returnDate: getDateYYYYMMDD(date) }))}
           />
-        </div>
-        <DatePickerInput
-          label="Depart"
-          selectedDate={localInputs.departDate}
-          onChange={(date) => setLocalInputs(prev => ({ ...prev, departDate: getDateYYYYMMDD(date) }))}
-        />
-        <DatePickerInput
-          label="Return"
-          selectedDate={localInputs.returnDate}
-          onChange={(date) => setLocalInputs(prev => ({ ...prev, returnDate: getDateYYYYMMDD(date) }))}
-        />
-        <PassengersInput
-          passengers={formData.passengers}
-          className='passengers'
-          onChange={(event) => setFormData(prev => ({ ...prev, passengers: event.target.value }))}
-        />
-        <button type="submit" className="btn btn--secondary-alt">Search</button>
-      </form>
-      <p>{formError}</p>
-    </div>
+          <PassengersInput
+            passengers={formData.passengers}
+            className='passengers'
+            onChange={(event) => setFormData(prev => ({ ...prev, passengers: event.target.value }))}
+          />
+          <button type="submit" className="btn btn--secondary-alt">Search</button>
+        </form>
+        <p>{formError}</p>
+      </div>
+      )
+    }
+    </>
   );
 };
 

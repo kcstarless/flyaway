@@ -12,8 +12,9 @@ export const fetchFlights = async (data) => {
       console.log("Using cached data");
       return JSON.parse(cachedData); // Return cached data if available
     }
-    
+
   try {      
+    console.log("Flight fetch started with data:", data);
     const response = await axios.post('/api/v1/search/flight_offers', {
         origin: data.departingIATA, //= Origin is the destination IATA for return flights
         destination: data.destinationIATA, // Destination is the departing IATA for return flights
@@ -21,6 +22,8 @@ export const fetchFlights = async (data) => {
         adults: data.passengers,         // e.g., 1
         currencyCode: data.currencyCode,      // e.g., 'USD'
     });
+    
+    console.log("Flight fetch completed with response:", response.data);
 
     // Remapping of reponse data to a new flightData structure.
     if (response.data.data && response.data.data.length > 0) {
@@ -71,7 +74,9 @@ export const fetchFlights = async (data) => {
 
       return itineraryData;
     }
+    console.log("No flight offers found");
     return [];
+    
   } catch (err) {
     console.error("Error fetching flights:", err);
     throw new Error(err.message);

@@ -1,15 +1,15 @@
-import { useFlightOffersContext } from '../contexts/FlightOffersContext';
-import { useLocalizationContext } from '../contexts/LocalizationContext';
-import { useLoadingContext } from '../contexts/LoadingContext';
+import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
+import { useContextLocalization } from '../contexts/ContextLocalization';
+import { useContextLoading } from '../contexts/ContextLoading';
 import { validCurrency, numberCommas } from '../helpers/general';
 import { toolTipHelper } from '../helpers/toolTipHelper';
 import Tooltip from '@mui/material/Tooltip';
 import { CiCircleInfo } from "react-icons/ci";
 
-const FlightflightPriceHistory = () => {
-    const {flightPriceHistory, formData} = useFlightOffersContext();
-    const {localizationData} = useLocalizationContext();
-    const {loadingPriceHistory} = useLoadingContext();
+const FlightsPriceHistory = () => {
+    const {flightPriceHistory, formData} = useContextFlightOffers();
+    const {localizationData} = useContextLocalization();
+    const {loadingPriceHistory} = useContextLoading();
     const currencySymbol = localizationData.currencySymbol;
     const currencyValid = validCurrency.includes(localizationData.currency);
 
@@ -79,4 +79,4 @@ const FlightflightPriceHistory = () => {
     )
 }
 
-export default FlightflightPriceHistory
+export default FlightsPriceHistory

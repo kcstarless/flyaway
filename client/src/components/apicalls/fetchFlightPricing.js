@@ -3,7 +3,7 @@ import axios from 'axios';
 export const fetchFlightPricing = async (selectedOffer) => {
     // console.log("Selected offer passed to fetchFlightPricing:", selectedOffer);
     try {
-        const response = await axios.post('/api/v1/search/pricing', {
+        const response = await axios.post('/api/v1/booking/pricing', {
             offer: selectedOffer.offer
         });
         // console.log(response);

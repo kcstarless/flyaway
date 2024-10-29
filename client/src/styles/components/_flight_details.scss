@@ -23,6 +23,16 @@
     .trip-confirmation {
         display: flex;
         flex-direction: row;
+        align-items: center;
+        gap: var(--space-l);
+        justify-content: space-between;
+        h5 {
+            color: var(--color-secondary);
+            filter: brightness(100%); 
+        }
+        p {
+            color: gray;
+        }
     }
     .trip-price {
         display: flex;

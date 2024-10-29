@@ -52,6 +52,7 @@ gem "amadeus"
 gem "faraday"
 gem 'flight_radar'
 gem 'opencage-geocoder'
+gem 'stripe'
 
 gem "devise", "~> 4.9"
 gem "devise-api", "~> 0.2.0"

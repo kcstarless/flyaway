@@ -52,7 +52,7 @@ export const fetchCountries = async () => {
 };
 
 export const fetchLocalizationData = async () => {
-    console.log("Fetching localization data..."); // Add this line
+    // console.log("Fetching localization data..."); // Add this line
     try {
         const position = await getLocation();
         const countryData = await getCountryData(position);

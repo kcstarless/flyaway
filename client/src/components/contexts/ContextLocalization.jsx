@@ -2,9 +2,9 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useQuery } from "@tanstack/react-query"
 import { fetchLocalizationData } from '../apicalls/fetchLocalizationData';
 
-const LocalizationContext = createContext();
+const ContextLocalization = createContext();
 
-export const LocalizationProvider = ({ children }) => {
+export const ProviderLocalization = ({ children }) => {
     // Define default localization data if it fails to load
     const defaultLocalizationData = {
         language: 'English',
@@ -53,14 +53,14 @@ export const LocalizationProvider = ({ children }) => {
     };
     
     return (
-        <LocalizationContext.Provider value={{
+        <ContextLocalization.Provider value={{
             localizationData,
             localizationQuery,
             updateLocalizationData,
         }}>
             {children}
-        </LocalizationContext.Provider>
+        </ContextLocalization.Provider>
     )
 }
 
-export const useLocalizationContext = () => useContext(LocalizationContext);
+export const useContextLocalization = () => useContext(ContextLocalization);

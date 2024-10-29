@@ -1,25 +1,25 @@
-// FlightSearchResultDisplay.jsx
+// components/search/display.jsx
 
-import { useFlightOffersContext } from '../contexts/FlightOffersContext';
-import { useLocalizationContext } from '../contexts/LocalizationContext';
+import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
+import { useContextLocalization } from '../contexts/ContextLocalization';
 import { filterFlightOffers, sortFlightOffers } from '../helpers/filterandsortflightOffers';
-import DisplayFlights from './DisplayFlights';
-import SortOptions from './SortOptions';
-import FlightPriceHistory from './FlightPriceHistory';
-import FilterOptions from './FilterOptions';
+import FlightsSearchResult from './FlightsSearchResult';
+import FlightsSort from './FlightsSort';
+import FlightsPriceHistory from './FlightsPriceHistory';
+import FlightsFilters from './FlightsFilters';
 import { useFlightSearchQuery } from '../hooks/useFlightSearchQuery';
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const FlightSearchResultDisplay = () => {
-    const { flightOffers, selectedOutboundFlight, isReturn, setSelectedOutboundFlight, setSelectedReturnFlight } = useFlightOffersContext();
-    const { localizationData: { currencySymbol } } = useLocalizationContext();
-    const navigate = useNavigate();
-
+const DisplayFlights = () => {
+    const { flightOffers, selectedOutboundFlight, isReturn, setSelectedOutboundFlight, setSelectedReturnFlight } = useContextFlightOffers();
+    const { localizationData: { currencySymbol } } = useContextLocalization();
+    const { refetchAll } = useFlightSearchQuery();
     const [noMatch, setNoMatch] = useState(null);
     const [sortOption, setSortOption] = useState("best");
     
-    const { refetchAll } = useFlightSearchQuery();
+    const navigate = useNavigate();
+
     // List of filters for flight offers data
     const [filterOption, setFilterOption] = useState({
         direct: true,
@@ -62,13 +62,13 @@ const FlightSearchResultDisplay = () => {
    
     return (
         <div className="search-result">
-            <FlightPriceHistory />
-            <SortOptions 
+            <FlightsPriceHistory />
+            <FlightsSort 
                 sortOption={sortOption} 
                 setSortOption={setSortOption} 
                 offersCount={offers.length} 
             />
-            <FilterOptions 
+            <FlightsFilters 
                 filters={filterOption} 
                 setFilters={setFilterOption}
             />
@@ -83,7 +83,7 @@ const FlightSearchResultDisplay = () => {
                     </div>
                 </div>
             ) : (
-                <DisplayFlights
+                <FlightsSearchResult
                     sortedOffers={offers}
                     currencySymbol={currencySymbol}
                     onFlightSelect={handleflightOfferselect}
@@ -94,4 +94,4 @@ const FlightSearchResultDisplay = () => {
     );
 };
 
-export default FlightSearchResultDisplay;
+export default DisplayFlights;

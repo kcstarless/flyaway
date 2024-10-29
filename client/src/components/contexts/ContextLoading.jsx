@@ -1,21 +1,21 @@
 import { createContext, useContext, useState } from "react";
 
-const LoadingContext = createContext();
+const ContextLoading = createContext();
 
-export const LoadingProvider = ({children}) => {
+export const ProviderContextLoading = ({children}) => {
     const [loadingFlightOffers, setLoadingFlightOffers] = useState(false);
     const [loadingPriceHistory, setLoadingPriceHistory] = useState(false);
 
     return (
-        <LoadingContext.Provider value={{
+        <ContextLoading.Provider value={{
             loadingFlightOffers,
             setLoadingFlightOffers,
             loadingPriceHistory,
             setLoadingPriceHistory,
         }}>
             {children}
-        </LoadingContext.Provider>
+        </ContextLoading.Provider>
     )
 }
 
-export const useLoadingContext = () => useContext(LoadingContext);
+export const useContextLoading = () => useContext(ContextLoading);

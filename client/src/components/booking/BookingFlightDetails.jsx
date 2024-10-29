@@ -1,9 +1,9 @@
 // FlightDetails.jsx
-import { useFlightOffersContext } from '../contexts/FlightOffersContext';
+import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
 import { useState, useEffect, useRef } from 'react';
 import { fetchLocation } from '../apicalls/fetchLocation';
 import { getDateDayDDMMYYYY } from '../helpers/general';
-import FlightDetailsExpanded from './FlightDetailsExpanded';
+import BookingFlightDetailsExpanded from './BookingFlightDetailsExpanded';
 
 async function fetchSegmentLocations(flight, newLocations) {
     for (const segment of flight) {
@@ -19,9 +19,9 @@ async function fetchSegmentLocations(flight, newLocations) {
     }
 }
 
-const FlightDetails = () => {
+const BookingFlightDetails = () => {
     console.log("FlightDetails rendered...");
-    const { selectedOutboundFlight, selectedReturnFlight } = useFlightOffersContext();
+    const { selectedOutboundFlight, selectedReturnFlight } = useContextFlightOffers();
     const [outboundDetailsOpen, setOutboundDetailsOpen] = useState(false);
     const [returnDetailsOpen, setReturnDetailsOpen] = useState(false);
     const locationsRef = useRef({});// To store location data
@@ -58,7 +58,7 @@ const FlightDetails = () => {
             {selectedOutboundFlight && (
                 <>
                     <div className="flight-bound"><b>Outbound</b><p className="medium-small gray">{getDateDayDDMMYYYY(selectedOutboundFlight.departureDateTime)}</p></div>
-                    <FlightDetailsExpanded 
+                    <BookingFlightDetailsExpanded 
                     flight = {selectedOutboundFlight}
                     detailsOpen = {outboundDetailsOpen}
                     setDetailsOpen = {setOutboundDetailsOpen}
@@ -86,4 +86,4 @@ const FlightDetails = () => {
     );    
 };
 
-export default FlightDetails;
+export default BookingFlightDetails;

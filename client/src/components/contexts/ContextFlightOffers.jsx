@@ -1,10 +1,12 @@
+// components/contexts/ContextFlightOffers.jsx
+
 import { createContext, useContext, useState, useEffect } from 'react';
-import { useLocalizationContext } from '../contexts/LocalizationContext';
+import { useContextLocalization } from './ContextLocalization';
 
-const FlightOffersContext = createContext();
+const ContextFlightOffers = createContext();
 
-export const FlightOffersProvider = ({ children }) => {
-    const { localizationData } = useLocalizationContext();
+export const ProviderContextFlightOffers = ({ children }) => {
+    const { localizationData } = useContextLocalization();
     const { currency, currencySymbol } = localizationData;
     
     const[flightOffers, setFlightOffers] = useState([]);
@@ -50,11 +52,11 @@ export const FlightOffersProvider = ({ children }) => {
     // If return date is present then set to true
     useEffect (() => {
         if (formData.returnDate) {
-            // console.log("is Return");
+            console.log("is Return");
             setIsReturn(true) ;
         } else {
             setIsReturn(false);
-            // console.log("is Oneway");
+            console.log("is Oneway");
         }
     }, [formData.returnDate]); 
 
@@ -64,8 +66,32 @@ export const FlightOffersProvider = ({ children }) => {
         // setCurrencyChanged(true); // Mark that currency has changed
     }, [currency]);
 
+    function resetFlightOffer () {
+        console.log("Resetting flight offers context");
+        setFlightOffers([]);
+        setFlightPriceHistory([]);
+        setSelectedOutboundFlight(null);
+        setSelectedReturnFlight(null);
+        setIsSubmitted(false);
+        setFormData(prev => ({
+            ...prev,
+            departingIATA: '',
+            departingCityName: '',
+            departingCountryCode: '',
+            departingGeoCode: '',
+            destinationIATA: '',
+            destinationCityName: '',
+            destinationCountryCode: '',
+            destinationGeoCode: '',
+            departDate: null,
+            returnDate: null,
+            passengers: 1,
+            currencyCode: currency, // Initialize with current currency
+            currencySymbol: currencySymbol,
+        }));
+    }
     return (
-        <FlightOffersContext.Provider value={{ 
+        <ContextFlightOffers.Provider value={{ 
             flightOffers, 
             setFlightOffers,
             flightPriceHistory,
@@ -82,11 +108,12 @@ export const FlightOffersProvider = ({ children }) => {
             // setCurrencyChanged,
             isSubmitted,
             setIsSubmitted,
+            resetFlightOffer,
             }}>
             {children}
-        </FlightOffersContext.Provider>
+        </ContextFlightOffers.Provider>
     );
 };
 
-export const useFlightOffersContext = () => useContext(FlightOffersContext);
+export const useContextFlightOffers = () => useContext(ContextFlightOffers);
 

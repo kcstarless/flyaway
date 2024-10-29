@@ -61,7 +61,7 @@ fieldset {
             outline: none;
             border: solid 2px #007bff;
         }
-    }
+    }    
     
     .item-button{
         display: flex;
@@ -79,6 +79,7 @@ fieldset {
     display: flex;
     flex-direction: column;
 }
+
 .form-title {
     display: flex;
     // gap: var(--space-s);
@@ -155,6 +156,7 @@ fieldset {
             // margin: 0; /* Reset margin for the menu list */
         }
     }
+
 
     .item-input-dob {
         display: flex;

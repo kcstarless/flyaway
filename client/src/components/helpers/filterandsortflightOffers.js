@@ -1,4 +1,5 @@
-// sortFlightOffers.js
+// components/helpers/filterandsortflightOffers.js
+
 import { hhmm24ToMinutes } from "./general";
 
 // Filters data based on filter (eg. direct, airline)

@@ -9,6 +9,8 @@ import { CiWifiOn } from "react-icons/ci";
 import { BiSolidDrink } from "react-icons/bi";
 import { RiMovieLine } from "react-icons/ri"
 import React, { useState } from 'react';
+
+
 // FlightSummary Component for the clickable itinerary card
 const FlightSummary = ({ flight, toggleDetails }) => (
     <div className="itinerary-card" onClick={toggleDetails}>
@@ -152,7 +154,7 @@ const LayoverDetails = ({ layoverTime, arrivalLocation }) => (
 );
 
 // Main FlightsDetailsExpanded Component
-const FlightsDetailsExpanded = ({ flight, detailsOpen, setDetailsOpen, itineraries, locations, carriers }) => {
+const BookingFlightDetailsExpanded = ({ flight, detailsOpen, setDetailsOpen, itineraries, locations, carriers }) => {
     const toggleDetails = () => setDetailsOpen(!detailsOpen);
 
     return (
@@ -188,4 +190,4 @@ const FlightsDetailsExpanded = ({ flight, detailsOpen, setDetailsOpen, itinerari
     );
 };
 
-export default FlightsDetailsExpanded;
+export default BookingFlightDetailsExpanded;

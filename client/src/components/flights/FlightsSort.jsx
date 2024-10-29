@@ -1,9 +1,9 @@
 // SortOptions.js
-import { useLoadingContext } from '../contexts/LoadingContext';
+import { useContextLoading } from '../contexts/ContextLoading';
 
-const SortOptions = ({ sortOption, setSortOption, offersCount }) => {
+const FlightsSort = ({ sortOption, setSortOption, offersCount }) => {
 
-    const {loadingFlightOffers} = useLoadingContext();
+    const {loadingFlightOffers} = useContextLoading();
     const handleSortChange = (event) => {
         setSortOption(event.target.value);
     };
@@ -30,4 +30,4 @@ const SortOptions = ({ sortOption, setSortOption, offersCount }) => {
     );
 };
 
-export default SortOptions;
+export default FlightsSort;
