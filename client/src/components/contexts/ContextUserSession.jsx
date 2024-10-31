@@ -1,9 +1,9 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import { API_TOKEN_URL } from '../../constants';
 import axios from 'axios';
-const UserSessionContext = createContext();
+const ContextUserSession = createContext();
 
-export const UserSessionProvider = ({ children }) => {
+export const ProviderContextUserSession = ({ children }) => {
     const [accessToken, setAccessToken] = useState(null);
     const [refreshToken, setRefreshToken] = useState(() => localStorage.getItem('refresh_token'));
     const [resourceOwner, setResourceOwner] = useState(() => JSON.parse(localStorage.getItem('resource_owner')));
@@ -12,10 +12,10 @@ export const UserSessionProvider = ({ children }) => {
     // Set localstorage for refreshToken and resourceOwner whenever they change. 
     useEffect(() => {
         if(refreshToken) {
-            console.log("refresh token set");
+            // console.log("refresh token set");
             localStorage.setItem('refresh_token', refreshToken);
         } else {
-            console.log("refresh token removed");
+            // console.log("refresh token removed");
             localStorage.removeItem('refresh_token');
         }
 
@@ -126,7 +126,7 @@ export const UserSessionProvider = ({ children }) => {
     }
 
     return (
-        <UserSessionContext.Provider value= {{
+        <ContextUserSession.Provider value= {{
             accessToken,
             setAccessToken,
             refreshToken,
@@ -139,8 +139,8 @@ export const UserSessionProvider = ({ children }) => {
             inSession,
         }}>
             {children}
-        </UserSessionContext.Provider>
+        </ContextUserSession.Provider>
     )
 }
 
-export const useUserSessionContext = () => useContext(UserSessionContext);
+export const useContextUserSession = () => useContext(ContextUserSession);

@@ -1,13 +1,13 @@
 import takeoff_icon from '../../assets/images/icon_flighttakeoff.svg';
 import landing_icon from '../../assets/images/icon_flightland.svg';
-import { useLoadingContext } from '../contexts/LoadingContext';
+import { useContextLoading } from '../contexts/ContextLoading';
 import PropTypes from 'prop-types'; // Import PropTypes
 import { useEffect, useState } from 'react';
 
-const DisplayFlights = ({sortedOffers, currencySymbol, onFlightSelect }) => {
+const FlightsSearchResult = ({sortedOffers, currencySymbol, onFlightSelect }) => {
     const [visibleCount, setVisibleCount] = useState(10);
     const offers = sortedOffers.slice(0, visibleCount);
-    const {loadingFlightOffers} = useLoadingContext();
+    const {loadingFlightOffers} = useContextLoading();
 
     const handleShowMore = () => {
         setVisibleCount((prevCount) => prevCount + 10);
@@ -67,7 +67,7 @@ const DisplayFlights = ({sortedOffers, currencySymbol, onFlightSelect }) => {
 }
 
 // Add PropTypes
-DisplayFlights.propTypes = {
+FlightsSearchResult.propTypes = {
     sortedOffers: PropTypes.arrayOf(PropTypes.shape({
         offerId: PropTypes.string.isRequired,
         carrierLogo: PropTypes.string.isRequired,
@@ -87,4 +87,4 @@ DisplayFlights.propTypes = {
 };
 
 
-export default DisplayFlights;
+export default FlightsSearchResult;

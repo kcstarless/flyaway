@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Modal from 'react-modal';
-import { useLocalizationContext } from '../contexts/LocalizationContext';
+import { useContextLocalization } from '../contexts/ContextLocalization';
 import { fetchCountries } from "../apicalls/fetchLocalizationData";
 
 const currenciesList = (countries) => {
@@ -22,7 +22,7 @@ const currenciesList = (countries) => {
 
 
 const SetLocalization = ({ isOpen, onRequestClose }) => {
-    const { localizationData, updateLocalizationData } = useLocalizationContext();
+    const { localizationData, updateLocalizationData } = useContextLocalization();
     const { countryCode, currency } = localizationData;
     const [countries, setCountries] = useState([]);
     const [selectedCountryCode, setSelectedCountryCode] = useState(countryCode);

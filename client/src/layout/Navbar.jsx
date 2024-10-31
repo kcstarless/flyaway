@@ -1,6 +1,6 @@
 import logo_plane from '../assets/images/logo_plane.svg';
-import Localization from './navbar/Localization';
-import UserLogin from './navbar/UserLogin';
+import Localization from '../components/navbar/Localization';
+import UserLogin from '../components/navbar/UserLogin';
 
 import React, { useState } from 'react';
 
@@ -34,7 +34,7 @@ function Navbar() {
                     {['Flight', 'Hotel', 'Destination'].map((item, index) => (
                         <li key={index}>
                             <a
-                            href="#"
+                            href="/"
                             onClick={() => handleMenuClick(index)}
                             className={activeIndex === index ? 'active' : ''}
                             >

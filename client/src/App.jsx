@@ -1,12 +1,15 @@
 // App.jsx
-import Navbar from "./components/Navbar" 
-import SearchBar from "./components/Searchbar" 
-import { FlightOffersProvider } from "./components/contexts/FlightOffersContext"
-import { LocalizationProvider } from "./components/contexts/LocalizationContext"
-import { UserSessionProvider } from "./components/contexts/UserSessionContext"
-import { LoadingProvider } from "./components/contexts/LoadingContext"
-import MainContent from "./components/MainContent"
+import Navbar from "./layout/Navbar" 
+import SearchBar from "./layout/Searchbar" 
+import MainContent from "./layout/MainContent"
+import { ProviderContextFlightOffers } from "./components/contexts/ContextFlightOffers"
+import { ProviderContextFlightBooking } from "./components/contexts/ContextFlightBooking"
+import { ProviderLocalization } from "./components/contexts/ContextLocalization"
+import { ProviderContextUserSession } from "./components/contexts/ContextUserSession"
+import { ProviderContextLoading } from "./components/contexts/ContextLoading"
+
 import { BrowserRouter as Router } from "react-router-dom";
+
 
 // import ErrorBoundary from "./components/ErrorBoundary"
 // import TempContainer from "./components/TempContainer"
@@ -15,10 +18,11 @@ function App() {
   return (
     <Router>
       <div className="container">
-        <UserSessionProvider>
-        <LocalizationProvider>
-        <FlightOffersProvider>
-        <LoadingProvider>
+        <ProviderContextUserSession>
+        <ProviderLocalization>
+        <ProviderContextFlightOffers>
+        <ProviderContextFlightBooking>
+        <ProviderContextLoading>
           <div className="c1">
             <div className="header">
               <Navbar />
@@ -31,13 +35,15 @@ function App() {
                 <MainContent />
             </div>
           </div>
-        </LoadingProvider>
-        </FlightOffersProvider>
-        </LocalizationProvider>
-        </UserSessionProvider>
+        </ProviderContextLoading>
+        </ProviderContextFlightBooking>
+        </ProviderContextFlightOffers>
+        </ProviderLocalization>
+        </ProviderContextUserSession>
       </div>
     </Router>
   )
 }
 
 export default App
+

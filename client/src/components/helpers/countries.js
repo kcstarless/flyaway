@@ -1,4 +1,4 @@
-// countries.js
+// components/helpers/countries.js
 
 export const countries = [
     { code: 'AD', label: 'Andorra', phone: '376' },

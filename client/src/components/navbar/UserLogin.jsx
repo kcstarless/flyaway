@@ -1,11 +1,11 @@
 import login_icon from '../../assets/images/icon_login.svg';
-import { useUserSessionContext } from '../contexts/UserSessionContext';
+import { useContextUserSession } from '../contexts/ContextUserSession';
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 
 const UserLogin = () => {
-    const { makecallSignup, makecallSignin, handleSignout, inSession, resourceOwner } = useUserSessionContext();
+    const { makecallSignup, makecallSignin, handleSignout, inSession, resourceOwner } = useContextUserSession();
     const [openLogin, setOpenLogin] = useState(false);
     const [switchForm, setSwitchForm] = useState(true);
     const dialogRef = useRef(null);

@@ -5,7 +5,8 @@ class OpencageApi
   attr_accessor :geocoder
 
   def initialize()
-    @geocoder = OpenCage::Geocoder.new(api_key: ENV['OPENCAGE_API_KEY'])
+    key = Rails.application.credentials.opencage[:key]
+    @geocoder = OpenCage::Geocoder.new(api_key: key)
   end
 
   def geocode_search(lat, lon)

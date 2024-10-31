@@ -1,17 +1,17 @@
-// useFlightSearchQuery.jsx
+// components/hooks/useFlightSearchQuery.jsx
 
 import { useQueries } from '@tanstack/react-query';
 import { fetchFlights } from '../apicalls/fetchFlights';
 import { fetchFlightPriceHistory } from '../apicalls/fetchFlightPriceHistory';
 // import { fetchPoI } from '../apicalls/fetchPointOfInterest';
-import { useLoadingContext } from '../contexts/LoadingContext';
-import { useFlightOffersContext } from '../contexts/FlightOffersContext';
+import { useContextLoading } from '../contexts/ContextLoading';
+import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
 
 import { useEffect, useState } from 'react';
 
 export const useFlightSearchQuery = () => {
-  const { setLoadingFlightOffers, setLoadingPriceHistory } = useLoadingContext();
-  const { setFlightOffers, setFlightPriceHistory, formData, isSubmitted, currencyChanged } = useFlightOffersContext(); 
+  const { setLoadingFlightOffers, setLoadingPriceHistory } = useContextLoading();
+  const { setFlightOffers, setFlightPriceHistory, formData, isSubmitted, currencyChanged } = useContextFlightOffers(); 
   const [queryError, setQueryError] = useState(null);
 
   // Fetch both flight offers and activities offers only if form is submitted and currency is changed. 

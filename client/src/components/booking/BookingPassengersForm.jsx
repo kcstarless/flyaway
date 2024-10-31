@@ -2,9 +2,9 @@
 import {useForm} from "react-hook-form";
 import { useCountries } from "../hooks/useCountries";
 import Select from "react-select";
-import { useLocalizationContext } from "../contexts/LocalizationContext";
-import { useFlightOffersContext } from '../contexts/FlightOffersContext';
-import { useFlightBookingContext } from "../contexts/FlightBookingContext";
+import { useContextLocalization } from "../contexts/ContextLocalization";
+import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
+import { useContextFlightBooking } from "../contexts/ContextFlightBooking";
 import { useEffect, useState } from "react";
 import { fetchCreateFlightBooking } from '../apicalls/fetchConfirmBooking';
 import { useNavigate } from "react-router-dom";
@@ -12,9 +12,9 @@ import { useNavigate } from "react-router-dom";
 
 const PassengerForm = () => {
     const { countries } = useCountries();
-    const { formData } = useFlightOffersContext();
-    const { localizationData } = useLocalizationContext(); // Getting localization data
-    const { pricingOutbound, pricingReturn, setBookedOutbound, setBookedReturn } = useFlightBookingContext();
+    const { formData } = useContextFlightOffers();
+    const { localizationData } = useContextLocalization(); // Getting localization data
+    const { setTravelerInfo } = useContextFlightBooking();
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate();
 
@@ -206,9 +206,8 @@ const PassengerForm = () => {
                         <select {...register(`travelers[${index}].gender`, {
                             required: " is required."
                         })}>
-                            <option value="" disabled selected></option>
-                            <option>Male</option>
                             <option>Female</option>
+                            <option>Male</option>
                         </select>
                     </div>
                 </div>
@@ -299,23 +298,23 @@ const PassengerForm = () => {
         return formsPassengers;
     }
     
-    const confirmBooking = async (formData) => {
-        try {
-            if (pricingOutbound) {
-                const response = await fetchCreateFlightBooking(pricingOutbound.data.flightOffers[0], formData);
-                setBookedOutbound(response);
-                console.log(response);
-            }
-            if (pricingReturn) {
-                const response = await fetchCreateFlightBooking(pricingReturn.data.flightOffers[0], formData);
-                setBookedReturn(response);
-                console.log(response);
-            }
+    // const amadeusBookingConfirmation = async (passengersInfo) => {
+    //     try {
+    //         if (pricingOutbound) {
+    //             const response = await fetchCreateFlightBooking(pricingOutbound.data.flightOffers[0], passengersInfo);
+    //             setBookedOutbound(response);
+    //             console.log(response);
+    //         }
+    //         if (pricingReturn) {
+    //             const response = await fetchCreateFlightBooking(pricingReturn.data.flightOffers[0], passengersInfo);
+    //             setBookedReturn(response);
+    //             console.log(response);
+    //         }
             
-        } catch (err) {
-            console.log("Error fetching confirmed flight: ", err);
-        }
-    }
+    //     } catch (err) {
+    //         console.log("Error fetching confirmed flight: ", err);
+    //     }
+    // }
     
     const prepTravelers = (data) => {
         const updateDob = data.travelers.map((traveler, index) => {
@@ -343,13 +342,13 @@ const PassengerForm = () => {
     const onSubmit = async (data) => {
         try {
             // Prepare the travelers' data
-            const updated = prepTravelers(data);
+            setTravelerInfo(prepTravelers(data));
             
             // Wait for the booking confirmation to complete
-            await confirmBooking(updated);
+            // await amadeusBookingConfirmation(passengersInfo);
     
             // Navigate only after the booking confirmation is successful
-            navigate("/booking_confirmation");
+            navigate("/checkout");
         } catch (err) {
             console.log("Error confirming booking:", err);
             // Optionally, show an error message to the user

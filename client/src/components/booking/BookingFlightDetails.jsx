@@ -1,10 +1,12 @@
 // FlightDetails.jsx
-import { useFlightOffersContext } from '../contexts/FlightOffersContext';
+import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
 import { useState, useEffect, useRef } from 'react';
 import { fetchLocation } from '../apicalls/fetchLocation';
 import { getDateDayDDMMYYYY } from '../helpers/general';
-import FlightDetailsExpanded from './FlightDetailsExpanded';
+import BookingFlightDetailsExpanded from './BookingFlightDetailsExpanded';
 
+
+// Fetch location details for each segment
 async function fetchSegmentLocations(flight, newLocations) {
     for (const segment of flight) {
         const departureIATA = segment.departure.iataCode;
@@ -19,17 +21,12 @@ async function fetchSegmentLocations(flight, newLocations) {
     }
 }
 
-const FlightDetails = () => {
+const BookingFlightDetails = () => {
     console.log("FlightDetails rendered...");
-    const { selectedOutboundFlight, selectedReturnFlight } = useFlightOffersContext();
-    const [outboundDetailsOpen, setOutboundDetailsOpen] = useState(false);
-    const [returnDetailsOpen, setReturnDetailsOpen] = useState(false);
-    const locationsRef = useRef({});// To store location data
+    const { selectedOutboundFlight, selectedReturnFlight, setLocations } = useContextFlightOffers();
     const outboundItineraries = selectedOutboundFlight?.offer.itineraries[0].segments;
     const returnItineraries = selectedReturnFlight?.offer.itineraries[0].segments;
-    const outboundCarriers = selectedOutboundFlight?.carriers || {};
-    const returnCarriers = selectedReturnFlight?.carriers || {};
-    const carriers = { ...outboundCarriers, ...returnCarriers };
+    const locationsRef = useRef({});// To store location data
 
     // Fetch location details for each segment
     useEffect(() => {
@@ -42,15 +39,14 @@ const FlightDetails = () => {
                 await fetchSegmentLocations(returnItineraries, newLocations);
             }
             locationsRef.current = newLocations;
+            setLocations(newLocations);
         };
-
         fetchLocations();
-    }, [outboundItineraries, returnItineraries]);
+    }, [outboundItineraries, returnItineraries, setLocations]);
 
     if (!selectedOutboundFlight && !selectedReturnFlight) { 
         return null; // Or handle the loading state appropriately
     }
-    
     return (
         <div className="flight-details">
             <h3 className="float-right">Flight details</h3>
@@ -58,13 +54,9 @@ const FlightDetails = () => {
             {selectedOutboundFlight && (
                 <>
                     <div className="flight-bound"><b>Outbound</b><p className="medium-small gray">{getDateDayDDMMYYYY(selectedOutboundFlight.departureDateTime)}</p></div>
-                    <FlightDetailsExpanded 
+                    <BookingFlightDetailsExpanded 
                     flight = {selectedOutboundFlight}
-                    detailsOpen = {outboundDetailsOpen}
-                    setDetailsOpen = {setOutboundDetailsOpen}
-                    itineraries = {outboundItineraries}
                     locations = {locationsRef.current}
-                    carriers = {carriers}
                     />   
                 </>
             )}
@@ -72,13 +64,9 @@ const FlightDetails = () => {
             {selectedReturnFlight && (
                 <>
                     <div className="flight-bound"><b>Return</b><p className="medium-small gray">{getDateDayDDMMYYYY(selectedReturnFlight.departureDateTime)}</p></div>
-                    <FlightDetailsExpanded 
+                    <BookingFlightDetailsExpanded 
                     flight = {selectedReturnFlight}
-                    detailsOpen = {returnDetailsOpen}
-                    setDetailsOpen = {setReturnDetailsOpen}
-                    itineraries = {returnItineraries}
                     locations = {locationsRef.current}
-                    carriers = {carriers}
                     />
                 </>
             )}
@@ -86,4 +74,4 @@ const FlightDetails = () => {
     );    
 };
 
-export default FlightDetails;
+export default BookingFlightDetails;

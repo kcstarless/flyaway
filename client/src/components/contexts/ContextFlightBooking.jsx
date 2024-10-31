@@ -1,18 +1,23 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { useFlightOffersContext } from './FlightOffersContext';
+import { useContextFlightOffers } from './ContextFlightOffers';
 import { fetchFlightPricing } from '../apicalls/fetchFlightPricing';
 
-const FlightBookingContext = createContext();
+const ContextFlightBooking = createContext();
 
-export const FlightBookingProvider = ({ children }) => {
-    const { selectedOutboundFlight, selectedReturnFlight } = useFlightOffersContext();
+export const ProviderContextFlightBooking = ({ children }) => {
+    const { selectedOutboundFlight, selectedReturnFlight } = useContextFlightOffers();
 
     const [pricingOutbound, setPricingOutbound] = useState(null);
     const [pricingReturn, setPricingReturn] = useState(null);
     const [bookedOutbound, setBookedOutbound] = useState({});
     const [bookedReturn, setBookedReturn] = useState({});
-    const [passengers, setPassengers] = useState({});
+    const [travelerInfo, setTravelerInfo] = useState(null);
 
+    const passengers = selectedOutboundFlight?.offer.travelerPricings.length; // Total number of passengers
+    const grandTotal = getTotalPrice();
+
+    // Check the selected offer for flight is still valid.
+    // This step is necessary for Amadeus API flight booking flow. 
     useEffect(() => {
         const fetchPricing = async () => {
             if (selectedOutboundFlight) {
@@ -37,19 +42,42 @@ export const FlightBookingProvider = ({ children }) => {
           fetchPricing();
     }, [selectedOutboundFlight, selectedReturnFlight]);
     
+    // Get total price of the flights
+    function getTotalPrice() {
+      if (!selectedOutboundFlight) {
+        return null;
+      }  
+      
+      return selectedReturnFlight ? selectedOutboundFlight.price + selectedReturnFlight.price : selectedOutboundFlight.price;
+    }
+
+    function resetFlightBooking() {
+        console.log("Resetting flight booking context");
+        setPricingOutbound(null);
+        setPricingReturn(null);
+        setBookedOutbound({});
+        setBookedReturn({});
+        setTravelerInfo(null);
+    }
+
     return (
-        <FlightBookingContext.Provider value= {{
+        <ContextFlightBooking.Provider value= {{
             pricingOutbound,
             pricingReturn,
             bookedOutbound,
             setBookedOutbound,
             bookedReturn,
             setBookedReturn,
+            grandTotal,
+            passengers,
+            travelerInfo,
+            setTravelerInfo,
+            resetFlightBooking,
         }}>
             {children}
-        </FlightBookingContext.Provider>
+        </ContextFlightBooking.Provider>
     )
 
 }
 
-export const useFlightBookingContext = () => useContext(FlightBookingContext);
+export const useContextFlightBooking = () => useContext(ContextFlightBooking);
