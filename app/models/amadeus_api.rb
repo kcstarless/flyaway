@@ -1,4 +1,5 @@
 # Amadeus_api.rb
+
 require 'amadeus'
 require 'faraday'
 require 'json'

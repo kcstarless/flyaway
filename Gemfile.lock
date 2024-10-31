@@ -102,6 +102,8 @@ GEM
       dry-monads (>= 1.6.0)
       dry-types (>= 1.7.0)
       rails (>= 6.0.0)
+    dockerfile-rails (1.6.22)
+      rails (>= 3.0.0)
     dotenv (3.1.2)
     dotenv-rails (3.1.2)
       dotenv (= 3.1.2)
@@ -245,6 +247,10 @@ GEM
     rake (13.2.1)
     rdoc (6.7.0)
       psych (>= 4.0.0)
+    redis (5.3.0)
+      redis-client (>= 0.22.0)
+    redis-client (0.22.2)
+      connection_pool
     reline (0.5.9)
       io-console (~> 0.5)
     responders (3.1.1)
@@ -279,6 +285,7 @@ DEPENDENCIES
   debug
   devise (~> 4.9)
   devise-api (~> 0.2.0)
+  dockerfile-rails (>= 1.6)
   dotenv-rails
   faker
   faraday
@@ -289,6 +296,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 7.1.4)
   rails-controller-testing (~> 1.0)
+  redis (~> 5.3)
   stripe
   tzinfo-data
 

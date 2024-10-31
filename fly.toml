@@ -1,13 +1,16 @@
-# fly.toml app configuration file generated for flyaway-still-meadow-8271 on 2024-10-31T18:47:19+11:00
+# fly.toml app configuration file generated for flyaway-rails-react on 2024-11-01T07:31:04+11:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'flyaway-still-meadow-8271'
+app = 'flyaway-rails-react'
 primary_region = 'syd'
 console_command = '/rails/bin/rails console'
 
 [build]
+
+[deploy]
+  release_command = './bin/rails db:prepare'
 
 [http_service]
   internal_port = 3000
@@ -21,3 +24,7 @@ console_command = '/rails/bin/rails console'
   memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
+
+[[statics]]
+  guest_path = 'demo/public'
+  url_prefix = '/'

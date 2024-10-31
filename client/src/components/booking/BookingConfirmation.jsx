@@ -134,7 +134,7 @@ const BookingConfirmation = () => {
                                 <h1>{selectedFlight.departureIata}</h1>
                             </div>
                             <div className="loc-direction">
-                                <div className="arrow"></div>
+                                <div className="arrow_2"></div>
                             </div>
                             <div className="loc-arrive">
                                 {locations[selectedFlight.arrivalIata].cityName}
