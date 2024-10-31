@@ -154,7 +154,12 @@ const LayoverDetails = ({ layoverTime, arrivalLocation }) => (
 );
 
 // Main FlightsDetailsExpanded Component
-const BookingFlightDetailsExpanded = ({ flight, detailsOpen, setDetailsOpen, itineraries, locations, carriers }) => {
+const BookingFlightDetailsExpanded = ({ flight, locations }) => {
+    const returnCarriers = flight?.carriers || {};
+    const carriers = { ...returnCarriers }; 
+    const [detailsOpen, setDetailsOpen] = useState(false);
+    const itineraries = flight?.offer.itineraries[0].segments;
+
     const toggleDetails = () => setDetailsOpen(!detailsOpen);
 
     return (

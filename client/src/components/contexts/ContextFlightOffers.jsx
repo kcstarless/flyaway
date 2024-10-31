@@ -16,6 +16,7 @@ export const ProviderContextFlightOffers = ({ children }) => {
     const[selectedReturnFlight, setSelectedReturnFlight] = useState(null);
     // const[currencyChanged, setCurrencyChanged] = useState(false);
     const[isSubmitted, setIsSubmitted] = useState(false);
+    const[locations, setLocations] = useState();
 
     // Flight search form data
     const [formData, setFormData] = useState({
@@ -73,6 +74,7 @@ export const ProviderContextFlightOffers = ({ children }) => {
         setSelectedOutboundFlight(null);
         setSelectedReturnFlight(null);
         setIsSubmitted(false);
+        setLocations({});
         setFormData(prev => ({
             ...prev,
             departingIATA: '',
@@ -109,6 +111,8 @@ export const ProviderContextFlightOffers = ({ children }) => {
             isSubmitted,
             setIsSubmitted,
             resetFlightOffer,
+            setLocations,
+            locations,
             }}>
             {children}
         </ContextFlightOffers.Provider>

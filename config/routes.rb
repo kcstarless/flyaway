@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       # Payment-related routes
       post 'payments/create_payment_intent',  to: 'payments#create_payment_intent'
       post 'webhooks/stripe',                 to: 'webhooks#stripe'
+      get 'payments/retrieve_charge', to: 'payments#retrieve_charge'
     end
   end
 end

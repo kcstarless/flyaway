@@ -35,6 +35,8 @@ const PaymentForm = ({ clientSecret }) => {
             redirect: 'if_required', 
         });
 
+        const paymentIntent = await stripe.retrievePaymentIntent(clientSecret);
+        console.log(paymentIntent);
 
         setLoading(false);
 
@@ -94,6 +96,8 @@ const BookingPayment = () => {
         };
         createPaymentIntent();
     }, [grandTotal, localizationData.currency]);
+
+    console.log(clientSecret);
     
     return(
         <>
