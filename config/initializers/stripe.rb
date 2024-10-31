@@ -2,9 +2,10 @@
 
 require 'stripe'
 
-if ENV['STRIPE_SECRET_KEY']
-  Stripe.api_key = ENV['STRIPE_SECRET_KEY']
-else
+# Set the Stripe API key from Rails credentials
+Stripe.api_key = Rails.application.credentials.stripe[:sk_key] if Rails.application.credentials.stripe[:sk_key]
+
+unless Stripe.api_key
   Rails.logger.warn("STRIPE_SECRET_KEY is not set; Stripe will not be initialized.")
   # You might choose to raise an error or set a default value if needed
 end

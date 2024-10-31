@@ -2,7 +2,7 @@ require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-  config.action_cable.allowed_request_origins = ['http://127.0.0.1:5173', 'http://localhost:3000']
+  config.action_cable.allowed_request_origins = ['http://localhost:3000', 'http://localhost:5173']
   # config.hosts << "2f08-220-245-163-90.ngrok-free.app"
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development

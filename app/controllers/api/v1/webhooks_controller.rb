@@ -21,7 +21,7 @@ class Api::V1::WebhooksController < ApplicationController
       return
     end
 
-    # Rails.logger.info "Event type: #{event['type']}"
+    Rails.logger.info "Event type: #{event['type']}"
 
     case event['type']
     when 'payment_intent.succeeded'
@@ -30,7 +30,9 @@ class Api::V1::WebhooksController < ApplicationController
     when 'charge.updated'
       charge = event['data']['object'] # Handle the charge.updated event here
       Rails.logger.info "Charge succeeded!!!!"
-      ActionCable.server.broadcast 'notifications_channel', event: 'charge.succeeded', charge: charge
+      # Correct usage
+      ActionCable.server.broadcast('notifications_channel', { event: 'charge.succeeded', charge: charge })
+
     else
       Rails.logger.info "Unhandled event type: #{event['type']}"
     end

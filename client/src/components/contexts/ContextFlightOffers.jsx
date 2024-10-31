@@ -75,22 +75,22 @@ export const ProviderContextFlightOffers = ({ children }) => {
         setSelectedReturnFlight(null);
         setIsSubmitted(false);
         setLocations({});
-        setFormData(prev => ({
-            ...prev,
-            departingIATA: '',
-            departingCityName: '',
-            departingCountryCode: '',
-            departingGeoCode: '',
-            destinationIATA: '',
-            destinationCityName: '',
-            destinationCountryCode: '',
-            destinationGeoCode: '',
-            departDate: null,
-            returnDate: null,
-            passengers: 1,
-            currencyCode: currency, // Initialize with current currency
-            currencySymbol: currencySymbol,
-        }));
+        // setFormData(prev => ({
+        //     ...prev,
+        //     departingIATA: '',
+        //     departingCityName: '',
+        //     departingCountryCode: '',
+        //     departingGeoCode: '',
+        //     destinationIATA: '',
+        //     destinationCityName: '',
+        //     destinationCountryCode: '',
+        //     destinationGeoCode: '',
+        //     departDate: null,
+        //     returnDate: null,
+        //     passengers: 1,
+        //     currencyCode: currency, // Initialize with current currency
+        //     currencySymbol: currencySymbol,
+        // }));
     }
     return (
         <ContextFlightOffers.Provider value={{ 
