@@ -13,11 +13,12 @@ User.destroy_all
 
 # Create 10 Users
 
-10.times do
-  User.create(
-    email: Faker::Internet.email,
-    # first_name: Faker::Name.first_name,
-    # last_name: Faker::Name.last_name,
-    password: '1212'
-  )
+if Rails.env.development? || Rails.env.test?
+  require 'faker'
+  10.times do
+    User.create!(
+      email: Faker::Internet.email,
+      name: Faker::Name.name
+    )
+  end
 end

@@ -10,7 +10,8 @@ import { loadStripe } from '@stripe/stripe-js';
 
 // Loads stripe.js 
 const stripePromise = loadStripe(STRIPE_PK_KEY);
-
+console.log('Stripe Publishable Key:', STRIPE_PK_KEY);
+console.log('API URL:', API_URL);
 // Stripe payment element 
 const PaymentForm = ({ clientSecret }) => {
     

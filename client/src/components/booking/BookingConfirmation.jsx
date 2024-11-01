@@ -51,7 +51,12 @@ const BookingConfirmation = () => {
 
     // ActionCable for payment confirmation using websockets // requires Live Rails server or ngrok
     useEffect(() => {
-        const cable = ActionCable.createConsumer('ws://localhost:3000/cable');
+        const cable = ActionCable.createConsumer(
+            process.env.NODE_ENV === 'development'
+              ? 'ws://localhost:3000/cable'
+              : 'wss://flyaway-rails-react.fly.dev/cable'
+          );
+          
         let subscription = cable.subscriptions.create('NotificationsChannel', {
             received(data) {
                 if (data.event === 'charge.succeeded') {

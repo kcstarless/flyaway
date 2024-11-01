@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for flyaway-rails-react on 2024-11-01T07:31:04+11:00
+# fly.toml app configuration file generated for flyaway-rails-react on 2024-11-01T13:15:55+11:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -26,5 +26,5 @@ console_command = '/rails/bin/rails console'
   cpus = 1
 
 [[statics]]
-  guest_path = 'demo/public'
+  guest_path = '/rails/public'
   url_prefix = '/'
