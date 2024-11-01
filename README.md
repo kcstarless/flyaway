@@ -154,3 +154,7 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
 CMD ["./bin/rails", "server"]
+
+
+# Issues
+- Amadeus Ruby API endpoint for Flight_Offer search is very unstable. Rework was needed to use faraday

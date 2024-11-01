@@ -29,6 +29,71 @@ class AmadeusFaradayApi
     end
   end
 
+  # flight-offers API call to search for flight offers
+  def flight_offers_search(origin, destination, departureDate, returnDate, adults, currencyCode, nonStop)
+    access_token = fetch_access_token
+    return nil unless access_token
+
+    travelers = (1..adults.to_i).map do |i|
+      { id: i.to_s, travelerType: "ADULT", fareOptions: ["STANDARD"] }
+    end
+    formatted_departure_date = Date.parse(departureDate).strftime('%Y-%m-%d')
+    request_body = {
+      currencyCode: currencyCode,
+      originDestinations: [
+        {
+          id: "1",
+          originLocationCode: origin,
+          destinationLocationCode: destination,
+          departureDateTimeRange: {
+            date: formatted_departure_date,
+            time: "10:00:00"
+          }
+        }
+      ],
+      travelers: travelers,
+      sources: ["GDS"],
+      searchCriteria: {
+        maxFlightOffers: 2,
+        flightFilters: {
+          cabinRestrictions: [
+            {
+              cabin: "BUSINESS",
+              coverage: "MOST_SEGMENTS",
+              originDestinationIds: ["1"]
+            }
+          ],
+          carrierRestrictions: {
+            excludedCarrierCodes: ["AA", "TP", "AZ"]
+          }
+        }
+      }
+    }
+
+    response = @conn.post('/v2/shopping/flight-offers', request_body.to_json) do |req|
+      req.headers['Authorization'] = "Bearer #{access_token}"
+      req.headers['Content-Type'] = 'application/json'
+      req.headers['X-HTTP-Method-Override'] = 'GET'
+    end
+
+    if response.success?
+      JSON.parse(response.body)
+    else
+      puts "Error: #{response.status} - #{response.body}"
+      nil
+    end
+  rescue Faraday::ConnectionFailed => e
+    puts "Connection error: #{e.message}"
+    nil
+  rescue JSON::ParserError => e
+    puts "JSON parsing error: #{e.message}"
+    nil
+  end
+
+
+
+
+
   # Flight-offers API call to search for flight offers
   # def flight_offers_search(origin, destination, departureDate, returnDate, adults, currencyCode, nonStop)
   #   access_token = fetch_access_token

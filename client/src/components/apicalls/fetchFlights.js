@@ -13,6 +13,8 @@ export const fetchFlights = async (data) => {
     //   return JSON.parse(cachedData); // Return cached data if available
     // }
 
+    console.log(data.departDate);
+
   try {      
     console.log("Flight fetch started with data:", data);
     const response = await axios.post('/api/v1/search/flight_offers', {
@@ -23,7 +25,7 @@ export const fetchFlights = async (data) => {
         currencyCode: data.currencyCode,      // e.g., 'USD'
     });
     
-    console.log("Flight fetch completed with response:", response.data);
+    console.log("Flight fetch completed with response:", response);
 
     // Remapping of reponse data to a new flightData structure.
     if (response.data.data && response.data.data.length > 0) {
