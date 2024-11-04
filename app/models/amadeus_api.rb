@@ -70,4 +70,12 @@ class AmadeusApi
       radius: radius,
     )
   end
+  # Tours and Activities API call
+  def tours_activities_search(latitude, longitude, radius)
+    @amadeus.get('/v1/shopping/activities',
+      latitude: latitude,
+      longitude: longitude,
+      radius: radius,
+    )
+  end
 end

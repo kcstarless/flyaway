@@ -6,8 +6,19 @@ require_relative '../../../models/amadeus_faraday_api'
 class Api::V1::SearchController < ApplicationController
   wrap_parameters false;
 
-
-
+  def tours_activities
+    begin
+      permitted_params = params.permit(:latitude, :longitude, :radius)
+      @response = AmadeusApi.new.tours_activities_search(
+        permitted_params[:latitude],
+        permitted_params[:longitude],
+        permitted_params[:radius],
+      )
+      render json: @response
+    rescue Amadeus::ResponseError => e
+      render json: { error: e.message }
+    end
+  end
   def airport_city
     begin
       location = params[:location]
