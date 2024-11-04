@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       get 'search/airport_iata/:iataCode',    to: 'search#airport_iata'
       get 'search/flight_offers',             to: 'search#flight_offers'
       post 'search/flight_offers',             to: 'search#flight_offers'
+      get 'search/tours_activities',           to: 'search#tours_activities'
 
       # Booking-related routes
       post 'booking/poi_offers',              to: 'booking#poi_offers'

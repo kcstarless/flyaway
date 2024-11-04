@@ -1,10 +1,11 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useRef } from 'react';
 import { useQuery } from "@tanstack/react-query"
 import { fetchLocalizationData } from '../apicalls/fetchLocalizationData';
 
 const ContextLocalization = createContext();
 
 export const ProviderLocalization = ({ children }) => {
+    const locationDataFetchedRef = useRef(false);
     // Define default localization data if it fails to load
     const defaultLocalizationData = {
         language: 'English',
@@ -13,30 +14,28 @@ export const ProviderLocalization = ({ children }) => {
         currency: 'USD',
         currencySymbol: '$',
         countryCode: 'US',
+        geoLocation: { latitude: 37.7749, longitude: -122.4194 },
     }
-    const [localizationData, setLocalizationData] = useState(defaultLocalizationData);
+
+    const [localizationData, setLocalizationData] = useState({defaultLocalizationData});
     
     const localizationQuery = useQuery({
         queryKey: ["localizationData"],
         queryFn: fetchLocalizationData,
-        enabled: true,
+        // enabled: false,
     });
-    useEffect(() => {
-        if (localizationQuery.data) {
-            setLocalizationData(localizationQuery.data);
-        }
-    }, [localizationQuery.data]);
 
-    // useEffect(() => {
-    //     // Fetch localization data on the initial load
-    //     const loadLocalizationData = async () => {
-    //         const data = await fetchLocalizationData();
-    //         if (data) {
-    //             setLocalizationData(data);
-    //         }
-    //     };
-    //     loadLocalizationData();
-    // }, []); // Run only once on component mount
+    useEffect(() => {
+        if (localizationQuery.isSuccess) {
+            setLocalizationData(localizationQuery.data);
+        } 
+        locationDataFetchedRef.current = true;
+        if(localizationQuery.isError || !localizationQuery) {
+            console.log("Failed to load localization data. Using default data.");
+            setLocalizationData(defaultLocalizationData);
+        }
+    }, [localizationQuery.isFetched]);
+
 
     const updateLocalizationData = (newData) => {
         console.log('Previous Data:', localizationData);
@@ -57,6 +56,7 @@ export const ProviderLocalization = ({ children }) => {
             localizationData,
             localizationQuery,
             updateLocalizationData,
+            locationDataFetchedRef,
         }}>
             {children}
         </ContextLocalization.Provider>

@@ -1,5 +1,39 @@
 // components/helpers/general.js
 
+import { act } from "react";
+
+// Fisher-Yates shuffle algorithm
+function shuffleArray(array) {
+    for(let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// Limit length of description
+export function limitDescriptionLength(description, length = 100) {
+    if (description.length > length) {
+        return description.slice(0, length) + "...";
+    } else {
+        return description;
+    }
+}
+
+// Randomize activities
+export function randomizeActivities(activities) {
+    if (!activities) {
+        return null;
+    }
+    const shuffledActivities = shuffleArray(activities);
+    const randomActivities = shuffledActivities
+        .filter(activity => activity.pictures && activity.description)
+        .slice(0, activities.length);
+    return randomActivities;
+}
+
+
+
 // Valid currencies for flight price history.
 // Used in: fetchFlightPriceHistory.js, FlightPriceHistory.jsx.
 export const validCurrency = [

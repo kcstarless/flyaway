@@ -4,13 +4,8 @@ import DisplayFlights from "../components/flights/_DisplayFlights";
 import DisplayBooking from "../components/booking/_DisplayBooking";
 import BookingConfirmation from "../components/booking/BookingConfirmation";
 import BookingPayment from "../components/booking/BookingPayment";
+import Mainpage from "../components/maincontent/MainPage";
 import { Routes, Route } from "react-router-dom";
-
-const Mainpage = () => {
-    return (
-        <h1>Make your bookings</h1>
-    )
-}
 
 const MainContent = () =>{
     return (

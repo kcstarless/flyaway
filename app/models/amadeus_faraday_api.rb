@@ -29,7 +29,7 @@ class AmadeusFaradayApi
     end
   end
 
-  # flight-offers API call to search for flight offers
+  # flight-offers API call to search for flight offers /NOTUSED
   def flight_offers_search(origin, destination, departureDate, returnDate, adults, currencyCode, nonStop)
     access_token = fetch_access_token
     return nil unless access_token
@@ -90,39 +90,6 @@ class AmadeusFaradayApi
     nil
   end
 
-
-
-
-
-  # Flight-offers API call to search for flight offers
-  # def flight_offers_search(origin, destination, departureDate, returnDate, adults, currencyCode, nonStop)
-  #   access_token = fetch_access_token
-  #   return nil unless access_token # Return nil if access token retrieval failed
-
-  #   response = @conn.get('/v2/shopping/flight-offers') do |req|
-  #     req.headers['Authorization'] = "Bearer #{access_token}"
-  #     req.params['originLocationCode'] = origin
-  #     req.params['destinationLocationCode'] = destination
-  #     req.params['departureDate'] = departureDate
-  #     req.params['returnDate'] = returnDate
-  #     req.params['adults'] = adults
-  #     req.params['currencyCode'] = currencyCode
-  #     req.params['nonStop'] = nonStop
-  #   end
-
-  #   if response.success?
-  #     JSON.parse(response.body)
-  #   else
-  #     puts "Error: #{response.status} - #{response.body}"
-  #     nil
-  #   end
-  # rescue Faraday::ConnectionFailed => e
-  #   puts "Connection error: #{e.message}"
-  #   nil
-  # rescue JSON::ParserError => e
-  #   puts "JSON parsing error: #{e.message}"
-  #   nil
-  # end
 
   # Flight-Offers-Price API calls to confirm price and availability of selected offer
   def flight_offer_price(offer)
@@ -193,4 +160,6 @@ class AmadeusFaradayApi
     puts "JSON parsing error: #{e.message}"
     nil
   end
+
+
 end
