@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
   // console.count("Searchbar rendered...");
-  const { formData, setFormData, resetFlightOffer, isSubmitted, setIsSubmitted,  setSelectedOutboundFlight, setSelectedReturnFlight } = useContextFlightOffers();
+  const { formData, setFormData, resetFlightOffer, isSubmitted, setIsSubmitted } = useContextFlightOffers();
   const { resetFlightBooking } = useContextFlightBooking();
   const [suggestions, setSuggestions] = useState({ departing: [], destination: [] });
   const [loading, setLoading] = useState({ departing: false, destination: false });
@@ -117,16 +117,18 @@ const SearchBar = () => {
     event.preventDefault();
     resetFlightBooking();
     resetFlightOffer();
-    // Update formData with localInputs data
-    setFormData(prev => ({
-      ...prev,
-      ...localInputs
-    }));
-    // Mark the form as submitted
-    // setCurrencyChanged(false);
-    // setSelectedOutboundFlight(null);
-    // setSelectedReturnFlight(null);
-    setIsSubmitted(true);
+
+    // Validate form data
+    if (validateForm(localInputs, setFormError)) {
+      // Update formData with localInputs data
+      setFormData(prev => ({
+        ...prev,
+        ...localInputs
+      }));
+
+      setIsSubmitted(true);
+    }
+
   };
 
   // Listen for changes in formData or isSubmitted
@@ -137,7 +139,7 @@ const SearchBar = () => {
       // Redirect to flight_search_result
       navigate("/flight_search_result");
     }
-  }, [formData, isSubmitted]);
+  }, [isSubmitted]);
 
   return (
     <>

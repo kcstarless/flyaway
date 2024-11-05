@@ -2,7 +2,7 @@ import React from 'react';
 
 const Unavailable = ({closeUnavailable}) => {
     const handleClose = () => {
-        closeUnavailable();
+        closeUnavailable && closeUnavailable(false);
     };
 
     return(

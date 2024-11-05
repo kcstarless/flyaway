@@ -1,5 +1,5 @@
 import { randomizeActivities, limitDescriptionLength } from '../helpers/general';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaExternalLinkAlt } from "react-icons/fa";
 import  NoLink from '../helpers/Unavailable';
 

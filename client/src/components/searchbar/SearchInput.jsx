@@ -1,6 +1,5 @@
 // SearchInput.jsx
 
-import React from 'react';
 import SuggestionsList from './SuggestionsList';
 
 const SearchInput = ({ label, value, onChange, onFocus, onBlur, loading, suggestions, onSuggestionClick, isFocused, className }) => (

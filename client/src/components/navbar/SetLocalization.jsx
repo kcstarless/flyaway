@@ -80,6 +80,7 @@ const SetLocalization = ({ isOpen, onRequestClose }) => {
             country: newCountry.name.common, // Directly get country name
             language: 'English', // Or the selected language
             currencySymbol: currenciesList(countries).find(([code]) => code === selectedCurrency)[1],
+            geoLocation: { latitude: newCountry.latlng[0], longitude: newCountry.latlng[1] },
         });
         console.log(localizationData);
         onRequestClose(); // Close the modal

@@ -6,16 +6,16 @@ import LocalActivities from "./LocalActivities";
 import { MdExplore } from "react-icons/md";
 import { MdRecommend } from "react-icons/md";
 import { FaArrowTrendUp } from "react-icons/fa6";
-import { useRef, useState } from "react";
+import { useState, useEffect } from "react";
 import Unavailable from "../helpers/Unavailable";
 
 const MainPageHeader = () => {
-    const [showUnavailable,setShowUnavailable] = useState(false);
+    const [showUnavailable, setShowUnavailable] = useState(false);
 
     function closeUnavailable() {
         setShowUnavailable(false);
     }
-    
+
     return (
     <>
         <div className="mainpage-header">
@@ -32,7 +32,11 @@ const MainPageHeader = () => {
 const Mainpage = () => {
     const { localizationData } = useContextLocalization();
     const toursActivitiesResult= useToursActivitiesQuery(localizationData.geoLocation);
-    // const unavailable = useRef(true);
+    // useEffect(() => {
+    //     toursActivitiesResult.refetch();
+    //     console.log("Mainpage localization data:", localizationData);
+    // }, [localizationData]);
+
 
 
     return (
