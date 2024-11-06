@@ -160,7 +160,42 @@
     }
     .ads {
         grid-area: ads;
-        // border: var(--border-dark);
+        // border: solid 2px white;
+        margin-left: var(--space-s);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-s);
+        overflow: hidden; /* Prevent overflow */ 
+        box-sizing: border-box;
+        .carousel .slide {
+            text-align: left;
+        }
+        .carousel .slid div {
+            box-sizing: border-box;
+        }
+        .carousel .control-arrow.control-prev,
+        .carousel .control-arrow.control-next {
+            display: none;
+        }   
+        .side-ads-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: var(--space-s);
+            // text-align: left;
+            // width: 100%;
+        }
+        .one {
+            background-color: var(--color-tertiary);
+            color: var(--color-light);
+        }
+        .two {
+            background-color: var(--color-secondary);
+            color: var(--color-light);
+        }
+        .three {
+            background-color: var(--color-secondary-rotate);
+            color: var(--color-light);
+        }
     }
 }
 

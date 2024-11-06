@@ -84,8 +84,8 @@ export const getDateDayDDMMYYYY = (dateString) => {
 
 // Validates flight search form data and set feedback
 // Used in: Searchbar.jsx
-export const validateForm = (formData, setFormError) => {
-    const { departingIATA, destinationIATA, departDate, passengers } = formData;
+export const validateForm = (input, setFormError) => {
+    const { departingIATA, destinationIATA, departDate, passengers } = input;
     if (!departingIATA || !destinationIATA || !departDate || !passengers) {
       setFormError('Please fill out all required fields.');
       return false;

@@ -1,7 +1,5 @@
 // searchBar/SuggestionsList.jsx
 
-import React from 'react';
-
 const SuggestionsList = ({ suggestions, isFocused, onSuggestionClick }) => {
   if (!isFocused || suggestions.length === 0) return null;
 

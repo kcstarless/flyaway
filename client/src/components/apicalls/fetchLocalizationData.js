@@ -1,4 +1,21 @@
-// fetchLocalizationData.js
+const getTimeInTimezone = (timezone) => {
+    const options = {
+        timeZone: timezone,
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true // Set to true if you prefer 12-hour format
+    };
+
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const formattedDate = formatter.format(new Date());
+
+    return formattedDate.replace(',','').replace(' at', ' ');
+};
+
 
 const getLocation = async () => {
     return new Promise((resolve, reject) => {
@@ -22,9 +39,10 @@ const getLocation = async () => {
 //     return data[0].flags.svg;
 // }
 
-const fetchCountryData = async (countryCode) => {
+export const fetchCountryData = async (countryCode) => {
     const response = await fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`);
     const data = await response.json();
+    console.log(data);
     return data[0];
 }
 
@@ -36,6 +54,7 @@ const getCountryData = async (position) => {
         const response = await fetch(`/api/v1/search/geocode?latitude=${latitude}&longitude=${longitude}`);
         if (response.ok) {         
             const data = await response.json();
+            console.log(data);
             const countryName = data.result.components.country;
             const countryCode = data.result.components.country_code;
             const countryCurrency = data.result.annotations.currency.iso_code;
@@ -43,6 +62,8 @@ const getCountryData = async (position) => {
             const countryData = await fetchCountryData(countryCode);
             const countryFlag = countryData.flags.svg;
             const countryLanguage = countryData.languages;
+            const cityName = data.result.components.city;
+            const localTime = getTimeInTimezone(data.result.annotations.timezone.name);
 
             return {
                 country: countryName,
@@ -51,7 +72,9 @@ const getCountryData = async (position) => {
                 language: Object.values(countryLanguage).join(', '),
                 flag: countryFlag,
                 currencySymbol: countryCurrencySymbol,
+                cityName: cityName,
                 geoLocation: { latitude: latitude, longitude: longitude },
+                localTime: localTime,
             }
         }
     } catch (error) {
@@ -61,9 +84,8 @@ const getCountryData = async (position) => {
 }
 
 export const fetchCountries = async () => {
-    const response = await fetch('https://restcountries.com/v3.1/all?fields=name,currencies,cca2,flags,idd');
+    const response = await fetch('https://restcountries.com/v3.1/all?fields=name,currencies,cca2,flags,idd,latlng');
     const countries = await response.json();
-    // console.log(countries);
     return countries;
 };
 

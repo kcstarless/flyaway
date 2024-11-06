@@ -7,14 +7,17 @@ import FlightsSearchResult from './FlightsSearchResult';
 import FlightsSort from './FlightsSort';
 import FlightsPriceHistory from './FlightsPriceHistory';
 import FlightsFilters from './FlightsFilters';
+import LocalActivities from '../maincontent/LocalActivities';
 import { useFlightSearchQuery } from '../hooks/useFlightSearchQuery';
+import { useToursActivitiesQuery } from "../hooks/useToursActivitiesQuery";
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const DisplayFlights = () => {
-    const { flightOffers, selectedOutboundFlight, isReturn, setSelectedOutboundFlight, setSelectedReturnFlight } = useContextFlightOffers();
+    const { formData, flightOffers, selectedOutboundFlight, isReturn, setSelectedOutboundFlight, setSelectedReturnFlight } = useContextFlightOffers();
     const { localizationData: { currencySymbol } } = useContextLocalization();
     const { refetchAll } = useFlightSearchQuery();
+    const toursActivitiesResult = useToursActivitiesQuery(formData.destinationGeoCode);  
     const [noMatch, setNoMatch] = useState(null);
     const [sortOption, setSortOption] = useState("best");
     
@@ -89,7 +92,9 @@ const DisplayFlights = () => {
                     onFlightSelect={handleflightOfferselect}
                 />
             )}
-            <div className="ads">ads</div>
+            <div className="ads">
+                <LocalActivities toursActivitiesResult={toursActivitiesResult} sideAds={true}/>
+            </div>
         </div>
     );
 };
