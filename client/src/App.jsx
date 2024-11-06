@@ -3,6 +3,7 @@ import Navbar from "./layout/Navbar"
 import SearchBar from "./layout/Searchbar" 
 import MainContent from "./layout/MainContent"
 import Footer from "./layout/Footer"
+import Notice from "./layout/Notice"
 import { ProviderContextFlightOffers } from "./components/contexts/ContextFlightOffers"
 import { ProviderContextFlightBooking } from "./components/contexts/ContextFlightBooking"
 import { ProviderLocalization } from "./components/contexts/ContextLocalization"
@@ -19,6 +20,7 @@ function App() {
   return (
     <Router>
       <div className="container">
+        <Notice />
         <ProviderContextUserSession>
         <ProviderLocalization>
         <ProviderContextFlightOffers>

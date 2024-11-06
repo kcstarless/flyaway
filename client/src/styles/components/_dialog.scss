@@ -41,6 +41,35 @@ dialog {
     z-index: 999; /* Ensure it's behind the dialog but above everything else */
 }
 
+.notice-dialog {
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+    font-size: var(--font-size-l);
+    font-weight: bold;
+    margin-bottom: var(--space-m);
+    color: var(--color-light);
+    background-color: var(--color-tertiary);;
+
+    .notice-header{
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        border-bottom: solid 2px var(--color-light);
+    }
+
+    h5 {
+        padding-bottom: var(--space-xxxs);
+    }
+
+    .notice-detail {
+        font-family: var(--font-family-title-alt);
+        font-size: var(--font-size-s);
+        margin-top: var(--space-m);
+    }
+}
+
 .oops {
     top: 50%;
     left: 50%;
