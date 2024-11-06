@@ -165,6 +165,14 @@
         }
     }
 
+    .side-activities {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        gap: var(--space-s);
+    }    
+
     .activity-overlay {
         position: absolute; 
         top: 0; 
@@ -193,6 +201,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         background-color: var(--color-secondary-rotate);
+
         .activity-expanded-image {
             border: var(--border-light);
             border-radius: var(--border-radius-more);

@@ -12,7 +12,7 @@ function getApiURL(location) {
 async function apiFetch(url) {
     try {
         let response = await fetch(url);
-
+        
         if (response.ok) {
             // console.log('Weather data fetched successfully', response.json());
             return response.json();
