@@ -6,10 +6,10 @@ export const fetchToursActivities = async (geoLocation) => {
     const latitude = geoLocation.latitude;
     const longitude = geoLocation.longitude;
 
-    // if (cachedData) {
-    //     console.log("Using cached data");
-    //     return JSON.parse(cachedData); // Return cached data if available
-    // }
+    if (cachedData) {
+        console.log("Using cached data");
+        return JSON.parse(cachedData); // Return cached data if available
+    }
 
     try {
         console.log("Fetching tours and activities");
