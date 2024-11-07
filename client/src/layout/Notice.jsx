@@ -1,22 +1,23 @@
 import { useState, useRef } from "react";
 
-const NOTICE_LOADED = 'cachedFlightOffers'; // Key for local storage
+const NOTICE_LOADED = 'noticeLoaded'; // Key for local storage
 
 // Display a notice dialog on first visit to the site only
 const Notice = () => {
     const [open, setOpen] = useState(true);
 
-    // if (localStorage.getItem(NOTICE_LOADED)) {
-    //     return null;
-    // }
+    if (localStorage.getItem(NOTICE_LOADED)) {
+        return null;
+    }
 
     const handleClose = () => {
         setOpen(false);
         localStorage.setItem(NOTICE_LOADED, JSON.stringify({ loaded: true }));
     }
+
     return (
         <>
-        {open && <div className="dialog-backdrop" onClick={handleClose}></div>}
+        {open && <div className="dialog-backdrop-dark" onClick={handleClose}></div>}
         {open &&
             <dialog open className="notice-dialog">
                 
@@ -27,11 +28,13 @@ const Notice = () => {
 
                 <div className="notice-detail">
                     <h5>Limited Functionality Notice:</h5>
-                    <p>We appreciate your interest in Flyaway. Please be aware that this site is currently an ongoing project and under development. As a result, some features may be inaccessible. This site is not designed for live/production but rather for learning and showcase purposes.</p>
+                    <p>We appreciate your interest in Flyaway. Please be aware that this site is currently an ongoing project and under development. As a result, some features may be inaccessible.
+                        Best viewed on desktop or tablet as features are not yet optimised for mobile devices.</p> <br />
+                        <p>This site is not designed for live/production but rather for learning and showcase purposes.</p>
                     <br />
                     
                     <h5>Geo Location Data:</h5>
-                    <p>Please allow geo location access for the best experience, as geo location is used for localization and localized content.</p>
+                    <p>Please allow geo location access for the best experience, as geo location is used for localisation and localised content.</p>
                     <br />
                     
                     <h5>API Limitations:</h5>
