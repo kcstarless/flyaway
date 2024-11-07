@@ -14,7 +14,7 @@ export const ProviderContextFlightOffers = ({ children }) => {
     const[isReturn, setIsReturn] = useState(false);
     const[selectedOutboundFlight, setSelectedOutboundFlight] = useState(null);
     const[selectedReturnFlight, setSelectedReturnFlight] = useState(null);
-    // const[currencyChanged, setCurrencyChanged] = useState(false);
+    const[currencyChanged, setCurrencyChanged] = useState(false);
     const[isSubmitted, setIsSubmitted] = useState(false);
     const[locations, setLocations] = useState();
 
