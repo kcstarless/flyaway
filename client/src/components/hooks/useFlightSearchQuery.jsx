@@ -40,6 +40,7 @@ export const useFlightSearchQuery = () => {
     outboundFlight.refetch();
     flightPriceHistory.refetch();
   };
+
   // sets data for each query. 
   useEffect(() => {
     outboundFlight.data && setFlightOffers(outboundFlight.data);
@@ -65,6 +66,6 @@ export const useFlightSearchQuery = () => {
     }
   }, [outboundFlight.error, flightPriceHistory.error, queryError]);
 
-  return { outboundFlight, flightPriceHistory, refetchAll, queryError }
+  return { outboundFlight, flightPriceHistory, refetchAll, queryError, queryResults }
 }
 

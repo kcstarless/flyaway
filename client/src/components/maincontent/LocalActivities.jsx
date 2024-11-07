@@ -6,11 +6,27 @@ import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import  NoLink from '../helpers/Unavailable';
 
+function dialogOpen(activity, setExpanded, expanded) {
+    return (
+    <dialog className="activity-expanded" open>
+        <img src={activity.pictures} alt={activity.name} className="activity-expanded-image" />
+        <a href={`https://www.google.com/search?q=${activity.name}`}
+            target="_blank"
+            className="activity-expanded-title"
+        >{activity.name}<FaExternalLinkAlt style={{float: "right"}}/></a>
+        <div className="activity-expanded-desc">{activity.description}</div>
+        <button className="btn btn--primary" onClick={() => setExpanded(!expanded)}>Close</button>
+    </dialog>
+    );
+}
+
 const LocalActivities = ({ toursActivitiesResult, sideAds}) => {
     const { data: activities } = toursActivitiesResult;
     const [visibleCount, setVisibleCount] = useState(20);
     const [randomActivities, setRandomActivities] = useState([]);
     const { formData } = useContextFlightOffers();
+    const [expanded, setExpanded] = useState(false);
+    const [selectedActivity, setSelectedActivity] = useState(null);
 
     useEffect(() => {
         if (activities) {
@@ -44,6 +60,11 @@ const LocalActivities = ({ toursActivitiesResult, sideAds}) => {
         },
     ];
 
+    function openSelectedActivity(activity) {
+        setExpanded(!expanded);
+        setSelectedActivity(activity);
+    }
+
     return (
         <>
             {sideAds &&
@@ -56,6 +77,7 @@ const LocalActivities = ({ toursActivitiesResult, sideAds}) => {
             <Carousel 
                 autoPlay
                 interval={5000}
+                key={carouselItems.length}
                 infiniteLoop
                 showThumbs={false}
                 showStatus={false}
@@ -70,17 +92,29 @@ const LocalActivities = ({ toursActivitiesResult, sideAds}) => {
             </Carousel>
             <Carousel
                 autoPlay
-                interval={1000}
+                interval={3000}
+                key={removeFeaturedActivity.length}
                 infiniteLoop
                 showThumbs={false}
                 showStatus={false}
                 showIndicators={false}>
                 {removeFeaturedActivity.map((activity, index) => (
-                    <div className="mainpage-local-activities" key={activity.id}>
-                        <Activity activity={activity} key={activity.id} />
+                    <>
+                    <div key={activity.id} className="mainpage-local-activities">
+                        <div key={activity.id} className="activity" onClick={() => openSelectedActivity(activity)} style={{ backgroundImage: `url(${activity.pictures})` }}>
+                            <div className="activity-overlay"> 
+                                <div className="activity-inner">
+                                    <div className="activity-title">{activity.name}</div>
+                                    <div className="activity-desc">{limitDescriptionLength(activity.description)}</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    </>
                 ))}
             </Carousel>
+            {expanded && <div className="mainpage-local-activities">{dialogOpen(selectedActivity, setExpanded, expanded)}</div>}
+            {expanded && <div className="dialog-backdrop" onClick={() => setExpanded(!expanded)}></div>}
             </>
 
             }
@@ -126,20 +160,6 @@ const Activities = ({ pagedActivities }) => {
         </div>
     );
 };
-
-function dialogOpen(activity, setExpanded, expanded) {
-    return (
-    <dialog className="activity-expanded" open>
-        <img src={activity.pictures} alt={activity.name} className="activity-expanded-image" />
-        <a href={`https://www.google.com/search?q=${activity.name}`}
-            target="_blank"
-            className="activity-expanded-title"
-        >{activity.name}<FaExternalLinkAlt style={{float: "right"}}/></a>
-        <div className="activity-expanded-desc">{activity.description}</div>
-        <button className="btn btn--primary" onClick={() => setExpanded(!expanded)}>Close</button>
-    </dialog>
-    );
-}
 
 const Activity = ({ activity, index }) => {
     const [expanded, setExpanded] = useState(false);

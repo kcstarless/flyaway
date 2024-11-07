@@ -42,6 +42,17 @@ dialog {
     z-index: 999; /* Ensure it's behind the dialog but above everything else */
 }
 
+.dialog-backdrop-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: none;
+    background-color: rgb(255, 255, 255); /* Grey with 50% transparency */
+    z-index: 999; /* Ensure it's behind the dialog but above everything else */
+}
+
 .notice-dialog {
     top: 40%;
     left: 50%;
@@ -68,6 +79,28 @@ dialog {
         font-family: var(--font-family-title-alt);
         font-size: var(--font-size-s);
         margin-top: var(--space-m);
+    }
+}
+
+.loading-screen-dialog {
+    position: relative;
+    top: 50%;
+    display: flex;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    // border: var(--border-dark);
+    box-shadow: none;
+    justify-content: center;
+    z-index: 1000;
+    gap: var(--space-xl);
+
+    .curved-letters {
+        // position: absolute;
+        // top: -20%;
+        text-align: cn;
+        margin-bottom: var(--space-s);
+        font-size: var(--font-size-m);
+
     }
 }
 

@@ -4,8 +4,9 @@ import { useState, useCallback, useEffect } from 'react';
 import { useContextFlightOffers } from '../components/contexts/ContextFlightOffers';
 import { useContextFlightBooking } from '../components/contexts/ContextFlightBooking';
 import { useFlightSearchQuery } from '../components/hooks/useFlightSearchQuery';
-import { validateForm } from '../components/helpers/general';
+import { validateForm, timeout } from '../components/helpers/general';
 import { useNavigate } from "react-router-dom";
+import { LoaderPlane }  from '../components/helpers/Loader';
 
 const SearchBar = () => {
   // console.count("Searchbar rendered...");
@@ -15,12 +16,13 @@ const SearchBar = () => {
   const navigate = useNavigate(); 
 
   // Custom hook to fetch search formData.
-  const { refetchAll } = useFlightSearchQuery();
+  const { refetchAll, queryResults } = useFlightSearchQuery();
+
+  const [outboundFlight, flightPriceHistory] = queryResults;
 
   const onFlightDetailsPage = location.pathname === "/flight_details";
   const onCheckOutPage = location.pathname === "/checkout";
   const onBookingConfirmaitonPage = location.pathname ==="/booking_confirmation"
-
   // Local component state to manage the inputs without formData
   const [localInputs, setLocalInputs] = useState({
     departingInput: '',
@@ -51,19 +53,22 @@ const SearchBar = () => {
         ...prev,
         ...localInputs
       }));
+      refetchAll();
       setIsSubmitted(true);
+    }
+    if (isSubmitted) {
+      timeout(3000);
     }
   };
 
   // Listen for changes in formData or isSubmitted
   useEffect(() => {
-    if (isSubmitted) {
+    if (isSubmitted && outboundFlight.isFetched && flightPriceHistory.isFetched) {
       // Perform the search after formData is updated
-      refetchAll();
-      // Redirect to flight_search_result
+      setIsSubmitted(false);
       navigate("/flight_search_result");
-    }
-  }, [isSubmitted]);
+    } 
+  }, [isSubmitted, outboundFlight.isFetched, flightPriceHistory.isFetched]);
 
   return (
     <>
@@ -76,6 +81,8 @@ const SearchBar = () => {
             setLocalInputs={setLocalInputs} />
         </div>
     }
+    {isSubmitted && <LoaderPlane />}
+    {isSubmitted && <div className="dialog-backdrop-loading"></div>}
     </>
   );
 };

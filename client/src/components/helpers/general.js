@@ -1,6 +1,9 @@
 // components/helpers/general.js
 
-import { act } from "react";
+// Delay function
+export function timeout(delay) {
+    return new Promise( res => setTimeout(res, delay) );
+}
 
 // Fisher-Yates shuffle algorithm
 function shuffleArray(array) {
