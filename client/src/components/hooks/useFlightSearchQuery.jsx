@@ -20,8 +20,8 @@ export const useFlightSearchQuery = () => {
   // Fetch both flight offers and activities offers only if form is submitted and currency is changed. 
   // Create a common enabled condition
   const checkCurrencyChanged = currencyChanged.current && flightOffers.length > 0;
-  console.log("Check currencychanged: ", checkCurrencyChanged);
-  console.log("Is isSubmitted", isSubmitted);
+  // console.log("Check currencychanged: ", checkCurrencyChanged);
+  // console.log("Is isSubmitted", isSubmitted);
   const isEnabled = isSubmitted || checkCurrencyChanged;
 
   const queryResults = useQueries({

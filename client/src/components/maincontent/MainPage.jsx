@@ -15,9 +15,9 @@ const MainPageHeader = () => {
     return (
     <>
         <div className="mainpage-header">
-            <button className="btn btn--tertiary" onClick={() => setUnavailable(true)}><MdExplore className="icon-mainpage-header" />Explore anywhere</button>
-            <button className="btn btn--tertiary" onClick={() => setUnavailable(true)}><MdRecommend className="icon-mainpage-header" />Popular destination</button>
-            <button className="btn btn--tertiary" onClick={() => setUnavailable(true)}><FaArrowTrendUp className="icon-mainpage-header" />Travel trends</button>
+            <button className="btn btn--tertiary-alt" onClick={() => setUnavailable(true)}><MdExplore className="icon-mainpage-header" />Explore anywhere</button>
+            <button className="btn btn--tertiary-alt" onClick={() => setUnavailable(true)}><MdRecommend className="icon-mainpage-header" />Popular destination</button>
+            <button className="btn btn--tertiary-alt" onClick={() => setUnavailable(true)}><FaArrowTrendUp className="icon-mainpage-header" />Travel trends</button>
             {unavailable && <Unavailable setUnavailable={setUnavailable}/>}
         </div>
     </>
