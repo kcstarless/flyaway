@@ -10,19 +10,15 @@ import { useState, useEffect } from "react";
 import Unavailable from "../helpers/Unavailable";
 
 const MainPageHeader = () => {
-    const [showUnavailable, setShowUnavailable] = useState(false);
-
-    function closeUnavailable() {
-        setShowUnavailable(false);
-    }
+    const [unavailable, setUnavailable] = useState(false);
 
     return (
     <>
         <div className="mainpage-header">
-            <button className="btn btn--tertiary" onClick={() => setShowUnavailable(true)}><MdExplore className="icon-mainpage-header" />Explore anywhere</button>
-            <button className="btn btn--tertiary" onClick={() => setShowUnavailable(true)}><MdRecommend className="icon-mainpage-header" />Popular destination</button>
-            <button className="btn btn--tertiary" onClick={() => setShowUnavailable(true)}><FaArrowTrendUp className="icon-mainpage-header" />Travel trends</button>
-            {showUnavailable && <Unavailable closeUnavailable={closeUnavailable}/>}
+            <button className="btn btn--tertiary" onClick={() => setUnavailable(true)}><MdExplore className="icon-mainpage-header" />Explore anywhere</button>
+            <button className="btn btn--tertiary" onClick={() => setUnavailable(true)}><MdRecommend className="icon-mainpage-header" />Popular destination</button>
+            <button className="btn btn--tertiary" onClick={() => setUnavailable(true)}><FaArrowTrendUp className="icon-mainpage-header" />Travel trends</button>
+            {unavailable && <Unavailable setUnavailable={setUnavailable}/>}
         </div>
     </>
     )

@@ -2,7 +2,7 @@
     display: grid;
     grid-template-areas: 
         "trip-details trip-details"
-        "passenger-details flight-details";
+        "user-details flight-details";
     // grid-template-rows: 0.1fr 1fr;
     grid-template-columns: auto 0.3fr;
     gap: var(--space-m);
@@ -11,7 +11,7 @@
 
 .trip-details {
     grid-area: trip-details;
-    border-bottom: solid 2px var(--color-secondary-rotate);
+    border-bottom: solid 2px white;
     padding-bottom: var(--space-xxxs);
     display: flex;
     justify-content: space-between;
@@ -46,14 +46,11 @@
     display: flex;
     flex-direction: column;
 
-    .float-right {
+    .details-header {
         display: inline-flex;
         justify-content: end;
-        h3 {
-            color: rgb(192, 191, 191);
-        }
-        
     }
+        
     .flight-bound {
         display: flex;
         gap: var(--space-s);
@@ -267,5 +264,40 @@
                 }
             }
         }
+    }
+}
+
+.passenger-details {
+    grid-area: user-details;
+    display: flex;
+    flex-direction: column;
+    button {
+        width: 100%;
+    }
+}
+
+.payment-details {
+    grid-area: user-details;
+    display: flex;
+    flex-direction: column;
+    // gap: var(--space-s);
+    .details-header {
+        display: inline-flex;
+        justify-content: start;
+    }
+    .payment-amount {
+        display: flex;
+        gap: var(--space-s);
+        padding-top: var(--space-s);
+        padding-bottom: var(--space-xs);
+        font-size: var(--font-size-s);
+        p.amount {
+            font-size: var(--font-size-s);
+            font-weight: bold;
+            color: var(--color-tertiary);
+        }
+    }
+    button {
+        width: 100%;
     }
 }

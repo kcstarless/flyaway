@@ -49,7 +49,9 @@ const BookingFlightDetails = () => {
     }
     return (
         <div className="flight-details">
-            <h3 className="float-right">Flight details</h3>
+            <div className="details-header">
+                <h3 className="float-right">Flight details</h3>
+            </div>
 
             {selectedOutboundFlight && (
                 <>

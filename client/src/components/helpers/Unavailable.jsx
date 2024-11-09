@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Unavailable = ({closeUnavailable}) => {
+const Unavailable = ({setUnavailable}) => {
     const handleClose = () => {
-        closeUnavailable && closeUnavailable(false);
+        setUnavailable(false);
     };
 
     return(

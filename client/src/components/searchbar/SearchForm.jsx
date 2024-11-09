@@ -11,6 +11,7 @@ const SearchForm = ({ handleSubmit, localInputs, setLocalInputs}) => {
     const [loading, setLoading] = useState({ departing: false, destination: false });
     const [focused, setFocused] = useState({ departing: false, destination: false });
     const [isSwapped, setIsSwapped] = useState(false);
+    const [formError, setFormError] = useState('');
 
     // Switch inputs field data between From and To without re-rendering
     const handleToggle = () => {
@@ -76,16 +77,38 @@ const SearchForm = ({ handleSubmit, localInputs, setLocalInputs}) => {
         }
     };
 
+    const handleFormSubmit = (event) => {
+      event.preventDefault();
+      if (validateForm(localInputs, setFormError)) {
+        handleSubmit();
+      }
+    };
+    const validateForm = (input, setFormError) => {
+      const { departingIATA, destinationIATA, departDate, passengers } = input;
+      
+      if (!departingIATA || !destinationIATA || !departDate || !passengers) {
+        
+        setFormError('Please fill out all required fields and must select from dropdown list.');
+        return false;
+      }
+      if (departingIATA === destinationIATA) {
+        setFormError("Origin and destination can not be same.");
+        return false;
+      }
+      setFormError('');
+      return true;
+    }
+
     const handleFocus = (type) => setFocused(prev => ({ ...prev, [type]: true }));
     const handleBlur = (type) => setTimeout(() => setFocused(prev => ({ ...prev, [type]: false })), 200);
     
-
     return (
-        <form className="search-flight" onSubmit={handleSubmit}>
+      <>
+        <form className="search-flight" onSubmit={handleFormSubmit}>
 
           <div className="location-toggle">
             <div className={`search-item search-item--departing`}>
-              <div className={`input-wrapper-departing`}>
+              <div className={!formError ? `input-wrapper-departing` : `input-wrapper-departing error`}>
                 <label>From</label>
                 <input
                   type="text"
@@ -109,7 +132,7 @@ const SearchForm = ({ handleSubmit, localInputs, setLocalInputs}) => {
               <span className={`arrow ${isSwapped ? 'flipped' : ''}`}>&#8596;</span>
             </button>
             <div className={`search-item search-item--destination`}>
-              <div className={`input-wrapper-destination`}>
+              <div className={!formError ? `input-wrapper-destination` : `input-wrapper-destination error`}>
                 <label>To</label>
                 <input
                   type="text"
@@ -117,7 +140,7 @@ const SearchForm = ({ handleSubmit, localInputs, setLocalInputs}) => {
                   onChange={(event) => handleInputChange(event, 'destination')}
                   onFocus={() => handleFocus('destination')}
                   onBlur={() => handleBlur('destination')}
-                  placeholder="Country, city or airport"
+                  placeholder= "Country, city or airport"  
                   className={`input-destination`}
                   autoComplete="off"
                 />
@@ -133,6 +156,7 @@ const SearchForm = ({ handleSubmit, localInputs, setLocalInputs}) => {
           
           <DatePickerInput
             label="Depart"
+            error={formError}
             selectedDate={localInputs.departDate}
             onChange={(date) => setLocalInputs(prev => ({ ...prev, departDate: getDateYYYYMMDD(date) }))}
           />
@@ -147,7 +171,10 @@ const SearchForm = ({ handleSubmit, localInputs, setLocalInputs}) => {
             onChange={(event) => setLocalInputs(prev => ({ ...prev, passengers: event.target.value }))}
           />
           <button type="submit" className="btn btn--secondary-alt">Search</button>
+          {formError && <><div className="form-error">{formError}</div></>}
         </form>
+        
+        </>
     )
 }
 

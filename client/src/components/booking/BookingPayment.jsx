@@ -7,6 +7,8 @@ import BookingTripHeader from './BookingTripHeader.jsx';
 import axios from "axios";
 import { Elements, useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import BookingFlightDetails from "./BookingFlightDetails.jsx";
+import { numberCommas } from '../helpers/general';
 
 // Loads stripe.js 
 const stripePromise = loadStripe(STRIPE_PK_KEY);
@@ -19,6 +21,8 @@ const PaymentForm = ({ clientSecret }) => {
     const elements = useElements();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const { grandTotal, passengers } = useContextFlightBooking();
+    const {localizationData} = useContextLocalization();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -62,13 +66,21 @@ const PaymentForm = ({ clientSecret }) => {
       }
 
     return (
+        <div className="payment-details">
+        <div className="details-header">
+            <h3>Payment</h3>
+        </div>
+        <div className="payment-amount">
+            <b>Total amount paying: </b>
+            <p className="amount">{localizationData.currency} {localizationData.currencySymbol}{numberCommas(grandTotal)}</p>
+        </div>
         <form onSubmit={handleSubmit}>
             <PaymentElement options={paymentElementOptions} />
-            <button type="submit" disabled={!stripe || !elements} className="btn btn--primary">
-                {loading ? "Processing..." : "Pay"}
+            <button type="submit" disabled={!stripe || !elements} className="btn btn--tertiary">
+                {loading ? "Processing..." : "Pay & Confirm Booking"}
             </button>
-                {loading && <p>Loading, please wait...</p>} {/* Show loading message */}
         </form>
+        </div>
     );
 }
 
@@ -101,14 +113,15 @@ const BookingPayment = () => {
     console.log(clientSecret);
     
     return(
-        <>
+        <div className="booking-details">
             <BookingTripHeader />
+            <BookingFlightDetails />
             {clientSecret && (
                 <Elements stripe={stripePromise} options={{ clientSecret }}>
                     <PaymentForm clientSecret={clientSecret} />
                 </Elements>
             )}
-        </>
+        </div>
     );
 }
 

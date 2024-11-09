@@ -21,9 +21,9 @@ const BookingConfirmation = () => {
     const [charge, setCharge] = useState(null);
 
     // const charged = useRef(null);
-    console.log(selectedOutboundFlight);
-    console.log(locations);
-    console.log(travelerInfo);
+    // console.log(selectedOutboundFlight);
+    // console.log(locations);
+    // console.log(travelerInfo);
     useEffect(() => {
         // Function to fetch charge details using PaymentIntent ID
         const fetchChargeDetails = async (paymentIntentId) => {
@@ -80,12 +80,12 @@ const BookingConfirmation = () => {
                 if (pricingOutbound) {
                     const response = await fetchCreateFlightBooking(pricingOutbound.data.flightOffers[0], travelerInfo);
                     setBookedOutbound(response);
-                    console.log(response);
+                    // console.log(response);
                 }
                 if (pricingReturn) {
                     const response = await fetchCreateFlightBooking(pricingReturn.data.flightOffers[0], travelerInfo);
                     setBookedReturn(response);
-                    console.log(response);
+                    // console.log(response);
                 }
                 setLoading(false);
             } catch (err) {

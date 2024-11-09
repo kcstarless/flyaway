@@ -8,16 +8,16 @@ import FlightsSort from './FlightsSort';
 import FlightsPriceHistory from './FlightsPriceHistory';
 import FlightsFilters from './FlightsFilters';
 import LocalActivities from '../maincontent/LocalActivities';
-import { useFlightSearchQuery } from '../hooks/useFlightSearchQuery';
+// import { useFlightSearchQuery } from '../hooks/useFlightSearchQuery';
 import { useToursActivitiesQuery } from "../hooks/useToursActivitiesQuery";
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const DisplayFlights = () => {
-    const { formData, flightOffers, selectedOutboundFlight, isReturn, setSelectedOutboundFlight, setSelectedReturnFlight } = useContextFlightOffers();
+    const { formData, flipFormData, flightOffers, selectedOutboundFlight, isReturn, setSelectedOutboundFlight, setSelectedReturnFlight, setIsSubmitted } = useContextFlightOffers();
     const { localizationData: { currencySymbol } } = useContextLocalization();
-    const { refetchAll } = useFlightSearchQuery();
-    const toursActivitiesResult = useToursActivitiesQuery(formData.destinationGeoCode);  
+    // const { refetchAll } = useFlightSearchQuery();
+    const toursActivitiesResult = useToursActivitiesQuery(formData.current.destinationGeoCode);  
     const [noMatch, setNoMatch] = useState(null);
     const [sortOption, setSortOption] = useState("best");
     
@@ -55,7 +55,13 @@ const DisplayFlights = () => {
     const handleflightOfferselect = (flight) => {
         if (selectedOutboundFlight === null) {
             setSelectedOutboundFlight(flight);
-            isReturn ? refetchAll() : navigate("/flight_details");
+            if (isReturn) {
+                flipFormData(); // Flip the form data for return flight
+                setIsSubmitted(true);
+                // refetchAll();
+            } else {
+                navigate("/flight_details");
+            }
         } 
         if (selectedOutboundFlight && isReturn) {
             setSelectedReturnFlight(flight);

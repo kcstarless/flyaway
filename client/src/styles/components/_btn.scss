@@ -55,14 +55,17 @@
     }
 
     &--tertiary {
-      font-family: arial;
+      // font-family: arial;
       color: var(--color-light);
-      background-color: var(--color-secondary-rotate);
+      background-color: var(--color-tertiary-rotate);
       padding: var(--space-s) var(--space-s);
       display: inline-flex;
       justify-content: center;
       align-items: center;
       font-size: var(--font-size-s);
+      margin-top: var(--space-xs);
+      margin-bottom: var(--space-xs);
+      float: right;
 
       &:hover,
       &:focus,

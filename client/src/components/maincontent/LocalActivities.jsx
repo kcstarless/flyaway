@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import  NoLink from '../helpers/Unavailable';
+import  Unavailable from '../helpers/Unavailable';
 
 function dialogOpen(activity, setExpanded, expanded) {
     return (
@@ -24,9 +24,6 @@ const LocalActivities = ({ toursActivitiesResult, sideAds}) => {
     const { data: activities } = toursActivitiesResult;
     const [visibleCount, setVisibleCount] = useState(20);
     const [randomActivities, setRandomActivities] = useState([]);
-    const { formData } = useContextFlightOffers();
-    const [expanded, setExpanded] = useState(false);
-    const [selectedActivity, setSelectedActivity] = useState(null);
 
     useEffect(() => {
         if (activities) {
@@ -42,82 +39,12 @@ const LocalActivities = ({ toursActivitiesResult, sideAds}) => {
     const removeFeaturedActivity = randomActivities.filter(activity => activity.id !== featuredActivity.id);
     const pagedActivities = removeFeaturedActivity.slice(0, visibleCount);
 
-    const carouselItems = [
-        {
-            name: "Need a place to stay?",
-            description: "Find the best hotels in your local area.",
-            color: "one"
-        },
-        {
-            name: "Need a ride?",
-            description: "Find the best car rentals in your local area.",
-            color: "two"
-        },
-        {
-            name: "Feeling hungry?",
-            description: "Find the best restaurants in your local area.",
-            color: "three"
-        },
-    ];
 
-    function openSelectedActivity(activity) {
-        setExpanded(!expanded);
-        setSelectedActivity(activity);
-    }
 
     return (
         <>
-            {sideAds &&
-            <>
-            <div className="side-ads-card">
-                <h5>Explore {formData.destinationCityName} </h5>
-                <br />
-                <p>Discover and book unique experiences hosted by local experts.</p>
-            </div>
-            <Carousel 
-                autoPlay
-                interval={5000}
-                key={carouselItems.length}
-                infiniteLoop
-                showThumbs={false}
-                showStatus={false}
-                showIndicators={false}>
-                {carouselItems.map((item, index) => (
-                    <div key={index} className={`side-ads-card ${item.color}`}>
-                        <h5>{item.name}</h5>
-                        <br />
-                        <p>{item.description}</p>
-                    </div>
-                ))}
-            </Carousel>
-            <Carousel
-                autoPlay
-                interval={3000}
-                key={removeFeaturedActivity.length}
-                infiniteLoop
-                showThumbs={false}
-                showStatus={false}
-                showIndicators={false}>
-                {removeFeaturedActivity.map((activity, index) => (
-                    <>
-                    <div key={activity.id} className="mainpage-local-activities">
-                        <div key={activity.id} className="activity" onClick={() => openSelectedActivity(activity)} style={{ backgroundImage: `url(${activity.pictures})` }}>
-                            <div className="activity-overlay"> 
-                                <div className="activity-inner">
-                                    <div className="activity-title">{activity.name}</div>
-                                    <div className="activity-desc">{limitDescriptionLength(activity.description)}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </>
-                ))}
-            </Carousel>
-            {expanded && <div className="mainpage-local-activities">{dialogOpen(selectedActivity, setExpanded, expanded)}</div>}
-            {expanded && <div className="dialog-backdrop" onClick={() => setExpanded(!expanded)}></div>}
-            </>
+            {sideAds && <CarouselActivities removeFeaturedActivity={removeFeaturedActivity} />}
 
-            }
             {!sideAds && 
                 <>
                     <FeaturedActivity featuredActivity={featuredActivity} />
@@ -183,7 +110,7 @@ const Activity = ({ activity, index }) => {
             <h3>Find the best hotels in your local area.</h3>
             <br />
             <div>Book now and save on your next stay.</div>
-            {unavailable && <NoLink />}
+            {unavailable && <Unavailable />}
         </div>
         )
     } else if (index === 9 || (index > 30 && index % 15 === 0)) {
@@ -194,7 +121,7 @@ const Activity = ({ activity, index }) => {
             <h3>Find the best restaurants in your local area.</h3>
             <br />
             <div>Book now and enjoy a great meal.</div>
-            {unavailable && <NoLink />}
+            {unavailable && <Unavailable />}
         </div>
         )
     } else if (index === 15 || (index > 40 && index % 17 === 0)) {
@@ -205,7 +132,7 @@ const Activity = ({ activity, index }) => {
             <h3>Find the best car rentals in your local area.</h3>
             <br />
             <div>Book now, save, and enjoy your next ride.</div>
-            {unavailable && <NoLink />}
+            {unavailable && <Unavailable />}
         </div>
         )
     } else {
@@ -227,6 +154,84 @@ const Activity = ({ activity, index }) => {
     }
 };
 
+const CarouselActivities = ({ removeFeaturedActivity }) => {
+    const [expanded, setExpanded] = useState(false);
+    const [selectedActivity, setSelectedActivity] = useState(null);
+    const { formData } = useContextFlightOffers();
 
+    const carouselItems = [
+        {
+            name: "Need a place to stay?",
+            description: "Find the best hotels in your local area.",
+            color: "one"
+        },
+        {
+            name: "Need a ride?",
+            description: "Find the best car rentals in your local area.",
+            color: "two"
+        },
+        {
+            name: "Feeling hungry?",
+            description: "Find the best restaurants in your local area.",
+            color: "three"
+        },
+    ];
+
+    function openSelectedActivity(activity) {
+        setExpanded(!expanded);
+        setSelectedActivity(activity);
+    }
+
+    return (
+        <>
+            <div className="side-ads-card">
+                <h5>Explore {formData.current.destinationCityName} </h5>
+                <br />
+                <p>Discover and book unique experiences hosted by local experts.</p>
+            </div>
+            <Carousel 
+                autoPlay
+                interval={5000}
+                key={carouselItems.length}
+                infiniteLoop
+                showThumbs={false}
+                showStatus={false}
+                showIndicators={false}>
+                {carouselItems.map((item, index) => (
+                    <div key={index} className={`side-ads-card ${item.color}`}>
+                        <h5>{item.name}</h5>
+                        <br />
+                        <p>{item.description}</p>
+                    </div>
+                ))}
+            </Carousel>
+            <Carousel
+                autoPlay
+                interval={3000}
+                key={removeFeaturedActivity.length}
+                infiniteLoop
+                showThumbs={false}
+                showStatus={false}
+                showIndicators={false}>
+                {removeFeaturedActivity.map((activity, index) => (
+                    <>
+                    <div key={activity.id} className="mainpage-local-activities">
+                        <div key={activity.id} className="activity" onClick={() => openSelectedActivity(activity)} style={{ backgroundImage: `url(${activity.pictures})` }}>
+                            <div key={activity.id} className="activity-overlay"> 
+                                <div key={activity.id} className="activity-inner">
+                                    <div key={activity.name} className="activity-title">{activity.name}</div>
+                                    <div key={activity.description} className="activity-desc">{limitDescriptionLength(activity.description)}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </>
+                ))}
+            </Carousel>
+            {expanded && <div className="mainpage-local-activities">{dialogOpen(selectedActivity, setExpanded, expanded)}</div>}
+            {expanded && <div className="dialog-backdrop" onClick={() => setExpanded(!expanded)}></div>}
+        </>
+    )
+}
 
 export default LocalActivities;

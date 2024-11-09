@@ -9,6 +9,7 @@ export const useToursActivitiesQuery = (geoLocation) => {
             const response = await fetchToursActivities(geoLocation);
             return response;
         },
+        refetchOnWindowFocus: false,
     });
 }
 
