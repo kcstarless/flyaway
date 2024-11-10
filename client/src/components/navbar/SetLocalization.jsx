@@ -82,7 +82,6 @@ const SetLocalization = ({ isOpen, onRequestClose }) => {
             currencySymbol: currenciesList(countries).find(([code]) => code === selectedCurrency)[1],
             geoLocation: { latitude: newCountry.latlng[0], longitude: newCountry.latlng[1] },
         });
-        console.log(localizationData);
         onRequestClose(); // Close the modal
     };
 
@@ -92,7 +91,7 @@ const SetLocalization = ({ isOpen, onRequestClose }) => {
             <form className="localization_form" onSubmit={handleSubmit}>
                 <fieldset className="localization">
                 <div className="legend-header">
-                        <div className="legend-header-title">Sign-in</div>                  
+                        <div className="legend-header-title">Localisation settings</div>                  
                         <div className="close_dialog">
                             <div onClick={onRequestClose}>close <b>&#x2716;</b></div>
                          </div>

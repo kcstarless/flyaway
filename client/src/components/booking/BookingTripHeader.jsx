@@ -14,6 +14,7 @@ const BookingTripHeader = () => {
     const onFlightDetailsPage = location.pathname === "/flight_details";
     const onCheckOutPage = location.pathname === "/checkout";
     const onBookingConfirmaitonPage = location.pathname ==="/booking_confirmation"
+    const currentForm = formData.current;
 
     if (!selectedOutboundFlight) {
         return null; // Or handle the loading state appropriately
@@ -23,7 +24,7 @@ const BookingTripHeader = () => {
         <div className="trip-details">
             <div>
                 <div className="trip-title">
-                    <h3>{formData.departingCityName} &rarr; {formData.destinationCityName}</h3>
+                    <h3>{currentForm.departingCityName} &rarr; {currentForm.destinationCityName}</h3>
                 </div>
                 <div className="trip-desc">
                     <p>

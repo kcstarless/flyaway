@@ -55,13 +55,14 @@ const FlightsSearchResult = ({sortedOffers, currencySymbol, onFlightSelect }) =>
                         <div className="itinerary-card-c4">
                             {currencySymbol}{offer.price}
                         </div>
-                        <button type="button" onClick={() => handleSelectedFlight(offer)} className="btn btn--secondary">Select</button>
+                        <button type="button" onClick={() => handleSelectedFlight(offer)} className="btn btn--primary">Select</button>
                     </div>
                 </div>
             )}
             {visibleCount < sortedOffers.length && ( // Check if there are more offers
                 <button onClick={handleShowMore} className="btn btn--primary">Show More</button>
             )}
+            <br />
         </div>
     )
 }

@@ -13,8 +13,6 @@ export const fetchFlights = async (data) => {
       return JSON.parse(cachedData); // Return cached data if available
     }
 
-    console.log(data.departDate);
-
   try {      
     console.log("Flight fetch started with data:", data);
     const response = await axios.post('/api/v1/search/flight_offers', {

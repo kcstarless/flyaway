@@ -24,6 +24,16 @@
     background-color: var(--color-secondary-rotate);
     // margin-left: -100%; // Extend to the left
     // margin-right: -100%; // Extend to the right
+    // border: solid;
+    .form-error {
+      position: absolute;
+      left: 2rem;
+      top: 80%;
+      color: var(--color-light);
+      // font-weight: bold;
+      // margin-top: -20px;
+      font-size: var(--font-size-xs);
+    }
   }
 
   @include media(tabletAndUp) {

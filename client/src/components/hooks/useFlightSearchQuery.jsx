@@ -6,27 +6,34 @@ import { fetchFlightPriceHistory } from '../apicalls/fetchFlightPriceHistory';
 // import { fetchPoI } from '../apicalls/fetchPointOfInterest';
 import { useContextLoading } from '../contexts/ContextLoading';
 import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
+import { useContextLocalization } from '../contexts/ContextLocalization';
 
 import { useEffect, useState } from 'react';
 
 export const useFlightSearchQuery = () => {
   const { setLoadingFlightOffers, setLoadingPriceHistory } = useContextLoading();
-  const { setFlightOffers, setFlightPriceHistory, formData, isSubmitted, currencyChanged } = useContextFlightOffers(); 
+  const { setFlightOffers, setFlightPriceHistory, flightOffers, formData, setIsSubmitted, isSubmitted } = useContextFlightOffers(); 
+  const { currencyChanged } = useContextLocalization();
   const [queryError, setQueryError] = useState(null);
 
+  // console.log("has currency changed? ", currencyChanged.current);
   // Fetch both flight offers and activities offers only if form is submitted and currency is changed. 
   // Create a common enabled condition
-  const isEnabled = isSubmitted && currencyChanged;
+  const checkCurrencyChanged = currencyChanged.current && flightOffers.length > 0;
+  // console.log("Check currencychanged: ", checkCurrencyChanged);
+  // console.log("Is isSubmitted", isSubmitted);
+  const isEnabled = isSubmitted || checkCurrencyChanged;
+
   const queryResults = useQueries({
     queries: [
       {
         queryKey: ['outboundFlight', formData],
-        queryFn: () => fetchFlights(formData),
+        queryFn: () => fetchFlights(formData.current),
         enabled: isEnabled,
       },
       {
         queryKey: ['flightPriceHistory', formData],
-        queryFn: () => fetchFlightPriceHistory(formData),
+        queryFn: () => fetchFlightPriceHistory(formData.current),
         enabled: isEnabled,
       },
     ],
@@ -34,12 +41,14 @@ export const useFlightSearchQuery = () => {
 
   // Destructure outboundFlight and flightPriceHistory directly
   const [outboundFlight, flightPriceHistory] = queryResults;
+
+  useEffect(() => {
+    if (outboundFlight.isFetched && flightPriceHistory.isFetched) {
+      setIsSubmitted(false);
+      currencyChanged.current = false;
+    }
+  }, [outboundFlight.isFetched, flightPriceHistory.isFetched]);
   
-  // Refetch all data
-  const refetchAll = () => {
-    outboundFlight.refetch();
-    flightPriceHistory.refetch();
-  };
   // sets data for each query. 
   useEffect(() => {
     outboundFlight.data && setFlightOffers(outboundFlight.data);
@@ -65,6 +74,6 @@ export const useFlightSearchQuery = () => {
     }
   }, [outboundFlight.error, flightPriceHistory.error, queryError]);
 
-  return { outboundFlight, flightPriceHistory, refetchAll, queryError }
+  return { outboundFlight, flightPriceHistory, queryError, queryResults }
 }
 

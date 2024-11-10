@@ -74,12 +74,6 @@ fieldset {
 
 }
 
-.passenger-details {
-    grid-area: passenger-details;
-    display: flex;
-    flex-direction: column;
-}
-
 .form-title {
     display: flex;
     // gap: var(--space-s);
@@ -94,9 +88,21 @@ fieldset {
     grid-template-columns: 1fr 1fr;
     gap: var(--space-s);
     padding: var(--space-s);
-    border: 1px solid gray;
+    // border: 1px solid gray;
     background-color: white;
     border-radius: var(--border-radius);
+    
+    .form-title {
+        display: flex;
+        gap: var(--space-s);
+        padding-top: var(--space-s);
+        padding-bottom: var(--space-xs);
+        font-size: var(--font-size-s);
+    }
+
+    legend {
+        color: var(--color-tertiary);
+    }
 
     .item-input-select {
         display: flex;

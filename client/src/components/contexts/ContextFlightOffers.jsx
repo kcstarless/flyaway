@@ -1,25 +1,22 @@
-// components/contexts/ContextFlightOffers.jsx
-
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { useContextLocalization } from './ContextLocalization';
 
 const ContextFlightOffers = createContext();
 
 export const ProviderContextFlightOffers = ({ children }) => {
-    const { localizationData } = useContextLocalization();
+    const { localizationData, currencyChanged } = useContextLocalization();
     const { currency, currencySymbol } = localizationData;
     
-    const[flightOffers, setFlightOffers] = useState([]);
-    const[flightPriceHistory, setFlightPriceHistory] = useState([]);
-    const[isReturn, setIsReturn] = useState(false);
-    const[selectedOutboundFlight, setSelectedOutboundFlight] = useState(null);
-    const[selectedReturnFlight, setSelectedReturnFlight] = useState(null);
-    // const[currencyChanged, setCurrencyChanged] = useState(false);
-    const[isSubmitted, setIsSubmitted] = useState(false);
-    const[locations, setLocations] = useState();
+    const [flightOffers, setFlightOffers] = useState([]);
+    const [flightPriceHistory, setFlightPriceHistory] = useState([]);
+    const [isReturn, setIsReturn] = useState(false);
+    const [selectedOutboundFlight, setSelectedOutboundFlight] = useState(null);
+    const [selectedReturnFlight, setSelectedReturnFlight] = useState(null);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [locations, setLocations] = useState();
 
-    // Flight search form data
-    const [formData, setFormData] = useState({
+    // Initialize formData with useRef instead of useState
+    const formData = useRef({
         departingIATA: '',
         departingCityName: '',
         departingCountryCode: '',
@@ -35,39 +32,41 @@ export const ProviderContextFlightOffers = ({ children }) => {
         currencySymbol: currencySymbol,
     });
 
+    // Update formData via useRef, and trigger re-render manually when needed
+    const updateFormData = (newData) => {
+        formData.current = { ...formData.current, ...newData };
+        // setIsSubmitted((prev) => !prev);  // Trigger a re-render
+    };
+
     // if outbound flight is picked and isReturn is true then change the departing date to return date on the form
-    useEffect(() => {
-        if (selectedOutboundFlight && isReturn) {
-            setFormData(prev => ({
-                ...prev,
-                departingIATA: prev.destinationIATA,
-                departingCityName: prev.destinationCityName,
-                destinationIATA: prev.departingIATA,
-                destinationCityName: prev.departingCityName,
-                departDate: prev.returnDate,
-                // returnDate: null, // Reset return date after updating depart date
-            }));
-        }
-    }, [selectedOutboundFlight, isReturn]);
-    
+    const flipFormData = () => {
+        updateFormData({
+            departingIATA: formData.current.destinationIATA,
+            departingCityName: formData.current.destinationCityName,
+            destinationIATA: formData.current.departingIATA,
+            destinationCityName: formData.current.departingCityName,
+            departDate: formData.current.returnDate,
+        });
+    }
+
     // If return date is present then set to true
-    useEffect (() => {
-        if (formData.returnDate) {
-            console.log("is Return");
-            setIsReturn(true) ;
+    useEffect(() => {
+        if (formData.current.returnDate) {
+            setIsReturn(true);
         } else {
             setIsReturn(false);
-            console.log("is Oneway");
         }
-    }, [formData.returnDate]); 
+    }, [formData.current.returnDate]);
 
     // If currency is changed in localization set it to true to re-render.
     useEffect(() => {
-        setFormData(prev => ({ ...prev, currencyCode: currency }));
-        // setCurrencyChanged(true); // Mark that currency has changed
+        if (currencyChanged.current) {
+            console.log("Currency changed in localization context");
+            updateFormData({ currencyCode: currency, currencySymbol: currencySymbol });
+        }
     }, [currency]);
 
-    function resetFlightOffer () {
+    function resetFlightOffer() {
         console.log("Resetting flight offers context");
         setFlightOffers([]);
         setFlightPriceHistory([]);
@@ -75,23 +74,8 @@ export const ProviderContextFlightOffers = ({ children }) => {
         setSelectedReturnFlight(null);
         setIsSubmitted(false);
         setLocations({});
-        // setFormData(prev => ({
-        //     ...prev,
-        //     departingIATA: '',
-        //     departingCityName: '',
-        //     departingCountryCode: '',
-        //     departingGeoCode: '',
-        //     destinationIATA: '',
-        //     destinationCityName: '',
-        //     destinationCountryCode: '',
-        //     destinationGeoCode: '',
-        //     departDate: null,
-        //     returnDate: null,
-        //     passengers: 1,
-        //     currencyCode: currency, // Initialize with current currency
-        //     currencySymbol: currencySymbol,
-        // }));
     }
+
     return (
         <ContextFlightOffers.Provider value={{ 
             flightOffers, 
@@ -105,19 +89,17 @@ export const ProviderContextFlightOffers = ({ children }) => {
             setIsReturn,
             isReturn,
             formData,
-            setFormData,
-            // currencyChanged,
-            // setCurrencyChanged,
+            updateFormData,
             isSubmitted,
             setIsSubmitted,
             resetFlightOffer,
             setLocations,
             locations,
-            }}>
+            flipFormData,
+        }}>
             {children}
         </ContextFlightOffers.Provider>
     );
 };
 
 export const useContextFlightOffers = () => useContext(ContextFlightOffers);
-

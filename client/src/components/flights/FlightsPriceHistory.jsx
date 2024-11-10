@@ -15,7 +15,7 @@ const FlightsPriceHistory = () => {
 
     return (
         <div>
-        <div className="flight-leg">{formData.departingCityName} &rarr; {formData.destinationCityName}</div>
+        <div className="flight-leg">{formData.current.departingCityName} &rarr; {formData.current.destinationCityName}</div>
 
         <div className={!loadingPriceHistory ? "flight-history" : "flight-history loading"}>
             <div className="history-title">

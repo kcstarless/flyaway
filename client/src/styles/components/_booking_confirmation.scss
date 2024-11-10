@@ -3,30 +3,6 @@ $red-d: #a62035;
 $grey: #666;
 $grey-l: lighten($grey, 30%);
 
-.payment-confirmation {
-    display: flex;
-    flex-direction: column;
-    // border: solid 1px gray;
-    padding: var(--space-s);
-    border-radius: var(--border-radius);
-    background-color: white;
-    .item {
-        font-size: var(--font-size-s);
-        a {
-            font-size: var(--font-size-s);
-            color: var(--color-secondary);
-            font-weight: bold;
-            text-decoration: underline;
-        }
-    }
-}
-
-.booking-confirmation {
-	display: flex;
-	flex-direction: row;
-	padding-top: var(--space-l);
-	justify-content: space-between;
-}
 
 // container
 // ******************************

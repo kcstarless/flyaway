@@ -21,7 +21,7 @@ const PassengerForm = () => {
     const [selectedCountryPhone, setSelectedCountryPhone] = useState(null);
     const [selectedCountryPassports, setSelectedCountryPassports] = useState([]);
 
-    const passengers = formData.passengers;
+    const passengers = formData.current.passengers;
     const formsPassengers = [];
     
     // Set selected country when localizationData is available for phone number and country of issuance
@@ -357,9 +357,8 @@ const PassengerForm = () => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-title"></div>
-            
             {createPassengersForm()}
-            <input type="submit"></input>
+            <button type="submit" className="btn btn--tertiary">To Payment..</button>
         </form>
     )
 }

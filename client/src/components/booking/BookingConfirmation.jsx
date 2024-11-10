@@ -7,6 +7,7 @@ import BookingTripHeader from './BookingTripHeader';
 import { useLocation } from 'react-router-dom';
 import BookingFlightDetailsExpanded from './BookingFlightDetailsExpanded';
 import { getDateDayDDMMYYYY } from '../helpers/general';
+import { LoaderPlane } from '../helpers/Loader';
 
 import ActionCable from 'actioncable';
 import axios from 'axios';
@@ -21,9 +22,9 @@ const BookingConfirmation = () => {
     const [charge, setCharge] = useState(null);
 
     // const charged = useRef(null);
-    console.log(selectedOutboundFlight);
-    console.log(locations);
-    console.log(travelerInfo);
+    // console.log(selectedOutboundFlight);
+    // console.log(locations);
+    // console.log(travelerInfo);
     useEffect(() => {
         // Function to fetch charge details using PaymentIntent ID
         const fetchChargeDetails = async (paymentIntentId) => {
@@ -48,7 +49,6 @@ const BookingConfirmation = () => {
     // console.log(charge);
     // console.log(paymentIntent);
   
-
     // ActionCable for payment confirmation using websockets // requires Live Rails server or ngrok
     useEffect(() => {
         const cable = ActionCable.createConsumer(
@@ -71,7 +71,6 @@ const BookingConfirmation = () => {
             }
         }
     }, []);
-
 
     // Confirm booking through Amadeus API
     useEffect(() => {
@@ -192,35 +191,50 @@ const BookingConfirmation = () => {
 
     return (
         <>
-            <BookingTripHeader />
-            <br />
-            {charge && (          
-                <fieldset className="payment-confirmation">
-                    <h4>Payment processed.</h4>
-                    <div className="item">Status: {charge.paid ? "Paid" : "Pending"} </div>
-                    <div className="item">
-                        Amount paid: {localizationData.currencySymbol}{(paymentIntent.amount / 100).toFixed(2)} &nbsp;
-                        {charge.payment_method_details.card.brand} ending in {charge.payment_method_details.card.last4}
-                    </div>
-                    <div className="item">Paid on: {new Date(charge.created * 1000).toLocaleString()}</div>
-                    <div className="item">Receipt can be viewed <a href={charge.receipt_url}>here</a>. A copy has been sent to your email.</div>
-                </fieldset>
-            )}
- 
+        {/* <LoaderPlane messageTop="Your flight is being confirmed." messageBottom="Please wait..." /><div className="dialog-backdrop-loading"></div> */}
+        { (loading || !charge)
             
-            {loading 
-                ?   <>
-                        <h4>We are almost there. Now confirmig flight...</h4>
-                        <div className="loading__bar long"></div>
-                    </>
-                :   <div className="booking-confirmation">
-                        {bookedOutbound && Object.keys(bookedOutbound).length > 0 &&
-                            displayConfirmationCard(bookedOutbound, selectedOutboundFlight)}
-                        <br />
-                        {bookedReturn && Object.keys(bookedReturn).length > 0 &&
-                            displayConfirmationCard(bookedReturn, selectedReturnFlight)}
+                ? (<><LoaderPlane messageTop="Your flight is being confirmed" messageBottom="Please wait..." /><div className="dialog-backdrop-loading"></div></>)
+
+                : (<><BookingTripHeader />
+                    <br />
+                    <div className="booking-made">
+                        {charge && (       
+                            <div className="booking-confirmation-card">   
+                            <fieldset className="payment-confirmation">
+                                <h4>Payment processed.</h4>
+                                <div className="item">Status: {charge.paid ? "Paid" : "Pending"} </div>
+                                <div className="item">
+                                    Amount paid: {localizationData.currencySymbol}{(paymentIntent.amount / 100).toFixed(2)} &nbsp;
+                                    {charge.payment_method_details.card.brand} ending in {charge.payment_method_details.card.last4}
+                                </div>
+                                <div className="item">Paid on: {new Date(charge.created * 1000).toLocaleString()}</div>
+                                <div className="item">Receipt can be viewed <a href={charge.receipt_url}>here</a>. A copy has been sent to your email.</div>
+                            </fieldset>
+                            <br />
+                            {/* <fieldset className="payment-confirmation">
+                                <h4>Flight confirmed.</h4>
+                                <div className="item">Status: {bookedOutbound.ticketingAgreement.option} </div>
+                                <div className="item">
+                                    Amount paid: {localizationData.currencySymbol}{(paymentIntent.amount / 100).toFixed(2)} &nbsp;
+                                    {charge.payment_method_details.card.brand} ending in {charge.payment_method_details.card.last4}
+                                </div>
+                                <div className="item">Paid on: {new Date(charge.created * 1000).toLocaleString()}</div>
+                            </fieldset> */}
+                            </div>
+                        )}
+
+                        <div className="booking-card">
+                            {bookedOutbound && Object.keys(bookedOutbound).length > 0 &&
+                                displayConfirmationCard(bookedOutbound, selectedOutboundFlight)}
+                            <br />
+                            {bookedReturn && Object.keys(bookedReturn).length > 0 &&
+                                displayConfirmationCard(bookedReturn, selectedReturnFlight)}
+                        </div>
+
                     </div>
-            }
+                    <br /></>)
+            }   
         </>
     )
 }

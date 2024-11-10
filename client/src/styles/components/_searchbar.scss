@@ -22,6 +22,7 @@
     }
   }
 
+
   .search-item:focus-within {
     // outline: none;
     border:2px solid var(--color-secondary);
@@ -103,9 +104,9 @@
   }
 
   .error {
-    color: red;
-    margin-top: 8px;
+    color: var(--color-tertiary-rotate);
+    // margin-top: 8px;
   }
-
-
 }
+
+
