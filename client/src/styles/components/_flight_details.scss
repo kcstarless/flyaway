@@ -301,3 +301,41 @@
         width: 100%;
     }
 }
+
+.booking-made {
+    display: flex;
+    // flex-direction: row;
+    justify-content: space-between;
+    // gap: var(--space-s);
+}
+
+.booking-confirmation-card {
+    width: 50%;
+}
+
+.payment-confirmation {
+    // grid-area: user-details;
+    display: flex;
+    flex-direction: column;
+    // width: 50%;
+    // border: solid 1px gray;
+    padding: var(--space-s);
+    border-radius: var(--border-radius);
+    background-color: white;
+    .item {
+        font-size: var(--font-size-s);
+        a {
+            font-size: var(--font-size-s);
+            color: var(--color-secondary);
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    }
+}
+
+.booking-card {
+    // grid-area: flight-details;
+    display: flex;
+    flex-direction: column;
+    // width: 50%;
+}

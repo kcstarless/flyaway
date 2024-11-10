@@ -8,6 +8,7 @@ export const fetchToursActivities = async (geoLocation) => {
 
     // if (cachedData) {
     //     console.log("Using cached data");
+    //     // console.log("Cached data:", cachedData);
     //     return JSON.parse(cachedData); // Return cached data if available
     // }
 
@@ -20,6 +21,8 @@ export const fetchToursActivities = async (geoLocation) => {
                 radius: 50,
             }
         });
+
+        console.log("Tours and activities response:", response);
         if (response.status === 200) {
             localStorage.setItem('tours_activities', JSON.stringify(response.data.data));
             return response.data.data

@@ -54,7 +54,7 @@ dialog {
 }
 
 .notice-dialog {
-    top: 40%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     position: fixed;
@@ -62,7 +62,14 @@ dialog {
     font-weight: bold;
     margin-bottom: var(--space-m);
     color: var(--color-light);
-    background-color: var(--color-tertiary);;
+    background-color: var(--color-tertiary);
+    min-width: 300px;
+    max-width: 500px;  /* Constrain the width */
+    max-height: 80%; /* Constrain the height */
+    overflow: auto;  /* Allow scrolling if the content overflows */
+    padding: var(--space-s); /* Optional: Add padding to make the content inside more readable */
+    box-sizing: border-box;
+    // z-index: 1000;
 
     .notice-header{
         display: flex;

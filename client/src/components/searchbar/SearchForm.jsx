@@ -82,6 +82,7 @@ const SearchForm = ({ handleSubmit, localInputs, setLocalInputs}) => {
       if (validateForm(localInputs, setFormError)) {
         handleSubmit();
       }
+      // handleSubmit();
     };
     const validateForm = (input, setFormError) => {
       const { departingIATA, destinationIATA, departDate, passengers } = input;

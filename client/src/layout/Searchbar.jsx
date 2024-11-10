@@ -12,7 +12,7 @@ import { LoaderPlane } from '../components/helpers/Loader';
 // Used in: Searchbar.jsx
 
 const SearchBar = () => {
-  const { updateFormData, resetFlightOffer, isSubmitted, setIsSubmitted } = useContextFlightOffers();
+  const { updateFormData, resetFlightOffer, formData, setIsSubmitted } = useContextFlightOffers();
   const { resetFlightBooking } = useContextFlightBooking();
   const navigate = useNavigate(); 
   // const {loadingFlightOffers} = useContextLoading();
@@ -73,7 +73,7 @@ const SearchBar = () => {
             setLocalInputs={setLocalInputs} />
         </div>
     }
-    {(outboundFlight.isFetching) && <LoaderPlane />}
+    {(outboundFlight.isFetching) && <LoaderPlane messageTop={`${formData.current.departingCityName} to ${formData.current.destinationCityName}.`} messageBottom={"Please wait..."} />}
     {(outboundFlight.isFetching) &&<div className="dialog-backdrop-loading"></div>}
     </>
   );

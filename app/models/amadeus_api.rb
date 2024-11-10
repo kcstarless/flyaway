@@ -12,6 +12,9 @@ class AmadeusApi
       client_id: ENV['AMADEUS_API_KEY'],
       client_secret: ENV['AMADEUS_API_SECRET']
     )
+    # puts "Amadeus API initialized"
+    # puts "Amadeus API Key: #{ENV['AMADEUS_API_KEY']}"
+    # puts "Amadeus API Secret: #{ENV['AMADEUS_API_SECRET']}"
   end
 
   # Airport/City/Location API calls for location suggestion list (autocomplete)

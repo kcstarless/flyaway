@@ -17,7 +17,7 @@ const Notice = () => {
 
     return (
         <>
-        {open && <div className="dialog-backdrop-dark" onClick={handleClose}></div>}
+        {open && <div className="dialog-backdrop-loading" onClick={handleClose}></div>}
         {open &&
             <dialog open className="notice-dialog">
                 

@@ -1,17 +1,22 @@
 
-export const LoaderPlane = () => {
+export const LoaderPlane = ({ messageTop, messageBottom }) => {
     return (
+      <>
         <dialog className="loading-screen-dialog" open> 
-        <svg width="200" height="100" >
-          <defs>
-            <path id="curve" d="M 18,50, Q 100,-8 182,51" fill="transparent"/>
-          </defs>
-          <text fill="black" className='curved-letters'>
-            <textPath href="#curve">
-              Searching for flights...
-            </textPath>
-          </text>
-        </svg>
+          {/* <svg width="400" height="200" className="arc-svg">
+            <defs>
+            <path id="curve" d="M 50,100 Q 200,-50 350,100" fill="transparent"/>
+
+
+            </defs>
+            <text fill="black">
+              <textPath href="#curve">
+                {messageTop}
+              </textPath>
+            </text>
+          </svg> */}
+          <div className="top-text">{messageTop}</div>
+          <div className="bottom-text">{messageBottom}</div>
           <div className="plane-loader" open>
                 <div className="cloud cloud1"></div>
                 <div className="cloud cloud4"></div>
@@ -66,8 +71,11 @@ export const LoaderPlane = () => {
                     <div className="c9"></div>
                     <div className="c10"></div>
                 </div>  
-            </div>
+                
+          </div>
+          
         </dialog>
+        </>
     );
 }
 
