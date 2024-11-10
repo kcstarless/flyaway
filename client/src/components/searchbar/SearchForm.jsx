@@ -79,10 +79,10 @@ const SearchForm = ({ handleSubmit, localInputs, setLocalInputs}) => {
 
     const handleFormSubmit = (event) => {
       event.preventDefault();
-      if (validateForm(localInputs, setFormError)) {
-        handleSubmit();
-      }
-      // handleSubmit();
+      // if (validateForm(localInputs, setFormError)) {
+      //   handleSubmit();
+      // }
+      handleSubmit();
     };
     const validateForm = (input, setFormError) => {
       const { departingIATA, destinationIATA, departDate, passengers } = input;

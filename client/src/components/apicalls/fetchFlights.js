@@ -8,10 +8,10 @@ export const fetchFlights = async (data) => {
     // Check local storage for cached data
     const cachedData = localStorage.getItem(CACHE_KEY);
   
-    // if (cachedData) {
-    //   console.log("Using cached flight offer data");
-    //   return JSON.parse(cachedData); // Return cached data if available
-    // }
+    if (cachedData) {
+      console.log("Using cached flight offer data");
+      return JSON.parse(cachedData); // Return cached data if available
+    }
 
   try {      
     console.log("Flight fetch started with data:", data);

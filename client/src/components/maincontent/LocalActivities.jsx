@@ -214,18 +214,16 @@ const CarouselActivities = ({ removeFeaturedActivity }) => {
                 showStatus={false}
                 showIndicators={false}>
                 {removeFeaturedActivity.map((activity, index) => (
-                    <>
-                    <div key={activity.id} className="mainpage-local-activities">
-                        <div key={activity.id} className="activity" onClick={() => openSelectedActivity(activity)} style={{ backgroundImage: `url(${activity.pictures})` }}>
-                            <div key={activity.id} className="activity-overlay"> 
-                                <div key={activity.id} className="activity-inner">
-                                    <div key={activity.name} className="activity-title">{activity.name}</div>
-                                    <div key={activity.description} className="activity-desc">{limitDescriptionLength(activity.description)}</div>
+                    <div key={index} className="mainpage-local-activities">
+                        <div  className="activity" onClick={() => openSelectedActivity(activity)} style={{ backgroundImage: `url(${activity.pictures})` }}>
+                            <div className="activity-overlay"> 
+                                <div className="activity-inner">
+                                    <div className="activity-title">{activity.name}</div>
+                                    <div className="activity-desc">{limitDescriptionLength(activity.description)}</div>
                                 </div>
-                            </div>
+                            </div>f
                         </div>
                     </div>
-                    </>
                 ))}
             </Carousel>
             {expanded && <div className="mainpage-local-activities">{dialogOpen(selectedActivity, setExpanded, expanded)}</div>}

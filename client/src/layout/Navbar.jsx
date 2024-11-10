@@ -43,6 +43,7 @@ function Navbar() {
                             href={item === 'Flight' ? `/` : `#`}
                             onClick={() => handleMenuClick(index, item)}
                             className={activeIndex === index ? 'active' : ''}
+                            aria-disabled
                             >
                             {item}
                             </a>
