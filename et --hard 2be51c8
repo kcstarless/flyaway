@@ -1,0 +1,18 @@
+[33m2be51c8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m34-user-purchase-history[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/34-user-purchase-history[m[33m)[m Merge pull request #33 from kcstarless/31-redesign-payment
+[33m3badffe[m[33m ([m[1;31morigin/31-redesign-payment[m[33m, [m[1;32m31-redesign-payment[m[33m)[m udpated README.md
+[33mcc6cb46[m Merge pull request #32 from kcstarless/31-redesign-payment
+[33m769d596[m update
+[33md66f9ab[m modified confirmation page
+[33med309b1[m updated
+[33me9e7346[m resolved issue #31
+[33me2e53e4[m updated
+[33m7e2e5fa[m added search loading screen, fix carousel
+[33mc8f2f5e[m Merge pull request #30 from kcstarless/28-add-dialog-regarding-app-information
+[33md218427[m[33m ([m[1;31morigin/28-add-dialog-regarding-app-information[m[33m, [m[1;32m28-add-dialog-regarding-app-information[m[33m)[m saved changes
+[33md35617f[m Merge pull request #29 from kcstarless/28-add-dialog-regarding-app-information
+[33maaa5317[m added Notice dialog
+[33m5e47949[m Merge pull request #27 from kcstarless/26-add-footer-local-area-info-and-search-result-activities
+[33m0347c20[m[33m ([m[1;31morigin/26-add-footer-local-area-info-and-search-result-activities[m[33m, [m[1;32m26-add-footer-local-area-info-and-search-result-activities[m[33m)[m Added footer, local area info, activities
+[33m4a9b689[m added: localinfo and footer. trying to refactor searchbar
+[33m2f639c6[m Merge pull request #25 from kcstarless/24-fill-up-the-home-page-with-some-content
+[33med9990c[m[33m ([m[1;31morigin/24-fill-up-the-home-page-with-some-content[m[33m, [m[1;32m24-fill-up-the-home-page-with-some-content[m[33m)[m added content page & oops dialog box

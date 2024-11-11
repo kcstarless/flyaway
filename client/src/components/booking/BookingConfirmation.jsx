@@ -8,7 +8,6 @@ import { useLocation } from 'react-router-dom';
 import BookingFlightDetailsExpanded from './BookingFlightDetailsExpanded';
 import { getDateDayDDMMYYYY } from '../helpers/general';
 import { LoaderPlane } from '../helpers/Loader';
-
 import ActionCable from 'actioncable';
 import axios from 'axios';
 
@@ -21,10 +20,14 @@ const BookingConfirmation = () => {
     const [loading, setLoading] = useState(true);
     const [charge, setCharge] = useState(null);
 
-    // const charged = useRef(null);
-    // console.log(selectedOutboundFlight);
-    // console.log(locations);
-    // console.log(travelerInfo);
+    // Listen to if page is being reloaded or going back
+    useEffect(() => {
+        window.addEventListener('beforeunload', (event) => {
+            event.preventDefault();
+            return (event.returnValue = 'sfasdf');
+        });
+    }, []);
+
     useEffect(() => {
         // Function to fetch charge details using PaymentIntent ID
         const fetchChargeDetails = async (paymentIntentId) => {
@@ -45,9 +48,6 @@ const BookingConfirmation = () => {
             });
         }
     }, [paymentIntent]);
-
-    // console.log(charge);
-    // console.log(paymentIntent);
   
     // ActionCable for payment confirmation using websockets // requires Live Rails server or ngrok
     useEffect(() => {
