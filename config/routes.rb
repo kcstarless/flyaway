@@ -31,4 +31,6 @@ Rails.application.routes.draw do
       get 'payments/retrieve_charge', to: 'payments#retrieve_charge'
     end
   end
+   # Catch-all route for React frontend
+   get '*path', to: 'static#index', constraints: ->(request) { !request.xhr? && request.path.exclude?('/api') }
 end
