@@ -10,9 +10,10 @@ import { getDateDayDDMMYYYY } from '../helpers/general';
 import { LoaderPlane } from '../helpers/Loader';
 import ActionCable from 'actioncable';
 import axios from 'axios';
+import { setSessionstorageItem, getSessionstorageItem } from "../helpers/localstorage";
 
 const BookingConfirmation = () => {
-    const { pricingOutbound, pricingReturn, setBookedOutbound, setBookedReturn, bookedOutbound, bookedReturn, travelerInfo } = useContextFlightBooking();
+    const { pricingOutbound, pricingReturn, setBookedOutbound, setBookedReturn, bookedOutbound, bookedReturn, travelerInfo, setTravelerInfo } = useContextFlightBooking();
     const { locations, selectedOutboundFlight, selectedReturnFlight } = useContextFlightOffers();
     const { localizationData } = useContextLocalization();
     const location = useLocation();
@@ -20,13 +21,27 @@ const BookingConfirmation = () => {
     const [loading, setLoading] = useState(true);
     const [charge, setCharge] = useState(null);
 
-    // Listen to if page is being reloaded or going back
     useEffect(() => {
-        window.addEventListener('beforeunload', (event) => {
-            event.preventDefault();
-            return (event.returnValue = 'sfasdf');
-        });
+        if (getSessionstorageItem('bookedOutbound') || getSessionstorageItem('bookedReturn')) {
+            setBookedOutbound(getSessionstorageItem('bookedOutbound'));
+            setBookedReturn(getSessionstorageItem('bookedReturn'));
+            setCharge(getSessionstorageItem('charge'));
+            setLoading(false);
+            setTravelerInfo(getSessionstorageItem('travelerInfo'));
+        }    
     }, []);
+
+
+    console.log(getSessionstorageItem('bookedOutbound'));
+    console.log(getSessionstorageItem('bookedReturn'));  
+    console.log(getSessionstorageItem('charge')); 
+    // Listen to if page is being reloaded or going back
+    // useEffect(() => {
+    //     window.addEventListener('beforeunload', (event) => {
+    //         event.preventDefault();
+    //         return (event.returnValue = 'sfasdf');
+    //     });
+    // }, []);
 
     useEffect(() => {
         // Function to fetch charge details using PaymentIntent ID
@@ -62,6 +77,8 @@ const BookingConfirmation = () => {
                 if (data.event === 'charge.succeeded') {
                     console.log("Payment succeeded", data.charge);
                     setCharge(data.charge);
+                    setSessionstorageItem('charge', data.charge);
+                    console.log("Charge: ", data.charge);
                 }
             }
         });
@@ -79,11 +96,13 @@ const BookingConfirmation = () => {
                 if (pricingOutbound) {
                     const response = await fetchCreateFlightBooking(pricingOutbound.data.flightOffers[0], travelerInfo);
                     setBookedOutbound(response);
+                    setSessionstorageItem('bookedOutbound', response);
                     console.log(response);
                 }
                 if (pricingReturn) {
                     const response = await fetchCreateFlightBooking(pricingReturn.data.flightOffers[0], travelerInfo);
                     setBookedReturn(response);
+                    setSessionstorageItem('bookedReturn', response);
                     console.log(response);
                 }
                 setLoading(false);
@@ -99,12 +118,12 @@ const BookingConfirmation = () => {
         }
     }, [paymentIntent]);
 
-    // console.log(bookedOutbound.data);
-    // console.log(bookedReturn.data);
+    console.log(bookedOutbound.data);
+    console.log(bookedReturn?.data);
 
     function displayConfirmationCard(flight, selectedFlight) {
         const passengersName = travelerInfo.map((passenger) => passenger.name.firstName + " " + passenger.name.lastName);
-        // const flightNo = 
+        const flightInfo = flight.data.flightOffers[0].itineraries[0].segments[0];
         
         return (
             <>
@@ -127,7 +146,7 @@ const BookingConfirmation = () => {
                             Ref No. {flight.data.associatedRecords[0].reference}
                         </div>
                         <div className="info-name">
-                                    {getDateDayDDMMYYYY(selectedFlight.departureDateTime)}
+                                    {getDateDayDDMMYYYY(flightInfo.departure.at)}
                         </div>
                     </div>
 

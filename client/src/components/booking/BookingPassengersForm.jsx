@@ -6,6 +6,7 @@ import { useContextLocalization } from "../contexts/ContextLocalization";
 import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
 import { useContextFlightBooking } from "../contexts/ContextFlightBooking";
 import { useEffect, useState } from "react";
+import { setSessionstorageItem } from "../helpers/localstorage";
 import { fetchCreateFlightBooking } from '../apicalls/fetchConfirmBooking';
 import { useNavigate } from "react-router-dom";
 
@@ -343,6 +344,8 @@ const PassengerForm = () => {
         try {
             // Prepare the travelers' data
             setTravelerInfo(prepTravelers(data));
+            setSessionstorageItem("travelerInfo", prepTravelers(data));
+
             
             // Wait for the booking confirmation to complete
             // await amadeusBookingConfirmation(passengersInfo);
