@@ -1,15 +1,12 @@
 import axios from "axios"
-
-const cachedData = localStorage.getItem('tours_activities');
+import { getLocalstorageItem, setLocalstorageItem } from "../helpers/localstorage"
 
 export const fetchToursActivities = async (geoLocation) => {
     const latitude = geoLocation.latitude;
     const longitude = geoLocation.longitude;
 
-    if (cachedData) {
-        console.log("Using cached data");
-        // console.log("Cached data:", cachedData);
-        return JSON.parse(cachedData); // Return cached data if available
+    if (getLocalstorageItem('toursActivities')) {
+        return getLocalstorageItem('toursActivities');
     }
 
     try {
@@ -24,7 +21,7 @@ export const fetchToursActivities = async (geoLocation) => {
 
         console.log("Tours and activities response:", response);
         if (response.status === 200) {
-            localStorage.setItem('tours_activities', JSON.stringify(response.data.data));
+            setLocalstorageItem('toursActivities', response.data.data);
             return response.data.data
         }
     } catch (error) {

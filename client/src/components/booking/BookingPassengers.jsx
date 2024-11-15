@@ -1,13 +1,15 @@
 // PassengersDetails 
-import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
 import BookingPassengersForm from './BookingPassengersForm';
+import { getSessionstorageItem } from '../helpers/localstorage';
 
 const BookingPassengers = () => {
-    const { selectedOutboundFlight } = useContextFlightOffers();
+    const outboundFlight = getSessionstorageItem('selectedOutboundFlight');
+    // const { selectedOutboundFlight } = useContextFlightOffers();
     
-    if (!selectedOutboundFlight) {
+    if (!outboundFlight) {
         return null; // Or handle the loading state appropriately
     }
+
     return (
         <div className="passenger-details">
             <h3>Traveller Details</h3>

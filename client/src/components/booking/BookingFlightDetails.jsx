@@ -1,9 +1,11 @@
 // FlightDetails.jsx
-import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
-import { useState, useEffect, useRef } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import { fetchLocation } from '../apicalls/fetchLocation';
 import { getDateDayDDMMYYYY } from '../helpers/general';
 import BookingFlightDetailsExpanded from './BookingFlightDetailsExpanded';
+import { setSessionstorageItem, getSessionstorageItem } from '../helpers/localstorage';
+import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
+import { get } from 'react-hook-form';
 
 
 // Fetch location details for each segment
@@ -23,28 +25,43 @@ async function fetchSegmentLocations(flight, newLocations) {
 
 const BookingFlightDetails = () => {
     console.log("FlightDetails rendered...");
-    const { selectedOutboundFlight, selectedReturnFlight, setLocations } = useContextFlightOffers();
-    const outboundItineraries = selectedOutboundFlight?.offer.itineraries[0].segments;
-    const returnItineraries = selectedReturnFlight?.offer.itineraries[0].segments;
-    const locationsRef = useRef({});// To store location data
+    const outboundFlight = getSessionstorageItem('selectedOutboundFlight');
+    const returnFlight = getSessionstorageItem('selectedReturnFlight');
+    const { locations, setLocations } = useContextFlightOffers();
+    // const [newLocations, setNewLocations] = useState(null);
+    const outboundItineraries = outboundFlight?.offer.itineraries[0].segments;
+    const returnItineraries = returnFlight?.offer.itineraries[0].segments;
+    // const locationsRef = useRef(getSessionstorageItem('locations') || {});// To store location data
 
-    // Fetch location details for each segment
+    // Memoize the newLocations object to prevent re-fetching on every render
     useEffect(() => {
-        const fetchLocations = async () => {
-            const newLocations = {};
-            if(outboundItineraries){
-                await fetchSegmentLocations(outboundItineraries, newLocations);
-            }
-            if(returnItineraries) {
-                await fetchSegmentLocations(returnItineraries, newLocations);
-            }
-            locationsRef.current = newLocations;
-            setLocations(newLocations);
-        };
-        fetchLocations();
+        const locationsInSession = getSessionstorageItem('locations');
+        
+        // Only fetch and update locations if they don't exist or are different from the current state
+        if (!locationsInSession || Object.keys(locationsInSession).length === 0) {
+            const airports = {};
+            const fetchLocations = async () => {
+                if (outboundItineraries) {
+                    await fetchSegmentLocations(outboundItineraries, airports);
+                }
+                if (returnItineraries) {
+                    await fetchSegmentLocations(returnItineraries, airports);
+                }
+
+                // Avoid unnecessary updates if the locations are the same
+                if (Object.keys(airports).length > 0) {
+                    setLocations(airports);  // Update context state
+                    setSessionstorageItem('locations', airports);  // Save to sessionStorage
+                }
+            };
+            fetchLocations();
+        }
     }, [outboundItineraries, returnItineraries, setLocations]);
 
-    if (!selectedOutboundFlight && !selectedReturnFlight) { 
+    console.log("locations:", locations);
+
+
+    if (!outboundFlight && !returnFlight) { 
         return null; // Or handle the loading state appropriately
     }
     return (
@@ -53,22 +70,22 @@ const BookingFlightDetails = () => {
                 <h3 className="float-right">Flight details</h3>
             </div>
 
-            {selectedOutboundFlight && (
+            {outboundFlight && (
                 <>
-                    <div className="flight-bound"><b>Outbound</b><p className="medium-small gray">{getDateDayDDMMYYYY(selectedOutboundFlight.departureDateTime)}</p></div>
+                    <div className="flight-bound"><b>Outbound</b><p className="medium-small gray">{getDateDayDDMMYYYY(outboundFlight.departureDateTime)}</p></div>
                     <BookingFlightDetailsExpanded 
-                    flight = {selectedOutboundFlight}
-                    locations = {locationsRef.current}
+                    flight = {outboundFlight}
+                    locations = {locations}
                     />   
                 </>
             )}
     
-            {selectedReturnFlight && (
+            {returnFlight && (
                 <>
-                    <div className="flight-bound"><b>Return</b><p className="medium-small gray">{getDateDayDDMMYYYY(selectedReturnFlight.departureDateTime)}</p></div>
+                    <div className="flight-bound"><b>Return</b><p className="medium-small gray">{getDateDayDDMMYYYY(returnFlight.departureDateTime)}</p></div>
                     <BookingFlightDetailsExpanded 
-                    flight = {selectedReturnFlight}
-                    locations = {locationsRef.current}
+                    flight = {returnFlight}
+                    locations = {locations}
                     />
                 </>
             )}

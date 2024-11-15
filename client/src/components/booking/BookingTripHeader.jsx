@@ -1,22 +1,24 @@
 // TripHeader.jsx
 import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
 import { useContextFlightBooking } from "../contexts/ContextFlightBooking";
+import { getSessionstorageItem } from '../helpers/localstorage';
 import { numberCommas } from '../helpers/general';
 import { useContextLocalization } from '../contexts/ContextLocalization';
 import { useLocation } from "react-router-dom"; // Import useLocation
 
 const BookingTripHeader = () => {
-    const { selectedOutboundFlight, formData, isReturn } = useContextFlightOffers();
-    const { grandTotal, passengers } = useContextFlightBooking();
+    const { isReturn } = useContextFlightOffers();
+    const { grandTotal } = useContextFlightBooking();
     const {localizationData} = useContextLocalization();
 
     const location = useLocation();
     const onFlightDetailsPage = location.pathname === "/flight_details";
     const onCheckOutPage = location.pathname === "/checkout";
     const onBookingConfirmaitonPage = location.pathname ==="/booking_confirmation"
-    const currentForm = formData.current;
+    const currentForm = getSessionstorageItem('formData');
+    const outboundFlight = getSessionstorageItem('selectedOutboundFlight');
 
-    if (!selectedOutboundFlight) {
+    if (!outboundFlight) {
         return null; // Or handle the loading state appropriately
     }
     
@@ -29,7 +31,7 @@ const BookingTripHeader = () => {
                 <div className="trip-desc">
                     <p>
                         {isReturn ? "Round trip" : "One way"} &bull; 
-                        Economy &bull; {passengers} passengers               
+                        Economy &bull; {currentForm.passengers} passengers               
                     </p>
                 </div>
             </div>

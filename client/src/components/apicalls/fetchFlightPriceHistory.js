@@ -1,10 +1,16 @@
 // fetchFlightHistory.js
 import { validCurrency } from '../helpers/general';
+import { setLocalstorageItem, getLocalstorageItem } from '../helpers/localstorage';
 
 import axios from "axios";
 
 export const fetchFlightPriceHistory = async(formData) => {
     const currencyValid = validCurrency.includes(formData.currency);
+
+    if (getLocalstorageItem('flightPriceHistory')) {    
+        return getLocalstorageItem('flightPriceHistory');
+    }
+
     try {
         !currencyValid && null;
         
@@ -18,6 +24,7 @@ export const fetchFlightPriceHistory = async(formData) => {
         });
         // console.log(response.data.data[0].priceMetrics);
         if (response.data.data[0].priceMetrics.length > 0) {
+            setLocalstorageItem('flightPriceHistory', response.data.data[0].priceMetrics);
             return response.data.data[0].priceMetrics;
         } else {
             return [];

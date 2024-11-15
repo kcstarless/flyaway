@@ -6,6 +6,7 @@ import { useContextLocalization } from "../contexts/ContextLocalization";
 import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
 import { useContextFlightBooking } from "../contexts/ContextFlightBooking";
 import { useEffect, useState } from "react";
+import { setSessionstorageItem } from "../helpers/localstorage";
 import { fetchCreateFlightBooking } from '../apicalls/fetchConfirmBooking';
 import { useNavigate } from "react-router-dom";
 
@@ -110,8 +111,6 @@ const PassengerForm = () => {
     // Create number of passenger form. 
     // Registered value is array followed by name. Eg traveler[1].fristname
     const createPassengersForm = () => {
-
-
         for (let index = 0; index < passengers; index++) {
             formsPassengers.push(
                 <div key={index}>
@@ -298,24 +297,6 @@ const PassengerForm = () => {
         return formsPassengers;
     }
     
-    // const amadeusBookingConfirmation = async (passengersInfo) => {
-    //     try {
-    //         if (pricingOutbound) {
-    //             const response = await fetchCreateFlightBooking(pricingOutbound.data.flightOffers[0], passengersInfo);
-    //             setBookedOutbound(response);
-    //             console.log(response);
-    //         }
-    //         if (pricingReturn) {
-    //             const response = await fetchCreateFlightBooking(pricingReturn.data.flightOffers[0], passengersInfo);
-    //             setBookedReturn(response);
-    //             console.log(response);
-    //         }
-            
-    //     } catch (err) {
-    //         console.log("Error fetching confirmed flight: ", err);
-    //     }
-    // }
-    
     const prepTravelers = (data) => {
         const updateDob = data.travelers.map((traveler, index) => {
             const {dd, mm, yyyy, passportNo } = traveler // Extract dd, mm, yyyy
@@ -343,9 +324,7 @@ const PassengerForm = () => {
         try {
             // Prepare the travelers' data
             setTravelerInfo(prepTravelers(data));
-            
-            // Wait for the booking confirmation to complete
-            // await amadeusBookingConfirmation(passengersInfo);
+            setSessionstorageItem("travelerInfo", prepTravelers(data));
     
             // Navigate only after the booking confirmation is successful
             navigate("/checkout");

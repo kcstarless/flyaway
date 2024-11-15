@@ -9,6 +9,7 @@ import { Elements, useStripe, useElements, PaymentElement } from '@stripe/react-
 import { loadStripe } from '@stripe/stripe-js';
 import BookingFlightDetails from "./BookingFlightDetails.jsx";
 import { numberCommas } from '../helpers/general';
+import { getSessionstorageItem, setSessionstorageItem } from "../helpers/localstorage.js";
 
 // Loads stripe.js 
 const stripePromise = loadStripe(STRIPE_PK_KEY);
@@ -21,15 +22,20 @@ const PaymentForm = ({ clientSecret }) => {
     const elements = useElements();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const { grandTotal, passengers } = useContextFlightBooking();
+    const { grandTotal } = useContextFlightBooking();
     const {localizationData} = useContextLocalization();
 
+    if (getSessionstorageItem("paymentIntent")) {
+        navigate('/booking_confirmation', { state: { paymentIntent: getSessionstorageItem("paymentIntent")} });
+    }
+    
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         if (!stripe || !elements) {
             return;
         }
+
         setLoading(true);
 
         const result = await stripe.confirmPayment({
@@ -51,6 +57,7 @@ const PaymentForm = ({ clientSecret }) => {
         } else {
             // Payment succeeded
             console.log("Payment successful!", result);
+            setSessionstorageItem("paymentIntent", result.paymentIntent);
             navigate('/booking_confirmation', { state: { paymentIntent: result.paymentIntent } }); // Navigate to booking_confirmation element once payment sucessful.
         }
     };
@@ -88,10 +95,14 @@ const PaymentForm = ({ clientSecret }) => {
 const BookingPayment = () => {
     const { grandTotal } = useContextFlightBooking();
     const { localizationData } = useContextLocalization();
-    const [clientSecret, setClientSecret] = useState("");
+    const [clientSecret, setClientSecret] = useState(getSessionstorageItem('clientSecret') || null);
 
     // Creates stripe payment of intent
     useEffect(() => {
+        console.log("Creating payment intent...");
+        if (clientSecret) {
+            return;
+        }
         const createPaymentIntent = async () => {
             try {
                 const response = await axios.post(`${API_URL}/payments/create_payment_intent`, 
@@ -103,6 +114,7 @@ const BookingPayment = () => {
                       }
                 )
                 setClientSecret(response.data.client_secret);
+                setSessionstorageItem('clientSecret', response.data.client_secret);
             } catch (error) {
                 console.error("Error creating payment intent: ", error);
             }
