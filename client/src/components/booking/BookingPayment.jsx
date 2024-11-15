@@ -99,6 +99,7 @@ const BookingPayment = () => {
 
     // Creates stripe payment of intent
     useEffect(() => {
+        console.log("Creating payment intent...");
         if (clientSecret) {
             return;
         }

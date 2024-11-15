@@ -4,9 +4,11 @@ import { getLocalstorageItem, setLocalstorageItem } from "../helpers/localstorag
 export const fetchToursActivities = async (geoLocation) => {
     const latitude = geoLocation.latitude;
     const longitude = geoLocation.longitude;
-    // if (getLocalstorageItem('toursActivities')) {
-    //     return getLocalstorageItem('toursActivities');
-    // }
+
+    if (getLocalstorageItem('toursActivities')) {
+        return getLocalstorageItem('toursActivities');
+    }
+
     try {
         console.log("Fetching tours and activities");
         const response = await axios.get(`/api/v1/search/tours_activities`, {

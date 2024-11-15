@@ -94,7 +94,7 @@ const BookingConfirmation = () => {
                     const response = await fetchCreateFlightBooking(pricingOutbound.data.flightOffers[0], travelerInfo);
                     setBookedOutbound(response);
                     setSessionstorageItem('bookedOutbound', response);
-                    console.log(response);
+                    console.log("Booking confirmed: ", response);   
                 }
                 if (pricingReturn) {
                     const response = await fetchCreateFlightBooking(pricingReturn.data.flightOffers[0], travelerInfo);

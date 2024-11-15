@@ -11,11 +11,11 @@ export const ProviderContextFlightBooking = ({ children }) => {
     const { selectedOutboundFlight, selectedReturnFlight } = useContextFlightOffers();
     const outboundFlight = getSessionstorageItem('selectedOutboundFlight');
     const returnFlight = getSessionstorageItem('selectedReturnFlight');
-    const [pricingOutbound, setPricingOutbound] = useState(null);
-    const [pricingReturn, setPricingReturn] = useState(null);
+    const [pricingOutbound, setPricingOutbound] = useState(getSessionstorageItem('pricingOutbound') || null);
+    const [pricingReturn, setPricingReturn] = useState(getSessionstorageItem('pricingReturn') || null);
     const [bookedOutbound, setBookedOutbound] = useState({});
     const [bookedReturn, setBookedReturn] = useState({});
-    const [travelerInfo, setTravelerInfo] = useState(null);
+    const [travelerInfo, setTravelerInfo] = useState(getSessionstorageItem('travelerInfo') || null);
 
     const passengers = selectedOutboundFlight?.offer.travelerPricings.length; // Total number of passengers
     const grandTotal = getTotalPrice();

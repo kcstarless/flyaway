@@ -297,24 +297,6 @@ const PassengerForm = () => {
         return formsPassengers;
     }
     
-    // const amadeusBookingConfirmation = async (passengersInfo) => {
-    //     try {
-    //         if (pricingOutbound) {
-    //             const response = await fetchCreateFlightBooking(pricingOutbound.data.flightOffers[0], passengersInfo);
-    //             setBookedOutbound(response);
-    //             console.log(response);
-    //         }
-    //         if (pricingReturn) {
-    //             const response = await fetchCreateFlightBooking(pricingReturn.data.flightOffers[0], passengersInfo);
-    //             setBookedReturn(response);
-    //             console.log(response);
-    //         }
-            
-    //     } catch (err) {
-    //         console.log("Error fetching confirmed flight: ", err);
-    //     }
-    // }
-    
     const prepTravelers = (data) => {
         const updateDob = data.travelers.map((traveler, index) => {
             const {dd, mm, yyyy, passportNo } = traveler // Extract dd, mm, yyyy
