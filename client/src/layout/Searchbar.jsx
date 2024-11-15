@@ -44,7 +44,7 @@ const SearchBar = () => {
   });
   const prevInputsRef = useRef(localInputs);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async () => {
     // event.preventDefault();
 
     // Validate form data

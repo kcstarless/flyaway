@@ -111,8 +111,6 @@ const PassengerForm = () => {
     // Create number of passenger form. 
     // Registered value is array followed by name. Eg traveler[1].fristname
     const createPassengersForm = () => {
-
-
         for (let index = 0; index < passengers; index++) {
             formsPassengers.push(
                 <div key={index}>
@@ -345,10 +343,6 @@ const PassengerForm = () => {
             // Prepare the travelers' data
             setTravelerInfo(prepTravelers(data));
             setSessionstorageItem("travelerInfo", prepTravelers(data));
-
-            
-            // Wait for the booking confirmation to complete
-            // await amadeusBookingConfirmation(passengersInfo);
     
             // Navigate only after the booking confirmation is successful
             navigate("/checkout");

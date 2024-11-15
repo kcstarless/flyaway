@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { useContextLocalization } from './ContextLocalization';
+import { setSessionstorageItem, getSessionstorageItem, clearSessionstorage } from '../helpers/localstorage';
 
 const ContextFlightOffers = createContext();
 
@@ -10,10 +11,10 @@ export const ProviderContextFlightOffers = ({ children }) => {
     const [flightOffers, setFlightOffers] = useState([]);
     const [flightPriceHistory, setFlightPriceHistory] = useState([]);
     const [isReturn, setIsReturn] = useState(false);
-    const [selectedOutboundFlight, setSelectedOutboundFlight] = useState(null);
-    const [selectedReturnFlight, setSelectedReturnFlight] = useState(null);
+    const [selectedOutboundFlight, setSelectedOutboundFlight] = useState(getSessionstorageItem('selectedOutboundFlight') || null);
+    const [selectedReturnFlight, setSelectedReturnFlight] = useState(getSessionstorageItem('selectedReturnFlight') || null);    
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [locations, setLocations] = useState();
+    const [locations, setLocations] = useState(getSessionstorageItem('locations') || {});
 
     // Initialize formData with useRef instead of useState
     const formData = useRef({
@@ -35,6 +36,7 @@ export const ProviderContextFlightOffers = ({ children }) => {
     // Update formData via useRef, and trigger re-render manually when needed
     const updateFormData = (newData) => {
         formData.current = { ...formData.current, ...newData };
+        setSessionstorageItem('formData', formData.current);
         // setIsSubmitted((prev) => !prev);  // Trigger a re-render
     };
 
@@ -74,6 +76,7 @@ export const ProviderContextFlightOffers = ({ children }) => {
         setSelectedReturnFlight(null);
         setIsSubmitted(false);
         setLocations({});
+        clearSessionstorage();
     }
 
     return (

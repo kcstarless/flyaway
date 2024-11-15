@@ -8,6 +8,7 @@ import FlightsSort from './FlightsSort';
 import FlightsPriceHistory from './FlightsPriceHistory';
 import FlightsFilters from './FlightsFilters';
 import LocalActivities from '../maincontent/LocalActivities';
+import { setSessionstorageItem } from '../helpers/localstorage';
 // import { useFlightSearchQuery } from '../hooks/useFlightSearchQuery';
 import { useToursActivitiesQuery } from "../hooks/useToursActivitiesQuery";
 import { useState, useMemo } from 'react';
@@ -55,6 +56,7 @@ const DisplayFlights = () => {
     const handleflightOfferselect = (flight) => {
         if (selectedOutboundFlight === null) {
             setSelectedOutboundFlight(flight);
+            setSessionstorageItem('selectedOutboundFlight', flight);
             if (isReturn) {
                 flipFormData(); // Flip the form data for return flight
                 setIsSubmitted(true);
@@ -65,6 +67,7 @@ const DisplayFlights = () => {
         } 
         if (selectedOutboundFlight && isReturn) {
             setSelectedReturnFlight(flight);
+            setSessionstorageItem('selectedReturnFlight', flight);
             navigate("/flight_details");
         }
     }
