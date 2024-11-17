@@ -3,7 +3,6 @@ import { useContextFlightOffers } from './ContextFlightOffers';
 import { fetchFlightPricing } from '../apicalls/fetchFlightPricing';
 import { clearSessionstorage, setSessionstorageItem } from '../helpers/localstorage';
 import { getSessionstorageItem, setLocalstorageItem } from '../helpers/localstorage';
-import { get, set } from 'react-hook-form';
 
 const ContextFlightBooking = createContext();
 
@@ -20,14 +19,12 @@ export const ProviderContextFlightBooking = ({ children }) => {
     const passengers = selectedOutboundFlight?.offer.travelerPricings.length; // Total number of passengers
     const grandTotal = getTotalPrice();
 
-
-
     // Check the selected offer for flight is still valid.
     // This step is necessary for Amadeus API flight booking flow. 
     useEffect(() => {
-      
+      console.log("Checking if selected flight is still valid...");
         const fetchPricing = async () => {
-            if (selectedOutboundFlight && !getSessionstorageItem('pricingOutbound')) {
+            if (selectedOutboundFlight) {
               console.log("started fetching pricing for outbound flight");
               try {
                 const response = await fetchFlightPricing(selectedOutboundFlight);
@@ -38,7 +35,7 @@ export const ProviderContextFlightBooking = ({ children }) => {
               }
             }
   
-            if (selectedReturnFlight && !getSessionstorageItem('pricingReturn')) {
+            if (selectedReturnFlight) {
               try {
                 const response = await fetchFlightPricing(selectedReturnFlight);
                 setPricingReturn(response);
@@ -48,10 +45,10 @@ export const ProviderContextFlightBooking = ({ children }) => {
               }
             }
           };
-          // if (selectedOutboundFlight || selectedReturnFlight) {
-          //   console.log("Fetching Pricing...");
+          if (!getSessionstorageItem('pricingOutbound')) {
             fetchPricing();
-          // }
+          }
+
     }, [selectedOutboundFlight, selectedReturnFlight]);
     
     // Get total price of the flights

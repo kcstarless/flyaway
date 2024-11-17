@@ -32,8 +32,8 @@ const BookingConfirmation = () => {
         }    
     }, []);
 
+    // Function to fetch charge details using PaymentIntent ID
     useEffect(() => {
-        // Function to fetch charge details using PaymentIntent ID
         const fetchChargeDetails = async (paymentIntentId) => {
             console.log("Fetching charge details...");
             try {
@@ -51,6 +51,7 @@ const BookingConfirmation = () => {
             fetchChargeDetails(paymentIntent.id).then((charge) => {
                 setCharge(charge);
                 setSessionstorageItem('charge', charge);
+                console.log("Charge details: ", charge);
             });
         }
     }, [paymentIntent]);
@@ -66,10 +67,9 @@ const BookingConfirmation = () => {
         let subscription = cable.subscriptions.create('NotificationsChannel', {
             received(data) {
                 if (data.event === 'charge.succeeded') {
-                    console.log("Payment succeeded", data.charge);
                     setCharge(data.charge);
                     setSessionstorageItem('charge', data.charge);
-                    console.log("Charge: ", data.charge);
+                    console.log("Adtion cable, charged data: ", data.charge);
                 }
             }
         });
@@ -189,9 +189,6 @@ const BookingConfirmation = () => {
             </>
         )
     }
-    
-    console.log("booked: ", bookedOutbound);
-    console.log("pricing: ", pricingOutbound);
 
     return (
         <>

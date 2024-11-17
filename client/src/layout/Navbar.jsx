@@ -2,6 +2,7 @@ import logo_plane from '../assets/images/logo_plane.svg';
 import Localization from '../components/navbar/Localization';
 import UserLogin from '../components/navbar/UserLogin';
 import  Unavailable from '../components/helpers/Unavailable';
+import { clearSessionstorage } from '../components/helpers/localstorage';
 
 import React, { useState } from 'react';
 
@@ -15,6 +16,9 @@ function Navbar() {
             setUnavailable(true);
         } else {
             setUnavailable(false);
+        }
+        if (item === 'Flight') {
+            clearSessionstorage();
         }
     };
 

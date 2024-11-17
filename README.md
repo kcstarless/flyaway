@@ -111,3 +111,7 @@ Because Rails server doesnt recognize React's client-side routes. I need to crea
   get '*path', to: 'static#index', constraints: ->(request) { !request.xhr? && request.path.exclude?('/api') }
 ```
 
+<ins>Persistant data</ins><br>
+During the booking process all booking related data including user input is stored in local session. This approach was neeeded in order tackle browser refresh and back event to prevent app from breaking. If the session data exist app will use this data. For example, if payment is made and booking is confirmed app will check for these events stored in session data and if it exist it will prevent user making another payment when user clicks browser back or refresh button. 
+
+

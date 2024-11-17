@@ -46,8 +46,8 @@ const PaymentForm = ({ clientSecret }) => {
             redirect: 'if_required', 
         });
 
-        const paymentIntent = await stripe.retrievePaymentIntent(clientSecret);
-        console.log(paymentIntent);
+        // const paymentIntent = await stripe.retrievePaymentIntent(clientSecret);
+        // console.log(paymentIntent);
 
         setLoading(false);
 
