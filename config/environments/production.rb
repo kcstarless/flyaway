@@ -72,12 +72,12 @@ Rails.application.configure do
     port: 587,
     domain: 'gmail.com',
     user_name: ENV['GMAIL_USERNAME'], # Store Gmail credentials in environment variables
-    password: ENV['GMAIL_PASSWORD'],  # Or app-specific password for better security
+    password: ENV['GMAIL_APP_PASSWORD'],  # Or app-specific password for better security
     authentication: 'plain',
     enable_starttls_auto: true
   }
 
-  config.action_mailer.default_url_options = { host: 'localhost:3000' } # Update with your app's host
+  config.action_mailer.default_url_options = { host: 'https://flyaway-rails-react.fly.dev/' } # Update with your app's host
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
