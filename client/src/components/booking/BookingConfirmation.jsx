@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useContextFlightBooking } from "../contexts/ContextFlightBooking";
 import { useContextFlightOffers } from "../contexts/ContextFlightOffers";
 import { fetchCreateFlightBooking } from "../apicalls/fetchConfirmBooking";
@@ -11,48 +11,54 @@ import { LoaderPlane } from '../helpers/Loader';
 import ActionCable from 'actioncable';
 import axios from 'axios';
 import { setSessionstorageItem, getSessionstorageItem } from "../helpers/localstorage";
+import { useNavigate } from "react-router-dom";
+import  {NavigateHome} from '../helpers/Unavailable';
 
 
 const BookingConfirmation = () => {
-    const { pricingOutbound, pricingReturn, setBookedOutbound, setBookedReturn, bookedOutbound, bookedReturn, travelerInfo, setTravelerInfo } = useContextFlightBooking();
+    const { bookedOutbound, bookedReturn, travelerInfo } = useContextFlightBooking();
     const { locations, selectedOutboundFlight, selectedReturnFlight } = useContextFlightOffers();
     const { localizationData } = useContextLocalization();
     const location = useLocation();
     const { paymentIntent } = location.state || {};
     const [loading, setLoading] = useState(getSessionstorageItem("charge") ? false : true);
     const [charge, setCharge] = useState(null);
+    const navigate = useNavigate();
+    const [unavailable, setUnavailable] = useState(false);
 
+    
     useEffect(() => {
-        if (getSessionstorageItem('bookedOutbound') || getSessionstorageItem('bookedReturn')) {
-            setBookedOutbound(getSessionstorageItem('bookedOutbound'));
-            setBookedReturn(getSessionstorageItem('bookedReturn'));
-            setCharge(getSessionstorageItem('charge'));
-            setLoading(false);
-            setTravelerInfo(getSessionstorageItem('travelerInfo'));
-        }    
+        if (getSessionstorageItem('charge')) {
+            setUnavailable(true);
+            // alert("Payment already processed. Please check your email for confirmation.");
+            // navigate('/');
+            return;
+        }
     }, []);
-
     // Function to fetch charge details using PaymentIntent ID
     useEffect(() => {
-        const fetchChargeDetails = async (paymentIntentId) => {
-            console.log("Fetching charge details...");
-            try {
-            const response = await axios.get(`/api/v1/payments/retrieve_charge`, {
-                params: {
-                payment_intent_id: paymentIntentId,
-                },
-            });
-            return response.data.charge;
-            } catch (error) {
-            console.error("Error retrieving charge:", error);
+        if (!getSessionstorageItem('charge')) {
+            const fetchChargeDetails = async (paymentIntentId) => {
+                console.log("Fetching charge details...");
+                try {
+                const response = await axios.get(`/api/v1/payments/retrieve_charge`, {
+                    params: {
+                    payment_intent_id: paymentIntentId,
+                    },
+                });
+                return response.data.charge;
+                } catch (error) {
+                console.error("Error retrieving charge:", error);
+                }
             }
-        }
-        if (paymentIntent) {
-            fetchChargeDetails(paymentIntent.id).then((charge) => {
-                setCharge(charge);
-                setSessionstorageItem('charge', charge);
-                console.log("Charge details: ", charge);
-            });
+            if (paymentIntent) {
+                fetchChargeDetails(paymentIntent.id).then((charge) => {
+                    setCharge(charge);
+                    setSessionstorageItem('charge', charge);
+                    setLoading(false);
+                    console.log("Charge details: ", charge);
+                });
+            }
         }
     }, [paymentIntent]);
   
@@ -81,44 +87,43 @@ const BookingConfirmation = () => {
     }, []);
 
     // Confirm booking through Amadeus API
-    useEffect(() => {
-        if (getSessionstorageItem('charge')) {
-            alert("Payment already processed. Please check your email for confirmation.");
-            return;
-        }
+    // useEffect(() => {
+    //     if (getSessionstorageItem('charge')) {
+    //         alert("Payment already processed. Please check your email for confirmation.");
+    //         return;
+    //     }
 
-        const amadeusConfirmBooking = async (travelerInfo) => {
-            try {
-                console.log("Confirming booking...");
-                if (pricingOutbound) {
-                    const response = await fetchCreateFlightBooking(pricingOutbound.data.flightOffers[0], travelerInfo);
-                    setBookedOutbound(response);
-                    setSessionstorageItem('bookedOutbound', response);
-                    console.log("Booking confirmed: ", response);   
-                }
-                if (pricingReturn) {
-                    const response = await fetchCreateFlightBooking(pricingReturn.data.flightOffers[0], travelerInfo);
-                    setBookedReturn(response);
-                    setSessionstorageItem('bookedReturn', response);
-                    console.log(response);
-                }
-                setLoading(false);
-            } catch (err) {
-                console.log("Error fetching confirmed flight: ", err);
-            }
-        }
+    //     const amadeusConfirmBooking = async (travelerInfo) => {
+    //         try {
+    //             console.log("Confirming booking...");
+    //             if (pricingOutbound) {
+    //                 const response = await fetchCreateFlightBooking(pricingOutbound.data.flightOffers[0], travelerInfo);
+    //                 setBookedOutbound(response);
+    //                 setSessionstorageItem('bookedOutbound', response);
+    //                 console.log("Booking confirmed: ", response);   
+    //             }
+    //             if (pricingReturn) {
+    //                 const response = await fetchCreateFlightBooking(pricingReturn.data.flightOffers[0], travelerInfo);
+    //                 setBookedReturn(response);
+    //                 setSessionstorageItem('bookedReturn', response);
+    //                 console.log(response);
+    //             }
+    //             setLoading(false);
+    //         } catch (err) {
+    //             console.log("Error fetching confirmed flight: ", err);
+    //         }
+    //     }
 
-        if (paymentIntent) { 
-            amadeusConfirmBooking(travelerInfo);
-        } else {
-            console.error("Something went wrong")
-        }
-    }, [paymentIntent]);
+    //     if (paymentIntent) { 
+    //         amadeusConfirmBooking(travelerInfo);
+    //     } else {
+    //         console.error("Something went wrong")
+    //     }
+    // }, [paymentIntent]);
 
     function displayConfirmationCard(flight, selectedFlight) {
         const passengersName = travelerInfo.map((passenger) => passenger.name.firstName + " " + passenger.name.lastName);
-        // const flightInfo = flight.flightOffers[0].itineraries[0].segments[0];
-        console.log("locatin data: ", locations)
+
         return (
             <>
             <div className="ticket">
@@ -199,21 +204,21 @@ const BookingConfirmation = () => {
                 : (<><BookingTripHeader />
                     <br />
                     <div className="booking-made">
-                        {charge && (       
+                        {/* {charge && (        */}
                             <div className="booking-confirmation-card">   
                             <fieldset className="payment-confirmation">
                                 <h4>Payment processed.</h4>
-                                <div className="item">Status: {charge.paid ? "Paid" : "Pending"} </div>
+                                <div className="item">Status: {charge?.paid ? "Paid" : "Pending"} </div>
                                 <div className="item">
-                                    Amount paid: {localizationData.currencySymbol}{(charge.amount / 100).toFixed(2)} &nbsp;
-                                    {charge.payment_method_details.card.brand} ending in {charge.payment_method_details.card.last4}
+                                    Amount paid: {localizationData.currencySymbol}{(charge?.amount / 100).toFixed(2)} &nbsp;
+                                    {charge?.payment_method_details.card.brand} ending in {charge?.payment_method_details.card.last4}
                                 </div>
-                                <div className="item">Paid on: {new Date(charge.created * 1000).toLocaleString()}</div>
-                                <div className="item">Receipt can be viewed <a href={charge.receipt_url}>here</a>. A copy has been sent to your email.</div>
+                                <div className="item">Paid on: {new Date(charge?.created * 1000).toLocaleString()}</div>
+                                <div className="item">Receipt can be viewed <a href={charge?.receipt_url}>here</a>. A copy has been sent to your email.</div>
                             </fieldset>
                             <br />
                             </div>
-                        )}
+                        {/* )} */}
 
                         <div className="booking-card">
                             {bookedOutbound && Object.keys(bookedOutbound).length > 0 &&
@@ -226,6 +231,7 @@ const BookingConfirmation = () => {
                     </div>
                     <br /></>)
             }   
+            {unavailable && <NavigateHome setUnavailable={setUnavailable} message="Your payment & flight is confirmed, Please check your email." />}
         </>
     )
 }

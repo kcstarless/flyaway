@@ -5,9 +5,9 @@ import { setLocalstorageItem, getLocalstorageItem} from '../helpers/localstorage
 
 export const fetchFlights = async (data) => {
     // Check local storage for cached data
-    if (getLocalstorageItem('flightOffers')) {
-        return getLocalstorageItem('flightOffers');
-    }
+    // if (getLocalstorageItem('flightOffers')) {
+    //     return getLocalstorageItem('flightOffers');
+    // }
 
   try {      
     console.log("Flight fetch started with data:", data);

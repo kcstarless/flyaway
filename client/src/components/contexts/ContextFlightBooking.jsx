@@ -12,8 +12,8 @@ export const ProviderContextFlightBooking = ({ children }) => {
     const returnFlight = getSessionstorageItem('selectedReturnFlight');
     const [pricingOutbound, setPricingOutbound] = useState(getSessionstorageItem('pricingOutbound') || null);
     const [pricingReturn, setPricingReturn] = useState(getSessionstorageItem('pricingReturn') || null);
-    const [bookedOutbound, setBookedOutbound] = useState({});
-    const [bookedReturn, setBookedReturn] = useState({});
+    const [bookedOutbound, setBookedOutbound] = useState(getSessionstorageItem('bookedOutbound') || {});
+    const [bookedReturn, setBookedReturn] = useState(getSessionstorageItem('bookedReturn') || {});
     const [travelerInfo, setTravelerInfo] = useState(getSessionstorageItem('travelerInfo') || null);
 
     const passengers = selectedOutboundFlight?.offer.travelerPricings.length; // Total number of passengers
@@ -27,9 +27,11 @@ export const ProviderContextFlightBooking = ({ children }) => {
             if (selectedOutboundFlight) {
               console.log("started fetching pricing for outbound flight");
               try {
+                console.log("fetching pricing for outbound flight");
                 const response = await fetchFlightPricing(selectedOutboundFlight);
                 setPricingOutbound(response);
                 setSessionstorageItem('pricingOutbound', response);
+                console.log(response);
               } catch (error) {
                 console.error("Error fetching outbound flight pricing:", error);
               }

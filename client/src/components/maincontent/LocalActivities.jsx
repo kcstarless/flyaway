@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import  Unavailable from '../helpers/Unavailable';
+import  {Unavailable} from '../helpers/Unavailable';
 
 function dialogOpen(activity, setExpanded, expanded) {
     return (

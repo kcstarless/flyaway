@@ -7,7 +7,7 @@ import { MdExplore } from "react-icons/md";
 import { MdRecommend } from "react-icons/md";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { useState, useEffect } from "react";
-import Unavailable from "../helpers/Unavailable";
+import {Unavailable} from "../helpers/Unavailable";
 
 const MainPageHeader = () => {
     const [unavailable, setUnavailable] = useState(false);

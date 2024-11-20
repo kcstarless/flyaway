@@ -1,23 +1,24 @@
 // PassengerForm.jsx
-import {useForm} from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { useCountries } from "../hooks/useCountries";
 import Select from "react-select";
 import { useContextLocalization } from "../contexts/ContextLocalization";
 import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
 import { useContextFlightBooking } from "../contexts/ContextFlightBooking";
 import { useEffect, useState } from "react";
-import { setSessionstorageItem } from "../helpers/localstorage";
+import { getSessionstorageItem, setSessionstorageItem } from "../helpers/localstorage";
 import { fetchCreateFlightBooking } from '../apicalls/fetchConfirmBooking';
 import { useNavigate } from "react-router-dom";
-
+import { LoaderPlane } from '../helpers/Loader';
 
 const PassengerForm = () => {
     const { countries } = useCountries();
     const { formData } = useContextFlightOffers();
     const { localizationData } = useContextLocalization(); // Getting localization data
-    const { setTravelerInfo } = useContextFlightBooking();
+    const { setTravelerInfo, pricingOutbound, pricingReturn, setBookedOutbound, setBookedReturn, bookedOutbound, bookedReturn } = useContextFlightBooking();
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const [selectedCountryPhone, setSelectedCountryPhone] = useState(null);
     const [selectedCountryPassports, setSelectedCountryPassports] = useState([]);
@@ -82,7 +83,6 @@ const PassengerForm = () => {
             ),
         };
     });
-
    
     // Select country phone code only display the dial code
     const selectedCountryPhoneHandler = (value) => {
@@ -322,23 +322,46 @@ const PassengerForm = () => {
     // On submit prepare the data for submission
     const onSubmit = async (data) => {
         try {
-            // Prepare the travelers' data
             setTravelerInfo(prepTravelers(data));
             setSessionstorageItem("travelerInfo", prepTravelers(data));
-    
+            setLoading(true);
+            if (pricingOutbound) {
+                const response = await fetchCreateFlightBooking(pricingOutbound.data.flightOffers[0], getSessionstorageItem('travelerInfo'));
+                if (response) {
+                    setBookedOutbound(response);
+                    setSessionstorageItem('bookedOutbound', response);
+                    // console.log("Booking confirmed: ", response);
+                }
+            }
+            if (pricingReturn) {
+                const response = await fetchCreateFlightBooking(pricingReturn.data.flightOffers[0], data);
+                setBookedReturn(response);
+                setSessionstorageItem('bookedReturn', response);
+            }
             // Navigate only after the booking confirmation is successful
-            navigate("/checkout");
+            console.log("bookedOutbound", bookedOutbound);
+            setLoading(false);
+            if (bookedOutbound || bookedReturn) {
+                navigate("/checkout");
+            }
         } catch (err) {
+            alert("Flight couldn't be confirmed.");
             console.log("Error confirming booking:", err);
+            navigate("/");
             // Optionally, show an error message to the user
         }
     };
+
     return (
+        <>
+        {(!pricingOutbound) && (<><LoaderPlane messageTop="Locking in the price." messageBottom="Please wait..." /><div className="dialog-backdrop-loading"></div></>)}
+        {(loading) && (<><LoaderPlane messageTop="Confirming booking details." messageBottom="Please wait..." /><div className="dialog-backdrop-loading"></div></>)}
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-title"></div>
             {createPassengersForm()}
-            <button type="submit" className="btn btn--tertiary">To Payment..</button>
+            <button type="submit" className="btn btn--tertiary">{loading ? "Processing..." : "Book Flight"}</button>
         </form>
+        </>
     )
 }
 

@@ -1,4 +1,4 @@
-# booking_controllerf.rb
+# booking_controller.rb
 
 require_relative '../../../models/amadeus_faraday_api'
 

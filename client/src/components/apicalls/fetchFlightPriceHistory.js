@@ -7,9 +7,9 @@ import axios from "axios";
 export const fetchFlightPriceHistory = async(formData) => {
     const currencyValid = validCurrency.includes(formData.currency);
 
-    if (getLocalstorageItem('flightPriceHistory')) {    
-        return getLocalstorageItem('flightPriceHistory');
-    }
+    // if (getLocalstorageItem('flightPriceHistory')) {    
+    //     return getLocalstorageItem('flightPriceHistory');
+    // }
 
     try {
         !currencyValid && null;

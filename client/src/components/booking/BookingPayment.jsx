@@ -10,6 +10,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import BookingFlightDetails from "./BookingFlightDetails.jsx";
 import { numberCommas } from '../helpers/general';
 import { getSessionstorageItem, setSessionstorageItem } from "../helpers/localstorage.js";
+import { LoaderPlane } from '../helpers/Loader';
 
 // Loads stripe.js 
 const stripePromise = loadStripe(STRIPE_PK_KEY);
@@ -74,19 +75,19 @@ const PaymentForm = ({ clientSecret }) => {
 
     return (
         <div className="payment-details">
-        <div className="details-header">
-            <h3>Payment</h3>
-        </div>
-        <div className="payment-amount">
-            <b>Total amount paying: </b>
-            <p className="amount">{localizationData.currency} {localizationData.currencySymbol}{numberCommas(grandTotal)}</p>
-        </div>
-        <form onSubmit={handleSubmit}>
-            <PaymentElement options={paymentElementOptions} />
-            <button type="submit" disabled={!stripe || !elements} className="btn btn--tertiary">
-                {loading ? "Processing..." : "Pay & Confirm Booking"}
-            </button>
-        </form>
+            <div className="details-header">
+                <h3>Payment</h3>
+            </div>
+            <div className="payment-amount">
+                <b>Total amount paying: </b>
+                <p className="amount">{localizationData.currency} {localizationData.currencySymbol}{numberCommas(grandTotal)}</p>
+            </div>
+            <form onSubmit={handleSubmit}>
+                <PaymentElement options={paymentElementOptions} />
+                <button type="submit" disabled={!stripe || !elements} className="btn btn--tertiary">
+                    {loading ? "Processing..." : "Pay & Confirm Booking"}
+                </button>
+            </form>
         </div>
     );
 }
@@ -96,6 +97,7 @@ const BookingPayment = () => {
     const { grandTotal } = useContextFlightBooking();
     const { localizationData } = useContextLocalization();
     const [clientSecret, setClientSecret] = useState(getSessionstorageItem('clientSecret') || null);
+    const navigate = useNavigate();
 
     // Creates stripe payment of intent
     useEffect(() => {
@@ -103,6 +105,7 @@ const BookingPayment = () => {
         if (clientSecret) {
             return;
         }
+        
         const createPaymentIntent = async () => {
             try {
                 const response = await axios.post(`${API_URL}/payments/create_payment_intent`, 
@@ -121,8 +124,6 @@ const BookingPayment = () => {
         };
         createPaymentIntent();
     }, [grandTotal, localizationData.currency]);
-
-    console.log(clientSecret);
     
     return(
         <div className="booking-details">
