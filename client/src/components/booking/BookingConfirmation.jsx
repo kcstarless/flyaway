@@ -86,41 +86,6 @@ const BookingConfirmation = () => {
         }
     }, []);
 
-    // Confirm booking through Amadeus API
-    // useEffect(() => {
-    //     if (getSessionstorageItem('charge')) {
-    //         alert("Payment already processed. Please check your email for confirmation.");
-    //         return;
-    //     }
-
-    //     const amadeusConfirmBooking = async (travelerInfo) => {
-    //         try {
-    //             console.log("Confirming booking...");
-    //             if (pricingOutbound) {
-    //                 const response = await fetchCreateFlightBooking(pricingOutbound.data.flightOffers[0], travelerInfo);
-    //                 setBookedOutbound(response);
-    //                 setSessionstorageItem('bookedOutbound', response);
-    //                 console.log("Booking confirmed: ", response);   
-    //             }
-    //             if (pricingReturn) {
-    //                 const response = await fetchCreateFlightBooking(pricingReturn.data.flightOffers[0], travelerInfo);
-    //                 setBookedReturn(response);
-    //                 setSessionstorageItem('bookedReturn', response);
-    //                 console.log(response);
-    //             }
-    //             setLoading(false);
-    //         } catch (err) {
-    //             console.log("Error fetching confirmed flight: ", err);
-    //         }
-    //     }
-
-    //     if (paymentIntent) { 
-    //         amadeusConfirmBooking(travelerInfo);
-    //     } else {
-    //         console.error("Something went wrong")
-    //     }
-    // }, [paymentIntent]);
-
     function displayConfirmationCard(flight, selectedFlight) {
         const passengersName = travelerInfo.map((passenger) => passenger.name.firstName + " " + passenger.name.lastName);
 

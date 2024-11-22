@@ -11,7 +11,10 @@ class Api::V1::BookingController < ApplicationController
       travelers = params[:travelers]
       @response = AmadeusFaradayApi.new.flight_create_order(offer, travelers)
 
+      flight_booking_service = FlightBookingService.new(@response)
+
       render json: @response
+      Rails.logger.info("Flight booking response: #{@response}")
     rescue Amadeus::ResponseError => e
       Rails.logger.error("Response error: #{e.message}")
       render json: { error: e.message }, status: :unprocessable_entity

@@ -7,7 +7,7 @@ export const fetchCreateFlightBooking = async (offer, travelers) => {
             offer: offer,
             travelers: travelers,
         })
-        // console.log(response);
+        console.log(response);
         if(response.data) {
             const booking = response.data;
             return booking;

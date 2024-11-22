@@ -71,6 +71,9 @@ Including airports, airliner, flight schedule, local activities and more.
 
 [Restcountries](https://restcountires.com) is used to collect related country data from opencage for country language and country flag. 
 
+## Flight booking cycle
+
+
 ## Gem dependencies
 - Devise
 - Simple form
@@ -93,7 +96,7 @@ Including airports, airliner, flight schedule, local activities and more.
 Flight_Offer search is very unstable. Rework was needed to use faraday to make custom API calls. 
 
 <ins>404 Error with React Routes</ins><br>
-Because Rails server doesnt recognize React's client-side routes. I need to create `Catch-All` routes for non Rails API routes to serve index.html when routes is not recognised(if page is refreshed while in React Route, Rails won't recognise the route path therefore giving 404 error). This involved few steps as I found out. 
+Because Rails server doesnt recognize React's client-side routes. I needed to create `Catch-All` routes for non Rails API routes to serve index.html when routes is not recognised(if page is refreshed while in React Route, Rails won't recognise the route path therefore giving 404 error). This involved few steps as I found out. 
 
 1. Create new controllers to serve and render `index.html`. 
 - `ApplicationController` inherits from `ActionController::API` serving only API requests. 
