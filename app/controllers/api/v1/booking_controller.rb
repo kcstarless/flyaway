@@ -1,6 +1,7 @@
 # booking_controller.rb
 
 require_relative '../../../models/amadeus_faraday_api'
+require_relative '../../../services/flight_booking_service'
 
 class Api::V1::BookingController < ApplicationController
   wrap_parameters false;
@@ -11,10 +12,20 @@ class Api::V1::BookingController < ApplicationController
       travelers = params[:travelers]
       @response = AmadeusFaradayApi.new.flight_create_order(offer, travelers)
 
-      flight_booking_service = FlightBookingService.new(@response)
+      if current_user.nil?
+        render json: { error: 'User not authenticated' }, status: :unauthorized
+        return
+      end
+
+      Rails.logger.info "User id is: #{current_user.id}"
+
+      flight_booking_service = FlightBookingService.new(@response, current_user)
+      booking_data = flight_booking_service.prepare_flight_booking_data
+
+      @flight_booking = FlightBooking.create!(booking_data[:booking])
 
       render json: @response
-      Rails.logger.info("Flight booking response: #{@response}")
+      # Rails.logger.info("Flight booking response: #{@response}")
     rescue Amadeus::ResponseError => e
       Rails.logger.error("Response error: #{e.message}")
       render json: { error: e.message }, status: :unprocessable_entity
@@ -24,6 +35,41 @@ class Api::V1::BookingController < ApplicationController
     rescue StandardError => e
       Rails.logger.error("Unexpected error: #{e.message}")
       render json: { error: 'An unexpected error occurred.', details: e.message }, status: :internal_server_error
+    end
+  end
+
+  def update_flight_booking_payment_status
+    created_booking_id= params[:created_booking_id]
+
+    booking = FlightBooking.find_by(created_booking_id: created_booking_id)
+
+    if booking
+      booking.update(payment_status: 'paid')
+      BookingMailer.booking_confirmation_email(booking).deliver_later
+      render json: { message: 'Payment status updated successfully.' }, status: :ok
+    else
+      render json: { error: 'Flight booking not found.' }, status: :not_found
+    end
+  end
+
+  def upcoming_flight
+    if current_user.nil?
+      render json: { message: 'User not authenticated' }, status: :unauthorized
+      return
+    end
+    # Rails.logger.info "Current User: #{current_user.id}"
+    id  = current_user.id
+    current_date = Date.today
+
+    booking = FlightBooking.where(user_id: id)
+                            .where(payment_status: 'paid')
+                            .where("itinerary->'segments'->0->'departure'->>'at' >= ?", current_date.to_s)
+
+    if booking
+      Rails.logger.info "Upcoming Flight: #{booking}"
+      render json: booking
+    else
+      render json: { message: 'No upcoming flights found for this user.'}, status: :not_found
     end
   end
 
@@ -49,6 +95,7 @@ class Api::V1::BookingController < ApplicationController
       @response = AmadeusFaradayApi.new.flight_offer_price(offer)
 
       render json: @response
+
     rescue Amadeus::ResponseError => e
       Rails.logger.error("Response error: #{e.message}")
       render json: { error: e.message }, status: :unprocessable_entity
@@ -60,6 +107,4 @@ class Api::V1::BookingController < ApplicationController
       render json: { error: 'An unexpected error occurred.', details: e.message }, status: :internal_server_error
     end
   end
-
-
 end

@@ -10,8 +10,10 @@ import { getSessionstorageItem, setSessionstorageItem } from "../helpers/localst
 import { fetchCreateFlightBooking } from '../apicalls/fetchConfirmBooking';
 import { useNavigate } from "react-router-dom";
 import { LoaderPlane } from '../helpers/Loader';
+import { useContextUserSession } from "../contexts/ContextUserSession";
 
 const PassengerForm = () => {
+    const { accessToken } = useContextUserSession();
     const { countries } = useCountries();
     const { formData } = useContextFlightOffers();
     const { localizationData } = useContextLocalization(); // Getting localization data
@@ -326,20 +328,21 @@ const PassengerForm = () => {
             setSessionstorageItem("travelerInfo", prepTravelers(data));
             setLoading(true);
             if (pricingOutbound) {
-                const response = await fetchCreateFlightBooking(pricingOutbound.data.flightOffers[0], getSessionstorageItem('travelerInfo'));
+                const response = await fetchCreateFlightBooking(pricingOutbound.data.flightOffers[0], getSessionstorageItem('travelerInfo'), accessToken);
                 if (response) {
                     setBookedOutbound(response);
                     setSessionstorageItem('bookedOutbound', response);
-                    // console.log("Booking confirmed: ", response);
+                    console.log("Booking Outbound: ", response);
                 }
             }
             if (pricingReturn) {
-                const response = await fetchCreateFlightBooking(pricingReturn.data.flightOffers[0], data);
+                const response = await fetchCreateFlightBooking(pricingReturn.data.flightOffers[0], getSessionstorageItem('travelerInfo'), accessToken);
                 setBookedReturn(response);
                 setSessionstorageItem('bookedReturn', response);
+                console.log("Booking Return: ", response);
             }
             // Navigate only after the booking confirmation is successful
-            console.log("bookedOutbound", bookedOutbound);
+            // console.log("bookedOutbound", bookedOutbound);
             setLoading(false);
             if (bookedOutbound || bookedReturn) {
                 navigate("/checkout");

@@ -5,7 +5,6 @@ import { getDateDayDDMMYYYY } from '../helpers/general';
 import BookingFlightDetailsExpanded from './BookingFlightDetailsExpanded';
 import { setSessionstorageItem, getSessionstorageItem } from '../helpers/localstorage';
 import { useContextFlightOffers } from '../contexts/ContextFlightOffers';
-import { get } from 'react-hook-form';
 
 
 // Fetch location details for each segment
@@ -24,7 +23,6 @@ async function fetchSegmentLocations(flight, newLocations) {
 }
 
 const BookingFlightDetails = () => {
-    console.log("FlightDetails rendered...");
     const outboundFlight = getSessionstorageItem('selectedOutboundFlight');
     const returnFlight = getSessionstorageItem('selectedReturnFlight');
     const { locations, setLocations } = useContextFlightOffers();

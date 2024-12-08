@@ -21,9 +21,12 @@ Rails.application.routes.draw do
       get 'search/tours_activities',           to: 'search#tours_activities'
 
       # Booking-related routes
+      get 'booking/upcoming_flight',          to: 'booking#upcoming_flight'
       post 'booking/poi_offers',              to: 'booking#poi_offers'
       post 'booking/pricing',                 to: 'booking#pricing'
       post 'booking/book_flight',             to: 'booking#book_flight'
+      post 'booking/update_flight_booking_payment_status',
+                                              to: 'booking#update_flight_booking_payment_status'
 
       # Payment-related routes
       post 'payments/create_payment_intent',  to: 'payments#create_payment_intent'

@@ -53,7 +53,7 @@ const SearchBar = () => {
     //   setFormError('Please make changes to the form data.');
     //   return null;
     // }
-    console.log("Form data changed. Proceeding to search for flights...");
+    // console.log("Form data changed. Proceeding to search for flights...");
     resetFlightBooking();
     resetFlightOffer();
     updateFormData(localInputs);              // Update the form data with localInputs.

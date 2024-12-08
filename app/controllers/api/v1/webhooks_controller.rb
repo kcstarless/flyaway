@@ -1,4 +1,6 @@
 # app/controllers/api/v1/webhooks_controller.rb
+require_relative '../../../services/flight_booking_service'
+
 class Api::V1::WebhooksController < ApplicationController
   def stripe
     Rails.logger.info "Webhook received!!!!"
@@ -21,22 +23,22 @@ class Api::V1::WebhooksController < ApplicationController
       return
     end
 
-    Rails.logger.info "Event type: #{event['type']}"
-
     case event['type']
-    when 'payment_intent.succeeded'
-      payment_intent = event['data']['object']
-      Rails.logger.info "PaymentIntent was successful!!!"
-    when 'charge.updated'
-      charge = event['data']['object'] # Handle the charge.updated event here
-      Rails.logger.info "Charge succeeded!!!!"
-      # Correct usage
-      ActionCable.server.broadcast('notifications_channel', { event: 'charge.succeeded', charge: charge })
+      when 'payment_intent.created'
+        payment_intent = event['data']['object']
+        Rails.logger.info "PaymentIntent was created!!!"
+      when 'charge.updated'
+        charge = event['data']['object'] # Handle the charge.updated event here
+        Rails.logger.info "Charge succeeded!!!!"
 
+        # Correct usage
+        ActionCable.server.broadcast('notifications_channel', { event: 'charge.succeeded', charge: charge })
+      when 'payment_intent.succeeded'
+        payment_intent = event['data']['object']
+        Rails.logger.info "PaymentIntent was successful!!!"
     else
       Rails.logger.info "Unhandled event type: #{event['type']}"
     end
-
     render json: { message: 'success' }
   end
 end

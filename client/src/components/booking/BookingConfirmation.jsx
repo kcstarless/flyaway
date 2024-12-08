@@ -56,7 +56,7 @@ const BookingConfirmation = () => {
                     setCharge(charge);
                     setSessionstorageItem('charge', charge);
                     setLoading(false);
-                    console.log("Charge details: ", charge);
+                    // console.log("Charge details: ", charge);
                 });
             }
         }

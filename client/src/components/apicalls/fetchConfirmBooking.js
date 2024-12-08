@@ -1,13 +1,16 @@
 import axios from 'axios';
 
-export const fetchCreateFlightBooking = async (offer, travelers) => {
-    // console.log(travelers);
+export const fetchCreateFlightBooking = async (offer, travelers, accessToken) => {
     try {
         const response = await axios.post('/api/v1/booking/book_flight', {
             offer: offer,
-            travelers: travelers,
+            travelers: travelers, 
+            }, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            }
         })
-        console.log(response);
+        // console.log(response);
         if(response.data) {
             const booking = response.data;
             return booking;

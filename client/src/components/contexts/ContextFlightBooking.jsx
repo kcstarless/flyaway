@@ -22,36 +22,41 @@ export const ProviderContextFlightBooking = ({ children }) => {
     // Check the selected offer for flight is still valid.
     // This step is necessary for Amadeus API flight booking flow. 
     useEffect(() => {
-      console.log("Checking if selected flight is still valid...");
         const fetchPricing = async () => {
-            if (selectedOutboundFlight) {
-              console.log("started fetching pricing for outbound flight");
+          console.log("Checking pricing outbound flight...");
+
               try {
-                console.log("fetching pricing for outbound flight");
                 const response = await fetchFlightPricing(selectedOutboundFlight);
                 setPricingOutbound(response);
                 setSessionstorageItem('pricingOutbound', response);
-                console.log(response);
+                console.log("pricingOutbound: ", response);
               } catch (error) {
                 console.error("Error fetching outbound flight pricing:", error);
               }
-            }
-  
-            if (selectedReturnFlight) {
-              try {
-                const response = await fetchFlightPricing(selectedReturnFlight);
-                setPricingReturn(response);
-                setSessionstorageItem('pricingReturn', response);
-              } catch (error) {
-                console.error("Error fetching return flight pricing:", error);
-              }
-            }
+
           };
-          if (!getSessionstorageItem('pricingOutbound')) {
+          if (selectedOutboundFlight) {
             fetchPricing();
           }
 
-    }, [selectedOutboundFlight, selectedReturnFlight]);
+    }, [selectedOutboundFlight]);
+
+    useEffect(() => {
+      const fetchPricing = async () => {
+        console.log("Checking pricing return flight...");
+            try {
+              const response = await fetchFlightPricing(selectedReturnFlight);
+              setPricingReturn(response);
+              setSessionstorageItem('pricingReturn', response);
+              console.log("pricingReturn: ", response);
+            } catch (error) {
+              console.error("Error fetching return flight pricing:", error);
+            }
+        }
+        if (selectedReturnFlight){
+          fetchPricing();
+        }
+    }, [selectedReturnFlight]);
     
     // Get total price of the flights
     function getTotalPrice() {
@@ -63,7 +68,7 @@ export const ProviderContextFlightBooking = ({ children }) => {
     }
 
     function resetFlightBooking() {
-        console.log("Resetting flight booking context");
+        // console.log("Resetting flight booking context");
         setPricingOutbound(null);
         setPricingReturn(null);
         setBookedOutbound({});

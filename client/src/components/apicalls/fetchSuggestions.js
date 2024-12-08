@@ -18,14 +18,14 @@ export const fetchSuggestions = async (location) => {
   }
 
   // Check cache first
-  if (suggestionCache.has(location)) {
-    return suggestionCache.get(location);
-  }
+  // if (suggestionCache.has(location)) {
+  //   return suggestionCache.get(location);
+  // }
 
   const noMatchedSuggestion = { cityName: "No match found", noMatch: true };
 
   try {
-    console.log("Fetching suggestions for:", location);
+    // console.log("Fetching suggestions for:", location);
     const response = await axios.get(`/api/v1/search/airport_city`, {
       params: { location: location }
     });
@@ -44,7 +44,7 @@ export const fetchSuggestions = async (location) => {
         imageUrl: imageUrls[location.subType],
         noMatch: false,
       }));
-      console.log(filteredSuggestions);
+      // console.log(filteredSuggestions);
       const limitedSuggestions = filteredSuggestions.slice(0, 10);
       suggestionCache.set(location, limitedSuggestions); // Cache the results
 

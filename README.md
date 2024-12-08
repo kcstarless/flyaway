@@ -25,6 +25,8 @@ Note. In this app payment is handle by using [Stripe](https://stripe.com/) and I
 
 
 ## Authentication React -> Rails
+[Devise-API](https://github.com/nejdetkadir/devise-api) provide `JSON Web Token (JWT)` stateless authentication. Whenever validation is required `headers: { Authorization: "Bearer ${accessToken} }` is passed in as parameter from React to Rails api, where devise-api ensure validity of the token. 
+
 Access Token: When a user signs in, they receive an accessToken, which is used to authenticate requests to protected resources. This token usually has a short expiration time (e.g., minutes).
 
 Refresh Token: Along with the accessToken, the user also receives a refreshToken. This token is used to obtain a new accessToken when the original one expires without requiring the user to log in again.
@@ -39,6 +41,9 @@ Implementation Steps:
 - `Store the refreshToken:` You should store the refreshToken in localStorage (or a more secure method like an HttpOnly cookie) to use it for fetching new accessTokens.
 - `Handle Token Refreshing:` Create a function that checks if the accessToken is expired and, if so, uses the refreshToken to get a new one.
 - `Call Refresh Token Endpoint:` Implement the API call to the endpoint responsible for refreshing the tokens, which might look something like this:
+
+`Guest` and `Registered` users both have full access with exception that `guest` user won't be able to access booking.
+`Registered` user will be able to view their bookings history and UI will display any upcoming flight on the user dialog box. 
 
 
 ## Stripe payment
@@ -70,9 +75,6 @@ Including airports, airliner, flight schedule, local activities and more.
 [OpenCage Geocoder](https://opencagedata.com/) is used for collecting user location data. I could have used IP based location finder but I decided to go with geolocation for possible expansion allowing user to use map to set origin and destiantion.
 
 [Restcountries](https://restcountires.com) is used to collect related country data from opencage for country language and country flag. 
-
-## Flight booking cycle
-
 
 ## Gem dependencies
 - Devise
