@@ -53,7 +53,7 @@ const SearchBar = () => {
     //   setFormError('Please make changes to the form data.');
     //   return null;
     // }
-
+    // console.log("Form data changed. Proceeding to search for flights...");
     resetFlightBooking();
     resetFlightOffer();
     updateFormData(localInputs);              // Update the form data with localInputs.
@@ -64,6 +64,7 @@ const SearchBar = () => {
 
   return (
     <>
+    {(outboundFlight.isFetching) && <><LoaderPlane messageTop={`${formData.current.departingCityName} to ${formData.current.destinationCityName}.`} messageBottom={"Please wait..."} /><div className="dialog-backdrop-loading"></div></>}
     { onFlightDetailsPage || onCheckOutPage || onBookingConfirmaitonPage 
       ? null 
       : <div className="search-bar">
@@ -73,8 +74,6 @@ const SearchBar = () => {
             setLocalInputs={setLocalInputs} />
         </div>
     }
-    {(outboundFlight.isFetching) && <LoaderPlane messageTop={`${formData.current.departingCityName} to ${formData.current.destinationCityName}.`} messageBottom={"Please wait..."} />}
-    {(outboundFlight.isFetching) &&<div className="dialog-backdrop-loading"></div>}
     </>
   );
 };

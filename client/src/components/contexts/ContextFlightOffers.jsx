@@ -69,7 +69,7 @@ export const ProviderContextFlightOffers = ({ children }) => {
     }, [currency]);
 
     function resetFlightOffer() {
-        console.log("Resetting flight offers context");
+        // console.log("Resetting flight offers context");
         setFlightOffers([]);
         setFlightPriceHistory([]);
         setSelectedOutboundFlight(null);

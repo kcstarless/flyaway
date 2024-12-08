@@ -5,12 +5,12 @@ import { setLocalstorageItem, getLocalstorageItem} from '../helpers/localstorage
 
 export const fetchFlights = async (data) => {
     // Check local storage for cached data
-    if (getLocalstorageItem('flightOffers')) {
-        return getLocalstorageItem('flightOffers');
-    }
+    // if (getLocalstorageItem('flightOffers')) {
+    //     return getLocalstorageItem('flightOffers');
+    // }
 
   try {      
-    console.log("Flight fetch started with data:", data);
+    // console.log("Flight fetch started with data:", data);
     const response = await axios.post('/api/v1/search/flight_offers', {
         origin: data.departingIATA, //= Origin is the destination IATA for return flights
         destination: data.destinationIATA, // Destination is the departing IATA for return flights
@@ -19,7 +19,7 @@ export const fetchFlights = async (data) => {
         currencyCode: data.currencyCode,      // e.g., 'USD'
     });
     
-    console.log("Flight fetch completed with response:", response);
+    // console.log("Flight fetch completed with response:", response);
 
     // Remapping of reponse data to a new flightData structure.
     if (response.data.data && response.data.data.length > 0) {

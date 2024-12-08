@@ -73,17 +73,18 @@ const SearchForm = ({ handleSubmit, localInputs, setLocalInputs}) => {
             [`${type}CountryCode`]: suggestion.countryCode || '', // Ensure to fall back to empty string
             [`${type}GeoCode`]: suggestion.geoCode || '', // Ensure to fall back to empty string
         }));
-        console.log(localInputs);
+        // console.log(localInputs);
         }
     };
 
     const handleFormSubmit = (event) => {
       event.preventDefault();
-      // if (validateForm(localInputs, setFormError)) {
-      //   handleSubmit();
-      // }
-      handleSubmit();
+      if (validateForm(localInputs, setFormError)) {
+        handleSubmit();
+      }
+      // handleSubmit();
     };
+    
     const validateForm = (input, setFormError) => {
       const { departingIATA, destinationIATA, departDate, passengers } = input;
       

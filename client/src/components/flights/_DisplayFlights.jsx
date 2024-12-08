@@ -45,7 +45,6 @@ const DisplayFlights = () => {
         } else {
             setNoMatch(null); // Reset noMatch if flights are found
         }
-    
         return sortedOffers;
     }, [filterOption, flightOffers, sortOption]); // Dependencies
 

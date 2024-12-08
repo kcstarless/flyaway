@@ -122,4 +122,7 @@ p {
   &.small {
     font-size: var(--font-size-xxs);
   }
+  &.error {
+    color: red;
+  }
 }

@@ -90,7 +90,7 @@
     animation:levitate 4s alternate ease-in-out infinite;
     transition:transform 150ms ease;
     background-size:100% 100%;
-    background-repeat:no-repeat
+    background-repeat:no-repeat;
   }
   .cloud{position:absolute;background-size:100% 100%;background-repeat:no-repeat;background-color:transparent}
   .cloud1{top:-30px;left:30px;height:39px;width:42px;animation:cloud1 7s linear infinite}

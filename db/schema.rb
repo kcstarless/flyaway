@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_23_032801) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_06_060454) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,6 +28,21 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_23_032801) do
     t.index ["previous_refresh_token"], name: "index_devise_api_tokens_on_previous_refresh_token"
     t.index ["refresh_token"], name: "index_devise_api_tokens_on_refresh_token"
     t.index ["resource_owner_type", "resource_owner_id"], name: "index_devise_api_tokens_on_resource_owner"
+  end
+
+  create_table "flight_bookings", force: :cascade do |t|
+    t.string "created_booking_id", null: false
+    t.integer "user_id"
+    t.string "booking_reference"
+    t.decimal "total_price", precision: 10, scale: 2
+    t.string "payment_status", default: "pending"
+    t.json "itinerary"
+    t.json "travelers"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "destination"
+    t.string "departing"
+    t.datetime "time_of_departure"
   end
 
   create_table "users", force: :cascade do |t|

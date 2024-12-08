@@ -1,11 +1,11 @@
 import login_icon from '../../assets/images/icon_login.svg';
 import { useContextUserSession } from '../contexts/ContextUserSession';
 import { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-
+import { useForm } from "react-hook-form";   
+import { getDateDayDDMMYYYY, isoDateToHHMM24 } from '../helpers/general';
 
 const UserLogin = () => {
-    const { makecallSignup, makecallSignin, handleSignout, inSession, resourceOwner } = useContextUserSession();
+    const { makecallSignup, makecallSignin, handleSignout, inSession, errorMessage, upcoming } = useContextUserSession();
     const [openLogin, setOpenLogin] = useState(false);
     const [switchForm, setSwitchForm] = useState(true);
     const dialogRef = useRef(null);
@@ -40,7 +40,8 @@ const UserLogin = () => {
             <form className="signin_form" onSubmit={handleSigninSubmit(submitSignin)}>
                 <fieldset className="signin">
                     <div className="legend-header">
-                        <div className="legend-header-title">Sign-in</div>                  
+                        <div className="legend-header-title">Sign-in</div> 
+                        {errorMessage && <p className="error">{errorMessage}</p>}                 
                         <div className="close_dialog" onClick={() => setOpenLogin(!openLogin)}>close <b>&#x2716;</b></div>
                     </div>
                     <div className="item">
@@ -125,25 +126,71 @@ const UserLogin = () => {
         )
     }
 
+    function signedIn() {
+        return (
+            <>
+            <form className="signup_form">
+            <fieldset className="signup">
+                    <div className="legend-header">
+                        <div className="legend-header-title">Upcoming Flights</div>                  
+                        <div className="close_dialog" onClick={() => setOpenLogin(!openLogin)}>close <b>&#x2716;</b></div>
+                    </div>
+
+                    {/* Loop through all upcoming flights */}
+                    {upcoming.length > 0 ? (
+                        upcoming.map((flight, index) => (
+                            <div key={index} className="item">
+                                <div className="item-title">
+                                    {/* You can display specific information here about each flight */}
+                                    <p>{getDateDayDDMMYYYY(flight.time_of_departure)}</p>
+                                    Flight to <b>{flight.destination}</b> at {isoDateToHHMM24(flight.time_of_departure)}
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No upcoming flights</p>  // Handle case where there are no upcoming flights
+                    )}
+                    <div className="item">
+                        <div className="item-button"> 
+                            <button type="submit" className="btn btn--primary" onClick={handleSignout}>Sign-out</button>
+                        </div>
+                    </div>
+                </fieldset>
+                </form>
+            </>
+        )
+    }
+
+    function upcomingFlight() {
+        if (upcoming.length === 0) return
+        return (
+            <div className="upcoming-flights" onClick={() => setOpenLogin(!openLogin)} >
+            <p>Upcoming flight to <b>{upcoming[0].destination}</b></p>
+            </div>
+        )
+    }
+
     return (
         <div className="user-login">
-            <a onClick={() => setOpenLogin(!openLogin)}>
-                <img src={login_icon} alt="login" className="login-icon" />
-            </a>
+            
+            {inSession && upcomingFlight()}
+
+            <img src={login_icon} alt="login" className="login-icon"  onClick={() => setOpenLogin(!openLogin)} />
             
             {openLogin && <div className="dialog-backdrop" onClick={() => setOpenLogin(false)}></div>}
 
             <dialog open={openLogin} className="dialog login" ref={dialogRef}>
-
                
                 {!inSession 
                     ? (switchForm ? (loginForm()) : (registerForm())) 
                     : (
-                    <>
-                        <div>{resourceOwner.email}</div>
-                        <button onClick={handleSignout}>Sign-out</button>
-                        {console.log("Session state: ", inSession)}
-                    </>
+                    <div className="signin_form">
+                        {signedIn()}
+                        {/* <div>Welcome back! {resourceOwner.email}</div>
+                        <button onClick={handleSignout}>Sign-out</button> */}
+                        {/* {console.log("Session state: ", inSession)}
+                        {console.log("User details: ", resourceOwner)} */}
+                    </div>
                 )}
                 
             </dialog>

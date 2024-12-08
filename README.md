@@ -25,6 +25,8 @@ Note. In this app payment is handle by using [Stripe](https://stripe.com/) and I
 
 
 ## Authentication React -> Rails
+[Devise-API](https://github.com/nejdetkadir/devise-api) provide `JSON Web Token (JWT)` stateless authentication. Whenever validation is required `headers: { Authorization: "Bearer ${accessToken} }` is passed in as parameter from React to Rails api, where devise-api ensure validity of the token. 
+
 Access Token: When a user signs in, they receive an accessToken, which is used to authenticate requests to protected resources. This token usually has a short expiration time (e.g., minutes).
 
 Refresh Token: Along with the accessToken, the user also receives a refreshToken. This token is used to obtain a new accessToken when the original one expires without requiring the user to log in again.
@@ -39,6 +41,9 @@ Implementation Steps:
 - `Store the refreshToken:` You should store the refreshToken in localStorage (or a more secure method like an HttpOnly cookie) to use it for fetching new accessTokens.
 - `Handle Token Refreshing:` Create a function that checks if the accessToken is expired and, if so, uses the refreshToken to get a new one.
 - `Call Refresh Token Endpoint:` Implement the API call to the endpoint responsible for refreshing the tokens, which might look something like this:
+
+`Guest` and `Registered` users both have full access with exception that `guest` user won't be able to access booking.
+`Registered` user will be able to view their bookings history and UI will display any upcoming flight on the user dialog box. 
 
 
 ## Stripe payment
@@ -93,7 +98,7 @@ Including airports, airliner, flight schedule, local activities and more.
 Flight_Offer search is very unstable. Rework was needed to use faraday to make custom API calls. 
 
 <ins>404 Error with React Routes</ins><br>
-Because Rails server doesnt recognize React's client-side routes. I need to create `Catch-All` routes for non Rails API routes to serve index.html when routes is not recognised(if page is refreshed while in React Route, Rails won't recognise the route path therefore giving 404 error). This involved few steps as I found out. 
+Because Rails server doesnt recognize React's client-side routes. I needed to create `Catch-All` routes for non Rails API routes to serve index.html when routes is not recognised(if page is refreshed while in React Route, Rails won't recognise the route path therefore giving 404 error). This involved few steps as I found out. 
 
 1. Create new controllers to serve and render `index.html`. 
 - `ApplicationController` inherits from `ActionController::API` serving only API requests. 
@@ -110,4 +115,8 @@ Because Rails server doesnt recognize React's client-side routes. I need to crea
 ```
   get '*path', to: 'static#index', constraints: ->(request) { !request.xhr? && request.path.exclude?('/api') }
 ```
+
+<ins>Persistant data</ins><br>
+During the booking process all booking related data including user input is stored in local session. This approach was neeeded in order tackle browser refresh and back event to prevent app from breaking. If the session data exist app will use this data. For example, if payment is made and booking is confirmed app will check for these events stored in session data and if it exist it will prevent user making another payment when user clicks browser back or refresh button. 
+
 

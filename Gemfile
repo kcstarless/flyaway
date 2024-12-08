@@ -57,6 +57,7 @@ gem 'stripe'
 gem "devise", "~> 4.9"
 gem "devise-api", "~> 0.2.0"
 
+
 gem "dockerfile-rails", ">= 1.6", :group => :development
 
 gem "redis", "~> 5.3"
