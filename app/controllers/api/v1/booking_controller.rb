@@ -12,17 +12,25 @@ class Api::V1::BookingController < ApplicationController
       travelers = params[:travelers]
       @response = AmadeusFaradayApi.new.flight_create_order(offer, travelers)
 
-      if current_user.nil?
-        render json: { error: 'User not authenticated' }, status: :unauthorized
-        return
-      end
+      # if current_user.nil?
+      #   render json: { error: 'User not authenticated' }, status: :unauthorized
+      #   return
+      # end
 
-      Rails.logger.info "User id is: #{current_user.id}"
-
+    # If current_user is nil, create flight booking without user association
+    if current_user.nil?
+      # Optionally, handle guest booking, maybe with a guest user model
+      flight_booking_service = FlightBookingService.new(@response, nil)  # No user is provided
+      booking_data = flight_booking_service.prepare_flight_booking_data
+      @flight_booking = FlightBooking.create!(booking_data[:booking])
+      Rails.logger.info("Flight booking created without user association.")
+    else
+      # Handle logged-in user flight booking
       flight_booking_service = FlightBookingService.new(@response, current_user)
       booking_data = flight_booking_service.prepare_flight_booking_data
-
       @flight_booking = FlightBooking.create!(booking_data[:booking])
+      Rails.logger.info("Flight booking created for user: #{current_user.id}")
+    end
 
       render json: @response
       # Rails.logger.info("Flight booking response: #{@response}")

@@ -24,11 +24,12 @@ export const ProviderLocalization = ({ children }) => {
     const localizationQuery = useQuery({
         queryKey: ["localizationData"],
         queryFn: fetchLocalizationData,
-        enabled: !localData,
+        // enabled: !localData,
     });
 
     useEffect(() => {
         if (localizationQuery.isSuccess) {
+            console.log("Success!");
             setLocalizationData(localizationQuery.data);
             setLocalstorageItem("localizationData", localizationQuery.data);
         } 

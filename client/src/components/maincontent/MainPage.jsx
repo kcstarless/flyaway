@@ -26,8 +26,10 @@ const MainPageHeader = () => {
 
 
 const Mainpage = () => {
-    const { localizationData } = useContextLocalization();
-    const toursActivitiesResult= useToursActivitiesQuery(localizationData.geoLocation);
+
+    // const { localizationData } = useContextLocalization();
+    const london = {latitude: 51.5072, longitude: 0.1276}
+    const toursActivitiesResult= useToursActivitiesQuery(london);
     // useEffect(() => {
     //     toursActivitiesResult.refetch();
     //     console.log("Mainpage localization data:", localizationData);

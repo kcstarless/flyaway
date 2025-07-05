@@ -9,7 +9,7 @@ import  {Unavailable} from '../helpers/Unavailable';
 function dialogOpen(activity, setExpanded, expanded) {
     return (
     <dialog className="activity-expanded" open>
-        <img src={activity.pictures} alt={activity.name} className="activity-expanded-image" />
+        <img src={activity.pictures[0]} alt={activity.name} className="activity-expanded-image" />
         <a href={`https://www.google.com/search?q=${activity.name}`}
             target="_blank"
             className="activity-expanded-title"
@@ -63,7 +63,7 @@ const FeaturedActivity = ({ featuredActivity }) => {
         <div className="featured-activity">
         {featuredActivity && (
             <div>
-            <img src={featuredActivity.pictures} alt={featuredActivity.name} className="activity-image" />
+            <img src={featuredActivity.pictures[0]} alt={featuredActivity.name} className="activity-image" />
             <div className="activity-title">
                 <a href={`https://www.google.com/search?q=${featuredActivity.name}`}
                         target="_blank"
@@ -139,7 +139,7 @@ const Activity = ({ activity, index }) => {
         return (
             <>
             {expanded && <div className="dialog-backdrop" onClick={() => setExpanded(!expanded)}></div>}
-            <div key={activity.id} className={expanded ? "activity expanded" : "activity"} onClick={() => setExpanded(!expanded)} style={{ backgroundImage: `url(${activity.pictures})` }}>     
+            <div key={activity.id} className={expanded ? "activity expanded" : "activity"} onClick={() => setExpanded(!expanded)} style={{ backgroundImage: `url(${activity.pictures[0]})` }}>     
                 <div className="activity-overlay">   
                     <div className="activity-inner">
                     {/* <img src={activity.pictures} alt={activity.name} className="activity-image" /> */}
@@ -215,7 +215,7 @@ const CarouselActivities = ({ removeFeaturedActivity }) => {
                 showIndicators={false}>
                 {removeFeaturedActivity.map((activity, index) => (
                     <div key={index} className="mainpage-local-activities">
-                        <div  className="activity" onClick={() => openSelectedActivity(activity)} style={{ backgroundImage: `url(${activity.pictures})` }}>
+                        <div  className="activity" onClick={() => openSelectedActivity(activity)} style={{ backgroundImage: `url(${activity.pictures[0]})` }}>
                             <div className="activity-overlay"> 
                                 <div className="activity-inner">
                                     <div className="activity-title">{activity.name}</div>
